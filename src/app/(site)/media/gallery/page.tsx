@@ -28,38 +28,38 @@ const photos: Photo[] = [
   { src: "/images/7.jpg.jpeg", alt: "Photo from a previous edition of the show" },
   { src: "/images/Untitled-2.jpg.jpeg", alt: "Photo from a previous edition of the show" },
 
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-36.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-35.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-33.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-45.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-44.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-39.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-4.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-36.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-35.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-33.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-45.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-44.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-39.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
+  // {
+  //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-4.jpg",
+  //   alt: "Gallery photo from a previous edition",
+  // },
 ];
 
 export default function PhotoGalleryPage() {

@@ -39,6 +39,7 @@ export default function OrganizerPage() {
                 width={900}
                 height={400}
                 className="h-full w-full object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </div>
             <SectionHeading eyebrow="Organizer" title={siteConfig.organizer.name} />
