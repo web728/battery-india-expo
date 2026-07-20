@@ -23,7 +23,7 @@ export default async function DashboardPage() {
           description="Role-based dashboards for visitors and exhibitors."
           breadcrumbs={[{ label: "Dashboard" }]}
         //     backgroundImage={{
-        //   src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+        //   src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
         //   alt: "Futurex branding at a previous edition of the show",
         // }}
         />

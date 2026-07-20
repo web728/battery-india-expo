@@ -22,7 +22,7 @@ export default function ExhibitCategoriesPage() {
         description="India Battery International Show 2026 spans 16 sectors across the battery and energy-storage value chain."
         breadcrumbs={[{ label: "Exhibit", href: "/exhibit" }, { label: "Exhibitor Categories" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

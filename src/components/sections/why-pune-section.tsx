@@ -48,7 +48,7 @@ export function WhyPuneSection() {
               {/* accent image, offset bottom-right for depth */}
               <div className="absolute bottom-0 right-0 h-28 w-40 overflow-hidden rounded-xl ring-4 ring-navy-dark sm:h-36 sm:w-52">
                 <Image
-                  src="https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-10.jpg"
+                  src="https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-10.jpg"
                   alt="Aerial view of the exhibition hall floor"
                   width={800}
                   height={533}

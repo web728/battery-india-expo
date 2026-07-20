@@ -23,7 +23,7 @@ export default function BookAStandPage() {
         description="Submit your requirements below and our exhibitor sales team will contact you with available stand options and rates."
         breadcrumbs={[{ label: "Exhibit", href: "/exhibit" }, { label: "Book a Stand" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

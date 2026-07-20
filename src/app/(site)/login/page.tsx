@@ -20,7 +20,7 @@ export default function LoginPage() {
         description="Registered visitors and exhibitors can access their dashboard here."
         breadcrumbs={[{ label: "Login" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

@@ -34,7 +34,7 @@ export default function OrganizerPage() {
           <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-grey-light bg-white p-3 shadow-sm">
               <Image
-                src="https://batteryindiaexpo.com/wp-content/uploads/2023/04/Futurex-Logo-copy.png"
+                src="https://info.batteryindiaexpo.com/wp-content/uploads/2023/04/Futurex-Logo-copy.png"
                 alt={`${siteConfig.organizer.name} logo`}
                 width={900}
                 height={400}

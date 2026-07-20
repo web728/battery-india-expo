@@ -21,7 +21,7 @@ export default function WhyPunePage() {
         description="A strategic host city at the heart of India's automotive and industrial manufacturing ecosystem."
         breadcrumbs={[{ label: "About", href: "/about" }, { label: "Why Pune" }]}
         backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2024/05/electronic-engineering-1.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2024/05/electronic-engineering-1.jpg",
           alt: "EV powertrain demonstration at a previous edition of the show",
         }}
       />

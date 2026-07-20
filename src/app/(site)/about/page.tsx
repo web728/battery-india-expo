@@ -54,7 +54,7 @@ export default function AboutPage() {
   description={siteConfig.tagline}
   breadcrumbs={[{ label: "About" }]}
    backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2022/09/81142496_477954383098116_3263101403136000000_n-1.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/81142496_477954383098116_3263101403136000000_n-1.jpg",
           alt: "EV powertrain demonstration at a previous edition of the show",
         }}
 />
@@ -114,7 +114,7 @@ export default function AboutPage() {
 
             <figure className="relative overflow-hidden rounded-2xl shadow-xl shadow-navy-dark/10 ring-1 ring-black/5 lg:aspect-[4/5]">
               <Image
-                src="https://batteryindiaexpo.com/wp-content/uploads/2026/03/SBP_3172-min-scaled-1.jpg"
+                src="https://info.batteryindiaexpo.com/wp-content/uploads/2026/03/SBP_3172-min-scaled-1.jpg"
                 alt="A technical conference session held alongside a previous edition of the show"
                 width={1600}
                 height={2000}

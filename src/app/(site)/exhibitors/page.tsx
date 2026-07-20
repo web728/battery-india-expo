@@ -25,7 +25,7 @@ export default function ExhibitorsDirectoryPage() {
         description="Search and filter confirmed exhibitors once bookings are announced."
         breadcrumbs={[{ label: "Exhibitors" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

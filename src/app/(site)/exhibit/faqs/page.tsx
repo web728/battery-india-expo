@@ -25,7 +25,7 @@ export default function ExhibitorFaqsPage() {
         description="Answers to common questions about exhibiting at India Battery International Show 2026."
         breadcrumbs={[{ label: "Exhibit", href: "/exhibit" }, { label: "Exhibitor FAQs" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

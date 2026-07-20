@@ -27,7 +27,7 @@ export default function ContactPage() {
         description="Reach our team for exhibiting, visiting, sponsorship, media or general enquiries."
         breadcrumbs={[{ label: "Contact" }]}
           backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />

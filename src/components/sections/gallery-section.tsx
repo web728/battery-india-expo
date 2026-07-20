@@ -9,30 +9,30 @@ export function GallerySection() {
 
  const galleryImages = [
   {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-36.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-36.jpg",
     title: "Gallery 1",
   },
   {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-35.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-35.jpg",
     title: "Gallery 2",
   },
   {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
     title: "Gallery 3",
   }, {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-33.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-33.jpg",
     title: "Gallery 3",
   }, {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-45.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-45.jpg",
     title: "Gallery 3",
   }, {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-44.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-44.jpg",
     title: "Gallery 3",
   }, {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-39.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-39.jpg",
     title: "Gallery 3",
   }, {
-    image: "https://batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-4.jpg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-4.jpg",
     title: "Gallery 3",
   },
 ];

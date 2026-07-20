@@ -22,7 +22,7 @@ export default function CoLocatedShowsPage() {
         description="One integrated platform spanning renewable energy, energy storage, charging infrastructure and electric mobility."
         breadcrumbs={[{ label: "About", href: "/about" }, { label: "Co-Located Shows" }]}
          backgroundImage={{
-          src: "https://batteryindiaexpo.com/wp-content/uploads/2023/10/fittosize__752_0_3c37ed7e08e9eb16fdbfba86df57b0ab_f__acmi_bottle_conveyor_system_3c_2019_07_1000x562-mobile-1581519535.jpg",
+          src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/10/fittosize__752_0_3c37ed7e08e9eb16fdbfba86df57b0ab_f__acmi_bottle_conveyor_system_3c_2019_07_1000x562-mobile-1581519535.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
       />
