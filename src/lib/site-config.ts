@@ -46,15 +46,15 @@ siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.t
   contacts: [
     {
       name: "Ms. Nidhi Sharma",
-      role: "Exhibitor & Partnership Enquiries",
+      // role: "Exhibitor & Partnership Enquiries",
       phone: "+91 98718 39040",
       email: "nidhi@futurextrade.com",
     },
     {
-      name: "Ms. Nashra Ahmad",
-      role: "Sales & General Enquiries",
-      phone: "+91 92667 27580",
-      email: "sales@futurextrade.com",
+      name: "Mr. Namit Gupta",
+      // role: "Sales & General Enquiries",
+      phone: "+91 9810855697",
+      email: "namit@futurextrade.co",
     },
   ],
   whatsapp: {

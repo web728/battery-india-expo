@@ -86,7 +86,6 @@ export function Footer() {
             {siteConfig.contacts.map((contact) => (
               <li key={contact.email}>
                 <p className="font-semibold text-white">{contact.name}</p>
-                <p className="text-white/60">{contact.role}</p>
                 <TrackedLink event={AnalyticsEvents.PHONE_CLICK} params={{ source: "footer" }} href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="mt-1 flex items-center gap-1.5 transition-colors hover:text-red">
                   <Phone className="h-3.5 w-3.5" aria-hidden="true" /> {contact.phone}
                 </TrackedLink>
