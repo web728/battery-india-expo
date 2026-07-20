@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "batteryindiaexpo.com",
       },
+      {
+        protocol: "https",
+        hostname: "info.batteryindiaexpo.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.batteryindiaexpo.com",
+      },
     ],
   },
 };
