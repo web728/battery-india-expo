@@ -27,7 +27,10 @@ export const siteConfig = {
   organizer: {
     name: "Futurex",
   },
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.batteryindiaexpo.com",
+ // Replace line 29:
+siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim() !== "")
+  ? process.env.NEXT_PUBLIC_SITE_URL 
+  : "https://www.batteryindiaexpo.com",
   coLocatedShows: [
     {
       name: "India EV International Show",
