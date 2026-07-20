@@ -54,7 +54,6 @@ export default function ContactPage() {
                 {siteConfig.contacts.map((contact) => (
                   <div key={contact.email} className="rounded-xl border border-grey-light bg-white p-5 shadow-sm">
                     <p className="font-heading text-base font-bold text-navy-dark">{contact.name}</p>
-                    <p className="text-sm text-grey-medium">{contact.role}</p>
                     <a href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="mt-2 flex items-center gap-2 text-sm text-navy-dark hover:text-red">
                       <Phone className="h-4 w-4" aria-hidden="true" /> {contact.phone}
                     </a>
