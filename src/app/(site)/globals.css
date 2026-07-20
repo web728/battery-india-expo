@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --color-navy: #071d3a;
+  --color-navy-dark: #031224;
+  --color-red: #ed1c24;
+  --color-red-dark: #c8151c;
+  --color-grey-light: #f4f6f8;
+  --color-grey-medium: #667085;
+  --color-green: #36c96b;
+  --color-silver: #c7cdd6;
+
+  --background: #ffffff;
+  --foreground: var(--color-navy-dark);
+
+  /* Font mappings inside root variables */
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", Arial, sans-serif;
+}
+
+@theme inline {
+  --color-navy: var(--color-navy);
+  --color-navy-dark: var(--color-navy-dark);
+  --color-red: var(--color-red);
+  --color-red-dark: var(--color-red-dark);
+  --color-grey-light: var(--color-grey-light);
+  --color-grey-medium: var(--color-grey-medium);
+  --color-green: var(--color-green);
+  --color-silver: var(--color-silver);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  
+  /* Standard Tailwind configuration map */
+  --font-heading: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+}
+
+/* Base resets & behavior updates */
+* {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em; /* Heading specific premium tracking adjustment */
+}
+
+/* Accessibility Skip link styling */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-red);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0;
+  transition: left 0.2s ease;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+::selection {
+  background-color: var(--color-red);
+  color: #ffffff;
+}
