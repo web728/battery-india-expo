@@ -5,16 +5,13 @@ import { Container } from "@/components/ui/container";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { footerLegalLinks, footerQuickLinks } from "@/lib/content/nav";
 import { siteConfig } from "@/lib/site-config";
-import { LinkedInIcon, TwitterIcon, FacebookIcon, InstagramIcon, YouTubeIcon } from "@/components/ui/social-icons";
+import { LinkedInIcon, FacebookIcon } from "@/components/ui/social-icons";
 import { TrackedLink } from "@/components/ui/tracked-link";
 import { AnalyticsEvents } from "@/lib/analytics";
 
 const socialIcons = [
-  { key: "linkedin", Icon: LinkedInIcon, label: "LinkedIn" },
-  { key: "twitter", Icon: TwitterIcon, label: "Twitter / X" },
-  { key: "facebook", Icon: FacebookIcon, label: "Facebook" },
-  { key: "instagram", Icon: InstagramIcon, label: "Instagram" },
-  { key: "youtube", Icon: YouTubeIcon, label: "YouTube" },
+  { key: "facebook", Icon: FacebookIcon, label: "Facebook", url: "https://www.facebook.com/batteryindiaexpo" },
+  { key: "linkedin", Icon: LinkedInIcon, label: "LinkedIn", url: "https://www.linkedin.com/company/indiabatteryshow/" },
 ] as const;
 
 export function Footer() {
@@ -22,48 +19,33 @@ export function Footer() {
     <footer className="bg-navy-dark text-white/80">
       <Container className="grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-         <Link href="/" className="mb-4 inline-flex items-center gap-2">
-  <Image
-    src="/logo/battery-logo.png"
-    alt="Battery India Expo Logo"
-    width={240}
-    height={90}
-    className="h-16 w-auto object-contain"
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-  />
-</Link>
+          <Link href="/" className="mb-4 inline-flex items-center gap-2">
+            <Image
+              src="/logo/battery-solar-logo.png"
+              alt="Battery India Expo Logo"
+              width={240}
+              height={90}
+              className="h-16 w-auto object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </Link>
           <p className="text-sm leading-relaxed">{siteConfig.eventName}</p>
           <p className="mt-2 text-sm leading-relaxed">{siteConfig.dates.display}</p>
           <p className="mt-2 text-sm leading-relaxed">{siteConfig.venue.full}</p>
           <p className="mt-4 text-sm leading-relaxed">Organised by {siteConfig.organizer.name}</p>
           <div className="mt-5 flex gap-3">
-            {socialIcons.map(({ key, Icon, label }) => {
-              const url = siteConfig.social[key];
-              if (!url) {
-                return (
-                  <span
-                    key={key}
-                    aria-label={`${label} (coming soon)`}
-                    title={`${label} — coming soon`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/30"
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                );
-              }
-              return (
-                <a
-                  key={key}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-red hover:text-red"
-                >
-                  <Icon className="h-4 w-4" aria-hidden="true" />
-                </a>
-              );
-            })}
+            {socialIcons.map(({ key, Icon, label, url }) => (<a
+              
+                key={key}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/70 transition-colors hover:border-red hover:text-red"
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+              </a>
+            ))}
           </div>
         </div>
 

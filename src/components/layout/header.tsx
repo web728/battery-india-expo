@@ -70,7 +70,7 @@ export function Header() {
           className="flex shrink-0 items-center gap-3 rounded transition-transform duration-200 hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-red"
         >
           <Image
-            src="/logo/battery-logo.png"
+            src="/logo/battery-solar-logo.png"
             alt="Battery India Expo Logo"
             width={160}
             height={60}
