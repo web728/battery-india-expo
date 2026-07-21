@@ -6,6 +6,7 @@ import { visitorConfirmationEmail } from "@/lib/email/templates";
 import { notifyAll } from "@/lib/notify";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
+import { appendToSheet } from "@/lib/sheets"; // <-- NAYA IMPORT
 
 export async function POST(request: Request) {
   const limit = checkRateLimit(`visitor-reg:${getClientKey(request)}`);
@@ -45,6 +46,22 @@ export async function POST(request: Request) {
       },
       "VIS"
     );
+
+    // ---- NAYA CODE YAHA SE ----
+    await appendToSheet({
+      Platform: "Visitor Form",
+      "Register As": "Visitor",
+      "Company Name": data.companyName,
+      "Contact Person": data.name,
+      Designation: data.designation,
+      "Email Id": data.businessEmail,
+      "Mobile No.": data.mobileNumber,
+      Country: data.country || "",
+      Address: [data.city, data.state].filter(Boolean).join(", "),
+      Website: data.companyWebsite || "",
+      "Area of Interest": (data.areasOfInterest ?? []).join(", "),
+    });
+    // ---- NAYA CODE YAHA TAK ----
 
     await sendEmail({
       to: data.businessEmail,

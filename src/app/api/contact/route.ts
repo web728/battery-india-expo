@@ -6,6 +6,7 @@ import { contactAckEmail } from "@/lib/email/templates";
 import { notifyAll } from "@/lib/notify";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
+import { appendToSheet } from "@/lib/sheets"; // <-- NAYA IMPORT (top pe add kiya)
 
 export async function POST(request: Request) {
   const limit = checkRateLimit(`contact:${getClientKey(request)}`);
@@ -41,6 +42,18 @@ export async function POST(request: Request) {
       },
       "CE"
     );
+
+    // ---- NAYA CODE YAHA SE ----
+    await appendToSheet({
+      Platform: "Contact Form",
+      "Register As": data.department,
+      "Company Name": data.company || "",
+      "Contact Person": data.name,
+      "Email Id": data.email,
+      "Mobile No.": data.phone || "",
+      Message: data.message,
+    });
+    // ---- NAYA CODE YAHA TAK ----
 
     await sendEmail({ to: data.email, ...contactAckEmail({ name: data.name, referenceNumber }) });
 

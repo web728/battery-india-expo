@@ -6,6 +6,7 @@ import { exhibitorEnquiryAckEmail } from "@/lib/email/templates";
 import { notifyAll } from "@/lib/notify";
 import { verifyRecaptcha } from "@/lib/recaptcha";
 import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
+import { appendToSheet } from "@/lib/sheets"; // <-- NAYA IMPORT
 
 export async function POST(request: Request) {
   const limit = checkRateLimit(`exhibitor-enquiry:${getClientKey(request)}`);
@@ -45,6 +46,23 @@ export async function POST(request: Request) {
       },
       "EXH"
     );
+
+    // ---- NAYA CODE YAHA SE ----
+    await appendToSheet({
+      Platform: "Exhibitor Form",
+      "Register As": "Exhibitor",
+      "Company Name": data.companyName,
+      "Contact Person": data.fullName,
+      Designation: data.designation,
+      "Email Id": data.businessEmail,
+      "Mobile No.": data.phone,
+      Country: data.country,
+      Address: data.city,
+      Website: data.companyWebsite || "",
+      "Sponsorship/Branding Opportunities Interest": data.sponsorshipInterest ? "Yes" : "No",
+      Message: data.message || "",
+    });
+    // ---- NAYA CODE YAHA TAK ----
 
     await sendEmail({
       to: data.businessEmail,

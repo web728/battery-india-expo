@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email/send";
 import { sponsorEnquiryAckEmail } from "@/lib/email/templates";
 import { notifyAll } from "@/lib/notify";
 import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
+import { appendToSheet } from "@/lib/sheets"; // <-- NAYA IMPORT
 
 export async function POST(request: Request) {
   const limit = checkRateLimit(`sponsor-enquiry:${getClientKey(request)}`);
@@ -35,6 +36,19 @@ export async function POST(request: Request) {
       },
       "SPN"
     );
+
+    // ---- NAYA CODE YAHA SE ----
+    await appendToSheet({
+      Platform: "Sponsor Form",
+      "Register As": "Sponsor",
+      "Company Name": data.companyName,
+      "Contact Person": data.contactPerson,
+      "Email Id": data.businessEmail,
+      "Mobile No.": data.phone,
+      "Sponsorship/Branding Opportunities Interest": data.packageInterest,
+      Message: data.message || "",
+    });
+    // ---- NAYA CODE YAHA TAK ----
 
     await sendEmail({
       to: data.businessEmail,
