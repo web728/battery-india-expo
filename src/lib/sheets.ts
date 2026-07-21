@@ -3,6 +3,12 @@ import { google } from "googleapis";
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID!;
 const SHEET_NAME = process.env.GOOGLE_SHEET_TAB_NAME || "Sheet1";
 
+// NAYA: tab naam me space/special chars hone par range fail hota hai,
+// isliye naam ko single quotes me wrap karna zaroori hai
+function quotedSheetRange(range: string): string {
+  return `'${SHEET_NAME}'!${range}`;
+}
+
 function getAuth() {
   const privateKey = Buffer.from(
     process.env.GOOGLE_SHEETS_PRIVATE_KEY_BASE64 || "",
@@ -72,7 +78,7 @@ export async function appendToSheet(data: SheetRowData) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A:A`,
+      range: quotedSheetRange("A:A"), // CHANGE: pehle `${SHEET_NAME}!A:A` tha
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
       requestBody: { values: [row] },
