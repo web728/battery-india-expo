@@ -1,15 +1,12 @@
 "use client";
 
 import { useCallback, useState, type FormEvent } from "react";
-import { Loader2, CalendarPlus, Navigation, LayoutDashboard, User, Building2, MapPinned, Tags } from "lucide-react";
+import { Loader2, CheckCircle2, User, Building2, MapPinned, Tags } from "lucide-react";
 import { visitorRegistrationSchema } from "@/lib/validations/forms";
 import { TextField, SelectField, CheckboxField, CheckboxGroupField } from "@/components/ui/form-fields";
 import { Button } from "@/components/ui/button";
 import { Recaptcha } from "@/components/ui/recaptcha";
-import { VisitorPass } from "@/components/visitor-pass";
-import { buildIcsDataUrl } from "@/lib/calendar";
 import { trackEvent, AnalyticsEvents } from "@/lib/analytics";
-import { siteConfig } from "@/lib/site-config";
 import { countryOptions, areasOfInterestOptions } from "@/lib/content/form-options";
 
 const initialState = {
@@ -91,36 +88,42 @@ export function VisitorRegistrationForm() {
     }
   }
 
-  if (status === "success" && referenceNumber) {
+  const handleReset = () => {
+    setValues(initialState);
+    setStatus("idle");
+    setReferenceNumber(null);
+    setStarted(false);
+  };
+
+  // ---- CLEAN SUCCESS SCREEN ----
+  if (status === "success") {
     return (
-      <div className="flex flex-col items-center gap-8 text-center">
-        <div>
-          <h3 className="font-heading text-2xl font-bold text-navy-dark">Registration Confirmed</h3>
-          <p className="mt-2 max-w-md text-sm text-grey-medium">
-            Thank you, {values.name.split(" ")[0]}. A confirmation email with your reference number has been sent to{" "}
-            {values.businessEmail}.
-          </p>
+      <div className="flex flex-col items-center text-center p-8 rounded-2xl border border-navy-dark/10 bg-white shadow-sm my-6">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-4">
+          <CheckCircle2 className="h-10 w-10 text-green-600" />
         </div>
+        
+        <h3 className="font-heading text-2xl font-bold text-navy-dark">
+          Form Submitted Successfully!
+        </h3>
+        
+        <p className="mt-2 max-w-md text-sm text-grey-medium">
+          Thank you, <span className="font-semibold text-navy-dark">{values.name}</span>. Your response has been recorded.
+        </p>
 
-        <VisitorPass fullName={values.name} company={values.companyName} referenceNumber={referenceNumber} />
+        {referenceNumber && (
+          <div className="mt-4 rounded-lg bg-gray-50 border border-gray-200 px-4 py-2 text-xs font-mono text-gray-600">
+            Reference No: <span className="font-bold text-navy-dark">{referenceNumber}</span>
+          </div>
+        )}
 
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button href={buildIcsDataUrl()} variant="outline" size="sm">
-            <CalendarPlus className="h-4 w-4" /> Add to Calendar
-          </Button>
-          <Button
-            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(siteConfig.venue.mapQuery)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="outline"
-            size="sm"
-          >
-            <Navigation className="h-4 w-4" /> Venue Directions
-          </Button>
-          <Button href="/dashboard" variant="secondary" size="sm">
-            <LayoutDashboard className="h-4 w-4" /> Go to Dashboard
-          </Button>
-        </div>
+        <p className="mt-3 text-xs text-grey-medium">
+          A confirmation email has been sent to <span className="font-medium text-navy-dark">{values.businessEmail}</span>.
+        </p>
+
+        <Button onClick={handleReset} variant="outline" size="sm" className="mt-6">
+          Submit Another Response
+        </Button>
       </div>
     );
   }
