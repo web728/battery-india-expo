@@ -5,6 +5,7 @@ import { sendEmail } from "@/lib/email/send";
 import { newsletterWelcomeEmail } from "@/lib/email/templates";
 import { notifyAll } from "@/lib/notify";
 import { checkRateLimit, getClientKey } from "@/lib/rate-limit";
+import { appendToSheet } from "@/lib/sheets";
 
 export async function POST(request: Request) {
   const limit = checkRateLimit(`newsletter:${getClientKey(request)}`);
@@ -33,6 +34,16 @@ export async function POST(request: Request) {
       },
       "NL"
     );
+
+    // Direct object pass ho raha hai (Aapke new sheet.ts ke according)
+    await appendToSheet({
+      Platform: "Newsletter Form",
+      "Register As": "Subscriber",
+      "Contact Person": data.name,
+      "Email Id": data.businessEmail,
+      "Company Name": data.company || "",
+      "Area of Interest": (data.interests ?? []).join(", "),
+    });
 
     await sendEmail({
       to: data.businessEmail,
