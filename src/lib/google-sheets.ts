@@ -81,11 +81,11 @@ export async function appendToSheet(formName: string, fields: Record<string, unk
       return String(val);
     });
 
+    // ⚡ FIX HERE: Range changed to A:A and removed insertDataOption
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A1`,
+      range: `${SHEET_NAME}!A:A`, 
       valueInputOption: "USER_ENTERED",
-      insertDataOption: "INSERT_ROWS",
       requestBody: { values: [row] },
     });
   } catch (error) {
