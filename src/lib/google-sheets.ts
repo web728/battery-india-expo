@@ -1,12 +1,8 @@
 import { google } from "googleapis";
 
-// All forms write into ONE tab called "Website Enquiries" in this sheet.
-// Required in .env.local:
-//   GOOGLE_SHEET_ID=the-long-id-from-the-sheet-url
-//   GOOGLE_SERVICE_ACCOUNT_EMAIL=xxxx@xxxx.iam.gserviceaccount.com
-//   GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const SHEET_NAME = "Website Enquiries";
+const HEADER_ANCHOR = "Company Name"; // any column name that will ALWAYS be in the header row
 
 function isSheetsConfigured() {
   return !!(SHEET_ID && process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY);
@@ -21,40 +17,41 @@ async function getSheetsClient() {
   return google.sheets({ version: "v4", auth });
 }
 
-async function ensureHeaders(
-  sheets: Awaited<ReturnType<typeof getSheetsClient>>,
-  keys: string[]
-): Promise<string[]> {
-  const headerRange = `${SHEET_NAME}!1:1`;
-  const res = await sheets.spreadsheets.values.get({ spreadsheetId: SHEET_ID, range: headerRange });
-  const existing: string[] = res.data.values?.[0] || [];
+// Finds the header row by scanning first ~10 rows for the anchor text
+async function findHeaderRow(
+  sheets: Awaited<ReturnType<typeof getSheetsClient>>
+): Promise<{ rowNumber: number; headers: string[] }> {
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${SHEET_NAME}!A1:ZZ10`, // scan first 10 rows only
+  });
+  const rows = res.data.values || [];
 
-  if (existing.length === 0) {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SHEET_ID,
-      range: headerRange,
-      valueInputOption: "RAW",
-      requestBody: { values: [keys] },
-    });
-    return keys;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some((cell) => String(cell).trim() === HEADER_ANCHOR)) {
+      return { rowNumber: i + 1, headers: rows[i] };
+    }
   }
-
-  const missing = keys.filter((k) => !existing.includes(k));
-  if (missing.length > 0) {
-    const updated = [...existing, ...missing];
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: SHEET_ID,
-      range: headerRange,
-      valueInputOption: "RAW",
-      requestBody: { values: [updated] },
-    });
-    return updated;
-  }
-
-  return existing;
+  throw new Error(`Header row not found — could not locate "${HEADER_ANCHOR}"`);
 }
 
-// fields should use human-readable labels as keys, e.g. { "Company Name": "...", "Email Id": "..." }
+async function getNextEmptyRow(
+  sheets: Awaited<ReturnType<typeof getSheetsClient>>,
+  dataStartRow: number
+): Promise<number> {
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SHEET_ID,
+    range: `${SHEET_NAME}!A${dataStartRow}:ZZ`,
+  });
+  const rows = res.data.values || [];
+  // find last row that actually has any non-empty cell (skip fully blank rows in between)
+  let lastFilled = 0;
+  rows.forEach((r, idx) => {
+    if (r.some((cell) => String(cell).trim() !== "")) lastFilled = idx + 1;
+  });
+  return dataStartRow + lastFilled;
+}
+
 export async function appendToSheet(formName: string, fields: Record<string, unknown>) {
   if (!isSheetsConfigured()) {
     console.info("[sheets] not configured — skipping", formName);
@@ -69,8 +66,9 @@ export async function appendToSheet(formName: string, fields: Record<string, unk
       timeStyle: "short",
     });
 
-    const allKeys = ["Date & Time", "Platform", ...Object.keys(fields)];
-    const headers = await ensureHeaders(sheets, allKeys);
+    const { rowNumber: headerRow, headers } = await findHeaderRow(sheets);
+    const dataStartRow = headerRow + 1;
+    const nextRow = await getNextEmptyRow(sheets, dataStartRow);
 
     const row = headers.map((h) => {
       if (h === "Date & Time") return dateTime;
@@ -81,10 +79,9 @@ export async function appendToSheet(formName: string, fields: Record<string, unk
       return String(val);
     });
 
-    // ⚡ FIX HERE: Range changed to A:A and removed insertDataOption
-    await sheets.spreadsheets.values.append({
+    await sheets.spreadsheets.values.update({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A:A`, 
+      range: `${SHEET_NAME}!A${nextRow}`,
       valueInputOption: "USER_ENTERED",
       requestBody: { values: [row] },
     });
