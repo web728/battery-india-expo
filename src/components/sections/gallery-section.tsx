@@ -20,7 +20,7 @@ export function GallerySection() {
     image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/5p-2.jpeg",
     title: "Gallery 3",
   }, {
-    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/03/WhatsApp-Image-2023-03-24-at-12.57.19-AM.jpeg",
+    image: "https://info.batteryindiaexpo.com/wp-content/uploads/2026/03/SBP_3172-min-scaled-1.jpg",
     title: "Gallery 3",
   }, {
     image: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/03/WhatsApp-Image-2023-03-24-at-12.57.09-AM.jpeg",
