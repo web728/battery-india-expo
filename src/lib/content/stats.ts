@@ -9,6 +9,6 @@ export type StatCard = {
 // status text instead of a number.
 export const statCards: StatCard[] = [
   { label: "Exhibitors", value: "120+", editable: true },
-  { label: "Business Visitors", value: "8000", editable: true },
+  { label: "Business Visitors", value: "8000+", editable: true },
   { label: "Exhibitor Categories", value: "25+", editable: true },
 ];
