@@ -2,8 +2,9 @@ import { google } from "googleapis";
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID!;
 const SHEET_NAME = process.env.GOOGLE_SHEET_TAB_NAME || "Sheet1";
+const HEADER_ANCHOR = "Company Name"; // koi bhi header text jo hamesha header row me milega
 
-// NAYA: tab naam me space/special chars hone par range fail hota hai,
+// tab naam me space/special chars hone par range fail hota hai,
 // isliye naam ko single quotes me wrap karna zaroori hai
 function quotedSheetRange(range: string): string {
   return `'${SHEET_NAME}'!${range}`;
@@ -66,21 +67,66 @@ const COLUMNS = [
 
 export type SheetRowData = Partial<Record<(typeof COLUMNS)[number], string>>;
 
+type SheetsClient = ReturnType<typeof google.sheets>;
+
+// Header row ko dhoondo — anchor text scan karke (pehli ~10 rows me)
+async function findHeaderRow(sheets: SheetsClient): Promise<number> {
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: quotedSheetRange("A1:ZZ10"),
+  });
+  const rows = res.data.values || [];
+
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some((cell) => String(cell).trim() === HEADER_ANCHOR)) {
+      return i + 1; // 1-indexed row number
+    }
+  }
+
+  // Header nahi mila to safe default: row 1 ko hi header maan lo
+  return 1;
+}
+
+// Header ke baad ka pehla khali row nikaalo (append() ka table-detection
+// bug avoid karne ke liye — wo kabhi kabhi top pe insert kar deta hai)
+async function getNextEmptyRow(
+  sheets: SheetsClient,
+  dataStartRow: number
+): Promise<number> {
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: quotedSheetRange(`A${dataStartRow}:A`),
+  });
+  const rows = res.data.values || [];
+
+  let lastFilled = 0;
+  rows.forEach((r, idx) => {
+    if (r.some((cell) => String(cell).trim() !== "")) lastFilled = idx + 1;
+  });
+
+  return dataStartRow + lastFilled;
+}
+
 export async function appendToSheet(data: SheetRowData) {
   try {
     const auth = getAuth();
     const sheets = google.sheets({ version: "v4", auth });
+
+    const headerRow = await findHeaderRow(sheets);
+    const dataStartRow = headerRow + 1;
+    const nextRow = await getNextEmptyRow(sheets, dataStartRow);
 
     const row = COLUMNS.map((col) => {
       if (col === "Date & Time") return formatDateTime();
       return data[col] ?? "";
     });
 
-    await sheets.spreadsheets.values.append({
+    // append() ki jagah update() use kar rahe — exact row number pe likhte
+    // hai, isliye kabhi bhi galti se top pe insert nahi hoga
+    await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
-      range: quotedSheetRange("A:A"), // CHANGE: pehle `${SHEET_NAME}!A:A` tha
+      range: quotedSheetRange(`A${nextRow}`),
       valueInputOption: "USER_ENTERED",
-      insertDataOption: "INSERT_ROWS",
       requestBody: { values: [row] },
     });
   } catch (err) {
