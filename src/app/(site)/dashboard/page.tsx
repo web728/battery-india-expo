@@ -32,7 +32,7 @@ export default async function DashboardPage() {
             <EmptyState
               title="Dashboard Available Once Accounts Are Enabled"
               description="This environment does not yet have Supabase configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to enable participant accounts and dashboards — see the README for setup instructions."
-              action={<Button href="/visit/register">Register to Visit</Button>}
+              action={<Button href="https://app.warpbay.com/DRmJetWf">Register to Visit</Button>}
             />
           </Container>
         </section>

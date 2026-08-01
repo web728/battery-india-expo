@@ -42,7 +42,7 @@ export default function ExhibitCategoriesPage() {
           </div>
 
           <div className="mt-14 flex flex-wrap justify-center gap-4">
-            <Button href="/exhibit/book-a-stand" size="lg">Book a Stand</Button>
+            <Button href="https://app.warpbay.com/LmfC1aDd" size="lg">Book a Stand</Button>
           </div>
         </Container>
       </section>

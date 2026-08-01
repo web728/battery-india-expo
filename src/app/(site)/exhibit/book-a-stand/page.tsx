@@ -10,13 +10,13 @@ import { Phone, Mail } from "lucide-react";
 export const metadata: Metadata = {
   title: "Book a Stand",
   description: "Book your stand at India Battery International Show 2026. Submit your requirements and our sales team will respond with options and rates.",
-  alternates: { canonical: "/exhibit/book-a-stand" },
+  alternates: { canonical: "https://app.warpbay.com/LmfC1aDd" },
 };
 
 export default function BookAStandPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ label: "Exhibit", href: "/exhibit" }, { label: "Book a Stand", href: "/exhibit/book-a-stand" }]} />
+      <BreadcrumbJsonLd items={[{ label: "Exhibit", href: "/exhibit" }, { label: "Book a Stand", href: "https://app.warpbay.com/LmfC1aDd" }]} />
       <PageHero
         eyebrow="Exhibit"
         title="Book a Stand"

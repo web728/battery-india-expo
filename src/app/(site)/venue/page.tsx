@@ -32,7 +32,7 @@ export default function VenuePage() {
             </a>
           </div>
           <div className="mt-10 flex justify-center">
-            <Button href="/visit/register">Register to Visit</Button>
+            <Button href="https://app.warpbay.com/DRmJetWf">Register to Visit</Button>
           </div>
         </Container>
       </section>

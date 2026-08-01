@@ -44,7 +44,7 @@ export function Hero() {
             <TrackedLink
               event={AnalyticsEvents.BOOK_STAND_CLICK}
               params={{ source: "hero" }}
-              href="/exhibit/book-a-stand"
+              href="https://app.warpbay.com/LmfC1aDd"
               className="inline-flex items-center gap-2 rounded-md bg-red px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-red-dark focus-visible:outline focus-visible:outline-3 focus-visible:outline-white"
             >
               <CalendarCheck className="h-5 w-5" aria-hidden="true" />
@@ -53,7 +53,7 @@ export function Hero() {
             <TrackedLink
               event={AnalyticsEvents.REGISTER_VISIT_CLICK}
               params={{ source: "hero" }}
-              href="/visit/register"
+              href="https://app.warpbay.com/DRmJetWf"
               className="inline-flex items-center gap-2 rounded-md border-2 border-white px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-navy-dark focus-visible:outline focus-visible:outline-3 focus-visible:outline-white"
             >
               <Ticket className="h-5 w-5" aria-hidden="true" />

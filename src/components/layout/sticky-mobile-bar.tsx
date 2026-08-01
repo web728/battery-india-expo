@@ -12,14 +12,14 @@ export function StickyMobileBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-grey-light bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.08)] lg:hidden">
       <Link
-        href="/exhibit/book-a-stand"
+        href="https://app.warpbay.com/LmfC1aDd"
         className="flex flex-col items-center justify-center gap-0.5 py-2.5 text-xs font-semibold text-navy-dark"
       >
         <CalendarCheck className="h-5 w-5 text-red" aria-hidden="true" />
         Exhibit
       </Link>
       <Link
-        href="/visit/register"
+        href="https://app.warpbay.com/DRmJetWf"
         className="flex flex-col items-center justify-center gap-0.5 border-x border-grey-light py-2.5 text-xs font-semibold text-navy-dark"
       >
         <Ticket className="h-5 w-5 text-red" aria-hidden="true" />

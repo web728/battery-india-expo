@@ -142,10 +142,10 @@ export function Header() {
 
         {/* Action Buttons */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Button href="/exhibit/book-a-stand" size="sm" variant="primary">
+          <Button href="https://app.warpbay.com/LmfC1aDd" size="sm" variant="primary">
             Book a Stand
           </Button>
-          <Button href="/visit/register" size="sm" variant="outline-white">
+          <Button href="https://app.warpbay.com/DRmJetWf" size="sm" variant="outline-white">
             Register to Visit
           </Button>
         </div>

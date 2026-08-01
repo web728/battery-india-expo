@@ -33,7 +33,7 @@ export default function ExhibitPage() {
         breadcrumbs={[{ label: "Exhibit" }]}
         actions={
           <>
-            <Button href="/exhibit/book-a-stand" variant="primary" size="lg">Book a Stand</Button>
+            <Button href="https://app.warpbay.com/LmfC1aDd" variant="primary" size="lg">Book a Stand</Button>
             <Button href="/media/downloads" variant="outline-white" size="lg">Download Brochure</Button>
           </>
         }
@@ -107,7 +107,7 @@ export default function ExhibitPage() {
       <section className="bg-navy-dark py-16 sm:py-20">
         <Container>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <Button href="/exhibit/book-a-stand" variant="outline-white" className="justify-center">Book a Stand</Button>
+            <Button href="https://app.warpbay.com/LmfC1aDd" variant="outline-white" className="justify-center">Book a Stand</Button>
             <Button href="/exhibit/sponsorship" variant="outline-white" className="justify-center">Sponsorship</Button>
           </div>
           <p className="mt-8 text-center text-sm text-white/60">

@@ -31,7 +31,7 @@ export default function LoginPage() {
           </div>
           <p className="mt-6 text-center text-sm text-grey-medium">
             Not registered yet?{" "}
-            <Button href="/visit/register" variant="ghost" size="sm">
+            <Button href="https://app.warpbay.com/DRmJetWf" variant="ghost" size="sm">
               Register to Visit
             </Button>
           </p>

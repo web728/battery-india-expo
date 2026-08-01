@@ -56,7 +56,7 @@ export function VenueSection() {
               >
                 <Navigation className="h-4 w-4" aria-hidden="true" /> Get Directions
               </Button>
-              <Button href="/visit/register" variant="outline">
+              <Button href="https://app.warpbay.com/DRmJetWf" variant="outline">
                 Plan Your Visit
               </Button>
             </div>

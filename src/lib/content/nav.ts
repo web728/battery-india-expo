@@ -22,7 +22,7 @@ export const mainNav: NavItem[] = [
     children: [
       { label: "Why Exhibit", href: "/exhibit" },
       { label: "Exhibitor Categories", href: "/exhibit/categories" },
-      { label: "Book a Stand", href: "/exhibit/book-a-stand" },
+      { label: "Book a Stand", href: "https://app.warpbay.com/LmfC1aDd" },
       { label: "Sponsorship Opportunities", href: "/exhibit/sponsorship" },
       { label: "Exhibitor FAQs", href: "/exhibit/faqs" },
     ],
@@ -32,7 +32,7 @@ export const mainNav: NavItem[] = [
     href: "/visit",
     children: [
       { label: "Why Visit", href: "/visit" },
-      { label: "Visitor Registration", href: "/visit/register" },
+      { label: "Visitor Registration", href: "https://app.warpbay.com/DRmJetWf" },
       { label: "Visitor Profile", href: "/visit/visitor-profile" },
       { label: "Visitor Guide", href: "/visit/guide" },
       { label: "Visitor FAQs", href: "/visit/faqs" },
@@ -59,8 +59,8 @@ export const footerLegalLinks = [
 ];
 
 export const footerQuickLinks = [
-  { label: "Book a Stand", href: "/exhibit/book-a-stand" },
-  { label: "Register to Visit", href: "/visit/register" },
+  { label: "Book a Stand", href: "https://app.warpbay.com/LmfC1aDd" },
+  { label: "Register to Visit", href: "https://app.warpbay.com/DRmJetWf" },
   { label: "Sponsorship", href: "/exhibit/sponsorship" },
   { label: "Exhibitor Directory", href: "/exhibitors" },
   { label: "Media Centre", href: "/media" },

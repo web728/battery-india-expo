@@ -30,7 +30,7 @@ export default function VisitPage() {
         title="Discover Technologies, Suppliers and Industry Opportunities"
         description="Explore the complete battery and energy-storage value chain, attend technical sessions and connect with manufacturers, experts and industry peers."
         breadcrumbs={[{ label: "Visit" }]}
-        actions={<Button href="/visit/register" size="lg">Register to Visit</Button>}
+        actions={<Button href="https://app.warpbay.com/DRmJetWf" size="lg">Register to Visit</Button>}
       />
 
       <Container className="-mt-10 sm:-mt-14">
@@ -110,7 +110,7 @@ export default function VisitPage() {
             <Accordion items={allFaqs} />
           </div>
           <div className="mt-10 flex justify-center gap-4">
-            <Button href="/visit/register" size="lg">Register to Visit</Button>
+            <Button href="https://app.warpbay.com/DRmJetWf" size="lg">Register to Visit</Button>
             <Button href="/visit/faqs" variant="ghost">All Visitor FAQs</Button>
           </div>
         </Container>

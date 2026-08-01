@@ -33,7 +33,7 @@ export default function VisitorProfilePage() {
             ))}
           </div>
           <div className="mt-12 flex justify-center">
-            <Button href="/visit/register" size="lg">Register to Visit</Button>
+            <Button href="https://app.warpbay.com/DRmJetWf" size="lg">Register to Visit</Button>
           </div>
         </Container>
       </section>

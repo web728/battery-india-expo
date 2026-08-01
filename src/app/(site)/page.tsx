@@ -42,7 +42,7 @@ export default function HomePage() {
         title="Why Visit India Battery International Show 2026"
         benefits={whyVisitBenefits}
         ctaLabel="Register as a Trade Visitor"
-        ctaHref="/visit/register"
+        ctaHref="https://app.warpbay.com/DRmJetWf"
         tone="dark"
       /> */}
       {/* <ShowHighlights /> */}

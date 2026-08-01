@@ -50,7 +50,7 @@ export default function ExhibitorsDirectoryPage() {
             <EmptyState
               title="Confirmed Exhibitor Directory Coming Soon"
               description="Exhibitor listings will appear here as bookings are confirmed and approved by the organizer."
-              action={<Button href="/exhibit/book-a-stand">Book a Stand</Button>}
+              action={<Button href="https://app.warpbay.com/LmfC1aDd">Book a Stand</Button>}
             />
           ) : null}
         </Container>
