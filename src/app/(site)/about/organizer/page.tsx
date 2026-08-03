@@ -47,7 +47,7 @@ export default function OrganizerPage() {
 
           <p className="mt-5 text-lg leading-relaxed text-grey-medium">
             {siteConfig.organizer.name} organises India Battery International Show 2026, alongside the
-            co-located India EV International Show and India Solar International Show, bringing together the
+            co-located India International  EV Show and India Solar International Show, bringing together the
             battery, energy-storage, electric-mobility, charging, recycling and renewable-energy value chains
             for business, technology exchange and collaboration.
           </p>

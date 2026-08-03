@@ -40,7 +40,7 @@ export function CoLocatedShows() {
                 Co-Located With
               </h3>
               <div className="flex flex-wrap items-center justify-center gap-8 mix-blend-multiply">
-                {/* Logo 1: India EV */}
+                {/* Logo 1: India International EV */}
                 <a 
                   href="https://iievshow.com/" 
                   target="_blank" 
@@ -49,7 +49,7 @@ export function CoLocatedShows() {
                 >
                   <img
                     src="https://iievshow.com/wp-content/uploads/2022/06/India-EV-Logo.png"
-                    alt="India EV Logo"
+                    alt="Indiainternational EV Logo"
                     className="h-full w-full object-contain"
                   />
                 </a>

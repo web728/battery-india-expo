@@ -8,7 +8,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 export const metadata: Metadata = {
   title: "Co-Located Shows",
   description:
-    "India Battery International Show 2026 is co-located with India EV International Show and India Solar International Show.",
+    "India Battery International Show 2026 is co-located with India International EV Show and India Solar International Show.",
   alternates: { canonical: "/about/co-located-shows" },
 };
 
@@ -30,7 +30,7 @@ export default function CoLocatedShowsPage() {
         <figure className="overflow-hidden rounded-2xl shadow-xl">
           <Image
             src="/images/expo-floor-ev-booth-visitors.jpg"
-            alt="Visitors at an electric-vehicle exhibitor booth at a previous edition of the co-located India EV International Show"
+            alt="Visitors at an electric-vehicle exhibitor booth at a previous edition of the co-located India International EV  Show"
             width={2000}
             height={1333}
             className="h-56 w-full object-cover sm:h-80"

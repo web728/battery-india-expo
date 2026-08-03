@@ -33,8 +33,8 @@ siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.t
   : "https://www.batteryindiaexpo.com",
   coLocatedShows: [
     {
-      name: "India EV International Show",
-      slug: "india-ev-international-show",
+      name: "India International EV  Show",
+      slug: "india-EV-international-show",
       url: null as string | null,
     },
     {

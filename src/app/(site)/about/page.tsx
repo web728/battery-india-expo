@@ -35,7 +35,7 @@ const exploreLinks = [
   {
     href: "/about/co-located-shows",
     title: "Co-Located Shows",
-    description: "Explore India EV International Show and India Solar International Show.",
+    description: "Explore India International EV  Show and India Solar International Show.",
   },
   {
     href: "/about/organizer",
@@ -79,7 +79,7 @@ export default function AboutPage() {
             <figure className="group relative overflow-hidden rounded-2xl shadow-xl shadow-navy-dark/10 ring-1 ring-black/5">
               <Image
                 src="/images/expo-vip-lounge-branding.jpg"
-                alt="Battery India Expo and India EV International Show branding at a previous edition, organised by Futurex"
+                alt="Battery India Expo and India EV Show branding at a previous edition, organised by Futurex"
                 width={2400}
                 height={1600}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
