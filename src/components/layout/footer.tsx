@@ -22,7 +22,7 @@ export function Footer() {
           <Link href="/" className="mb-4 inline-flex items-center gap-2">
             <Image
               src="/logo/battery-solar-logo.png"
-              alt="Battery India Expo Logo"
+              alt="Battery India Expo"
               width={240}
               height={90}
               className="h-16 w-auto object-contain"

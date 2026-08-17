@@ -71,7 +71,7 @@ export function Header() {
         >
           <Image
             src="/logo/battery-solar-logo.png"
-            alt="Battery India Expo Logo"
+            alt="Battery India Expo"
             width={160}
             height={60}
             className="h-10 w-auto object-contain sm:h-12"
