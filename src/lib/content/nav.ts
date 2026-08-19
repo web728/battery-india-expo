@@ -45,6 +45,9 @@ export const mainNav: NavItem[] = [
     //   { label: "Media Centre", href: "/media" },
     //   { label: "Photo Gallery", href: "/media/gallery" },
     // ],
+  },  {
+    label: "Conference",
+    href: "https://bharatemmsummit.com/",
   },
   { label: "Contact", href: "/contact" },
 ];
@@ -63,6 +66,10 @@ export const footerQuickLinks = [
   { label: "Register to Visit", href: "https://app.warpbay.com/DRmJetWf" },
   { label: "Sponsorship", href: "/exhibit/sponsorship" },
   { label: "Exhibitor Directory", href: "/exhibitors" },
+   {
+    label: "Conference",
+    href: "https://bharatemmsummit.com/",
+  },
   { label: "Media Centre", href: "/media" },
   { label: "Contact Us", href: "/contact" },
   { label: "Participant Login", href: "/login" },
