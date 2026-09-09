@@ -6,19 +6,31 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "Visitor Registration",
-  description: "Register as a trade visitor for India Battery International Show 2026. Receive your confirmation and digital visitor pass instantly.",
-  alternates: { canonical: "https://app.warpbay.com/DRmJetWf" },
+  description:
+    "Register as a trade visitor for India Battery International Show 2026. Receive your confirmation and digital visitor pass instantly.",
+  alternates: { canonical: "https://app.warpbay.com/qPMIy6ii" },
 };
 
 export default function VisitorRegisterPage() {
   return (
     <>
-      <BreadcrumbJsonLd items={[{ label: "Visit", href: "/visit" }, { label: "Visitor Registration", href: "https://app.warpbay.com/DRmJetWf" }]} />
+      <BreadcrumbJsonLd
+        items={[
+          { label: "Visit", href: "/visit" },
+          {
+            label: "Visitor Registration",
+            href: "https://app.warpbay.com/qPMIy6ii",
+          },
+        ]}
+      />
       <PageHero
         eyebrow="Visit"
         title="Visitor Registration"
         description="Complete the form below to register as a trade visitor. You will receive a confirmation email and digital pass immediately after submitting."
-        breadcrumbs={[{ label: "Visit", href: "/visit" }, { label: "Visitor Registration" }]}
+        breadcrumbs={[
+          { label: "Visit", href: "/visit" },
+          { label: "Visitor Registration" },
+        ]}
       />
 
       <section className="py-16 sm:py-20">

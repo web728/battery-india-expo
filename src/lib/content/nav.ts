@@ -32,7 +32,10 @@ export const mainNav: NavItem[] = [
     href: "/visit",
     children: [
       { label: "Why Visit", href: "/visit" },
-      { label: "Visitor Registration", href: "https://app.warpbay.com/DRmJetWf" },
+      {
+        label: "Visitor Registration",
+        href: "https://app.warpbay.com/qPMIy6ii",
+      },
       { label: "Visitor Profile", href: "/visit/visitor-profile" },
       { label: "Visitor Guide", href: "/visit/guide" },
       { label: "Visitor FAQs", href: "/visit/faqs" },
@@ -45,7 +48,8 @@ export const mainNav: NavItem[] = [
     //   { label: "Media Centre", href: "/media" },
     //   { label: "Photo Gallery", href: "/media/gallery" },
     // ],
-  },  {
+  },
+  {
     label: "Conference",
     href: "https://bharatemmsummit.com/",
   },
@@ -63,10 +67,10 @@ export const footerLegalLinks = [
 
 export const footerQuickLinks = [
   { label: "Book a Stand", href: "https://app.warpbay.com/LmfC1aDd" },
-  { label: "Register to Visit", href: "https://app.warpbay.com/DRmJetWf" },
+  { label: "Register to Visit", href: "https://app.warpbay.com/qPMIy6ii" },
   { label: "Sponsorship", href: "/exhibit/sponsorship" },
   { label: "Exhibitor Directory", href: "/exhibitors" },
-   {
+  {
     label: "Conference",
     href: "https://bharatemmsummit.com/",
   },

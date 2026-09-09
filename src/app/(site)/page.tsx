@@ -13,7 +13,10 @@ import { WhyPuneSection } from "@/components/sections/why-pune-section";
 import { VenueSection } from "@/components/sections/venue-section";
 import { NewsletterSection } from "@/components/sections/newsletter-section";
 import { FinalCta } from "@/components/sections/final-cta";
-import { whyExhibitBenefits, whyVisitBenefits } from "@/lib/content/home-content";
+import {
+  whyExhibitBenefits,
+  whyVisitBenefits,
+} from "@/lib/content/home-content";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -42,7 +45,7 @@ export default function HomePage() {
         title="Why Visit India Battery International Show 2026"
         benefits={whyVisitBenefits}
         ctaLabel="Register as a Trade Visitor"
-        ctaHref="https://app.warpbay.com/DRmJetWf"
+        ctaHref="https://app.warpbay.com/qPMIy6ii"
         tone="dark"
       /> */}
       {/* <ShowHighlights /> */}

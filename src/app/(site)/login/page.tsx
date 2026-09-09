@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Participant Login",
-  description: "Log in to your India Battery International Show 2026 participant dashboard.",
+  description:
+    "Log in to your India Battery International Show 2026 participant dashboard.",
   alternates: { canonical: "/login" },
   robots: { index: false, follow: false },
 };
@@ -19,7 +20,7 @@ export default function LoginPage() {
         title="Log In to Your Dashboard"
         description="Registered visitors and exhibitors can access their dashboard here."
         breadcrumbs={[{ label: "Login" }]}
-          backgroundImage={{
+        backgroundImage={{
           src: "https://info.batteryindiaexpo.com/wp-content/uploads/2023/05/nepal5p-34.jpg",
           alt: "Futurex branding at a previous edition of the show",
         }}
@@ -31,7 +32,11 @@ export default function LoginPage() {
           </div>
           <p className="mt-6 text-center text-sm text-grey-medium">
             Not registered yet?{" "}
-            <Button href="https://app.warpbay.com/DRmJetWf" variant="ghost" size="sm">
+            <Button
+              href="https://app.warpbay.com/qPMIy6ii"
+              variant="ghost"
+              size="sm"
+            >
               Register to Visit
             </Button>
           </p>

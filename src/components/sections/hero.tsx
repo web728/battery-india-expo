@@ -28,7 +28,8 @@ export function Hero() {
       <Container className="relative z-10">
         <div className="max-w-3xl">
           <p className="mb-4 inline-flex items-center rounded-full border border-green/30 bg-green/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green">
-            {siteConfig.dates.display} · {siteConfig.venue.city}, {siteConfig.venue.state}
+            {siteConfig.dates.display} · {siteConfig.venue.city},{" "}
+            {siteConfig.venue.state}
           </p>
           <h1 className="font-heading text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
             {siteConfig.eventName}
@@ -37,7 +38,8 @@ export function Hero() {
             {siteConfig.marketingLine}
           </p>
           <p className="mt-3 text-sm text-white/60">
-            {siteConfig.venue.line1}, {siteConfig.venue.line2}, {siteConfig.venue.city}
+            {siteConfig.venue.line1}, {siteConfig.venue.line2},{" "}
+            {siteConfig.venue.city}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -53,7 +55,7 @@ export function Hero() {
             <TrackedLink
               event={AnalyticsEvents.REGISTER_VISIT_CLICK}
               params={{ source: "hero" }}
-              href="https://app.warpbay.com/DRmJetWf"
+              href="https://app.warpbay.com/qPMIy6ii"
               className="inline-flex items-center gap-2 rounded-md border-2 border-white px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-white hover:text-navy-dark focus-visible:outline focus-visible:outline-3 focus-visible:outline-white"
             >
               <Ticket className="h-5 w-5" aria-hidden="true" />

@@ -9,10 +9,18 @@ export function FinalCta() {
           Be Part of India&apos;s Battery and Energy Storage Business Platform
         </h2>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button href="https://app.warpbay.com/LmfC1aDd" variant="secondary" size="lg">
+          <Button
+            href="https://app.warpbay.com/LmfC1aDd"
+            variant="secondary"
+            size="lg"
+          >
             Book a Stand
           </Button>
-          <Button href="https://app.warpbay.com/DRmJetWf" variant="outline-white" size="lg">
+          <Button
+            href="https://app.warpbay.com/qPMIy6ii"
+            variant="outline-white"
+            size="lg"
+          >
             Register to Visit
           </Button>
           <Button href="/exhibit/sponsorship" variant="outline-white" size="lg">

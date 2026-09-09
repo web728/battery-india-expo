@@ -8,7 +8,8 @@ import { visitorFaqs } from "@/lib/content/faqs";
 
 export const metadata: Metadata = {
   title: "Visitor FAQs",
-  description: "Frequently asked questions for visitors to India Battery International Show 2026.",
+  description:
+    "Frequently asked questions for visitors to India Battery International Show 2026.",
   alternates: { canonical: "/visit/faqs" },
 };
 
@@ -17,25 +18,37 @@ export default function VisitorFaqsPage() {
 
   return (
     <>
-      <BreadcrumbJsonLd items={[{ label: "Visit", href: "/visit" }, { label: "Visitor FAQs", href: "/visit/faqs" }]} />
+      <BreadcrumbJsonLd
+        items={[
+          { label: "Visit", href: "/visit" },
+          { label: "Visitor FAQs", href: "/visit/faqs" },
+        ]}
+      />
       <FaqJsonLd items={allFaqs} />
       <PageHero
         eyebrow="Visit"
         title="Visitor FAQs"
         description="Answers to common questions about visiting India Battery International Show 2026."
-        breadcrumbs={[{ label: "Visit", href: "/visit" }, { label: "Visitor FAQs" }]}
+        breadcrumbs={[
+          { label: "Visit", href: "/visit" },
+          { label: "Visitor FAQs" },
+        ]}
       />
 
       <section className="py-16 sm:py-20">
         <Container className="max-w-3xl">
           {visitorFaqs.map((group) => (
             <div key={group.group} className="mb-10">
-              <h2 className="mb-4 font-heading text-lg font-bold text-navy-dark">{group.group}</h2>
+              <h2 className="mb-4 font-heading text-lg font-bold text-navy-dark">
+                {group.group}
+              </h2>
               <Accordion items={group.items} />
             </div>
           ))}
           <div className="mt-4 flex justify-center">
-            <Button href="https://app.warpbay.com/DRmJetWf">Register to Visit</Button>
+            <Button href="https://app.warpbay.com/qPMIy6ii">
+              Register to Visit
+            </Button>
           </div>
         </Container>
       </section>

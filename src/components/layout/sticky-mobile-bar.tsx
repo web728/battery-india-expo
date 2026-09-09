@@ -6,7 +6,7 @@ import { AnalyticsEvents } from "@/lib/analytics";
 
 export function StickyMobileBar() {
   const waLink = `https://wa.me/${siteConfig.whatsapp.number}?text=${encodeURIComponent(
-    siteConfig.whatsapp.message
+    siteConfig.whatsapp.message,
   )}`;
 
   return (
@@ -19,7 +19,7 @@ export function StickyMobileBar() {
         Exhibit
       </Link>
       <Link
-        href="https://app.warpbay.com/DRmJetWf"
+        href="https://app.warpbay.com/qPMIy6ii"
         className="flex flex-col items-center justify-center gap-0.5 border-x border-grey-light py-2.5 text-xs font-semibold text-navy-dark"
       >
         <Ticket className="h-5 w-5 text-red" aria-hidden="true" />

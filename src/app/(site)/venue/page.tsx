@@ -26,13 +26,22 @@ export default function VenuePage() {
       <section className="py-16 sm:py-20">
         <Container>
           <div className="flex justify-center">
-            <a href="/venue/travel" className="max-w-sm rounded-xl border border-grey-light bg-white p-6 shadow-sm hover:shadow-md">
-              <h3 className="font-heading text-base font-bold text-navy-dark">Travel Information</h3>
-              <p className="mt-2 text-sm text-grey-medium">Air, rail and road access to Pune and the venue.</p>
+            <a
+              href="/venue/travel"
+              className="max-w-sm rounded-xl border border-grey-light bg-white p-6 shadow-sm hover:shadow-md"
+            >
+              <h3 className="font-heading text-base font-bold text-navy-dark">
+                Travel Information
+              </h3>
+              <p className="mt-2 text-sm text-grey-medium">
+                Air, rail and road access to Pune and the venue.
+              </p>
             </a>
           </div>
           <div className="mt-10 flex justify-center">
-            <Button href="https://app.warpbay.com/DRmJetWf">Register to Visit</Button>
+            <Button href="https://app.warpbay.com/qPMIy6ii">
+              Register to Visit
+            </Button>
           </div>
         </Container>
       </section>

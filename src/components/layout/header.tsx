@@ -58,7 +58,7 @@ export function Header() {
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         transparent
           ? "bg-transparent"
-          : "bg-navy-dark/95 shadow-lg backdrop-blur-sm supports-[backdrop-filter]:bg-navy-dark/80"
+          : "bg-navy-dark/95 shadow-lg backdrop-blur-sm supports-[backdrop-filter]:bg-navy-dark/80",
       )}
     >
       {/* 
@@ -81,7 +81,11 @@ export function Header() {
         </Link>
 
         {/* Desktop Primary Nav */}
-        <nav ref={navRef} aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav
+          ref={navRef}
+          aria-label="Primary"
+          className="hidden items-center gap-1 lg:flex"
+        >
           {mainNav.map((item) => {
             const isOpen = openDropdown === item.href;
             return (
@@ -93,14 +97,16 @@ export function Header() {
                     aria-haspopup="true"
                     aria-expanded={isOpen}
                     onClick={() =>
-                      setOpenDropdown((current) => (current === item.href ? null : item.href))
+                      setOpenDropdown((current) =>
+                        current === item.href ? null : item.href,
+                      )
                     }
                   >
                     {item.label}
                     <ChevronDown
                       className={cn(
                         "h-3.5 w-3.5 transition-transform duration-200",
-                        isOpen && "rotate-180"
+                        isOpen && "rotate-180",
                       )}
                       aria-hidden="true"
                     />
@@ -120,7 +126,7 @@ export function Header() {
                       "absolute left-0 top-full w-72 -translate-y-1 rounded-lg border border-grey-light bg-white py-2 shadow-xl transition-[opacity,transform,visibility] duration-150",
                       isOpen
                         ? "visible translate-y-0 opacity-100"
-                        : "invisible opacity-0"
+                        : "invisible opacity-0",
                     )}
                   >
                     {item.children.map((child) => (
@@ -142,10 +148,18 @@ export function Header() {
 
         {/* Action Buttons */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Button href="https://app.warpbay.com/LmfC1aDd" size="sm" variant="primary">
+          <Button
+            href="https://app.warpbay.com/LmfC1aDd"
+            size="sm"
+            variant="primary"
+          >
             Book a Stand
           </Button>
-          <Button href="https://app.warpbay.com/DRmJetWf" size="sm" variant="outline-white">
+          <Button
+            href="https://app.warpbay.com/qPMIy6ii"
+            size="sm"
+            variant="outline-white"
+          >
             Register to Visit
           </Button>
         </div>
