@@ -12,7 +12,7 @@ const topRowPartners = {
 
 // 2. Remaining Category Partners (Second Row onwards)
 const remainingCategoryPartners = {
-  battery: [{ src: "/partners/Redon-logo-2.png", url: "https://iievshow.com/", name: "Battery Partner", imgClassName: "max-h-10" }],
+  battery: [{ src: "/partners/Redon-logo-2.png", url: "#", name: "Battery Partner", imgClassName: "max-h-10" }],
 };
 
 // 3. Institutional, Testing, Supporting, Startup Ecosystem Data
@@ -47,7 +47,7 @@ const tierThreePartners = {
 // 5. Supporting Associations
 const supportingAssociations = [
   { src: "/partners/logo-1.jpg", url: "https://www.araiindia.com/", name: "Association 1", imgClassName: "max-h-11" },
-  { src: "/partners/ace.png", url: "https://iievshow.com/#", name: "Association 2", imgClassName: "max-h-11" },
+  { src: "/partners/ace.png", url: "#", name: "Association 2", imgClassName: "max-h-11" },
   { src: "/partners/logo-4.jpg", url: "https://indiaesa.info/", name: "Association 3", imgClassName: "max-h-11" },
   { src: "/partners/logo-3.jpg", url: "https://smartemobility.org/", name: "Association 4", imgClassName: "max-h-15" },
   { src: "/partners/aisia.png", url: "https://aisia.org.in/", name: "Association 5", imgClassName: "max-h-11" },
