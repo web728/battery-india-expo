@@ -3,42 +3,42 @@ import { SectionHeading } from "@/components/ui/section-heading";
 
 // 1. Masma Pavilion & Category Partners (Top Row: Exactly 5 items)
 const topRowPartners = {
-  masmaPavilion: [{ src: "/partners/masma.webp", url: "#", name: "MASMA Pavilion", imgClassName: "max-h-13" }],
-  coSponsor: [{ src: "/partners/youhonk.png", url: "#", name: "Co-Sponsor", imgClassName: "max-h-13" }],
-  eMobility: [{ src: "/partners/garve-hyundai.png", url: "#", name: "E-Mobility Partner", imgClassName: "max-h-12" }],
-  fourWheeler: [{ src: "/partners/toyota.png", url: "#", name: "Four Wheeler Partner", imgClassName: "max-h-10" }],
-  twoWheeler: [{ src: "/partners/kinet.jpeg", url: "#", name: "Two Wheeler Partner", imgClassName: "max-h-10" }],
+  masmaPavilion: [{ src: "/partners/masma.webp", url: "https://www.youhonk.com/", name: "MASMA Pavilion", imgClassName: "max-h-13" }],
+  coSponsor: [{ src: "/partners/youhonk.png", url: "https://www.youhonk.com/", name: "Co-Sponsor", imgClassName: "max-h-13" }],
+  eMobility: [{ src: "/partners/garve-hyundai.png", url: "https://garve.hyundaimotor.in/", name: "E-Mobility Partner", imgClassName: "max-h-12" }],
+  fourWheeler: [{ src: "/partners/toyota.png", url: "https://www.toyotabharat.com/", name: "Four Wheeler Partner", imgClassName: "max-h-10" }],
+  twoWheeler: [{ src: "/partners/kinet.jpeg", url: "https://kineticev.in/", name: "Two Wheeler Partner", imgClassName: "max-h-10" }],
 };
 
 // 2. Remaining Category Partners (Second Row onwards)
 const remainingCategoryPartners = {
-  battery: [{ src: "/partners/Redon-logo-2.png", url: "#", name: "Battery Partner", imgClassName: "max-h-10" }],
+  battery: [{ src: "/partners/Redon-logo-2.png", url: "https://iievshow.com/", name: "Battery Partner", imgClassName: "max-h-10" }],
 };
 
 // 3. Institutional, Testing, Supporting, Startup Ecosystem Data
 const secondaryPartners = {
   institutional: [
-    { src: "/partners/institutional.png", url: "https://araiindia.com/", name: "Institutional Partner 1", imgClassName: "max-h-10" },
-    { src: "/partners/RVSF_logo_new.webp", url: "https://smartemobility.org/", name: "Institutional Partner 2", imgClassName: "max-h-10" },
+    { src: "/partners/institutional.png", url: "https://www.asrtu.org/", name: "Institutional Partner 1", imgClassName: "max-h-10" },
+    { src: "/partners/RVSF_logo_new.webp", url: "https://rvsfindia.in/", name: "Institutional Partner 2", imgClassName: "max-h-10" },
   ],
   batteryTesting: [
-    { src: "/partners/Bind.jpg", url: "#", name: "Battery Testing Partner", imgClassName: "max-h-10" },
+    { src: "/partners/Bind.jpg", url: "https://www.binder-world.com/int-en", name: "Battery Testing Partner", imgClassName: "max-h-10" },
   ],
   supporting: [
-    { src: "/partners/supporting.png", url: "https://indiaesa.info/", name: "Supporting Partner 1", imgClassName: "max-h-10" },
+    { src: "/partners/supporting.png", url: "#", name: "Supporting Partner 1", imgClassName: "max-h-10" },
     { src: "/partners/bis-logo.png", url: "#", name: "Supporting Partner 2", imgClassName: "max-h-10" },
   ],
   startupEcosystem: [
-    { src: "/partners/hub.png", url: "#", name: "Startup Ecosystem Partner", imgClassName: "max-h-10" },
+    { src: "/partners/hub.png", url: "https://ihubgujarat.in/", name: "Startup Ecosystem Partner", imgClassName: "max-h-10" },
   ],
 };
 
 // 4. Strategy, Startup, Knowledge Partners
 const tierThreePartners = {
-  strategy: [{ src: "/partners/Theistic.png", url: "#", name: "Strategy Partner", imgClassName: "max-h-10" }],
-  startup: [{ src: "/partners/Wespark.png", url: "#", name: "Startup Partner", imgClassName: "max-h-12" }],
+  strategy: [{ src: "/partners/Theistic.png", url: "https://theistic.in/", name: "Strategy Partner", imgClassName: "max-h-10" }],
+  startup: [{ src: "/partners/Wespark.png", url: "https://wespark.org.in/", name: "Startup Partner", imgClassName: "max-h-12" }],
   knowledge: [
-    { src: "/partners/ifeva.png", url: "#", name: "Knowledge Partner 1", imgClassName: "max-h-12" },
+    { src: "/partners/ifeva.png", url: "https://fevaev.com/", name: "Knowledge Partner 1", imgClassName: "max-h-12" },
     { src: "/partners/knowledge-part.png", url: "#", name: "Knowledge Partner 2", imgClassName: "max-h-12" },
     { src: "/partners/fronst-sullivan-1.png", url: "#", name: "Knowledge Partner 3", imgClassName: "max-h-12" },
   ],
@@ -46,14 +46,14 @@ const tierThreePartners = {
 
 // 5. Supporting Associations
 const supportingAssociations = [
-  { src: "/partners/logo-1.jpg", url: "#", name: "Association 1", imgClassName: "max-h-11" },
-  { src: "/partners/ace.png", url: "#", name: "Association 2", imgClassName: "max-h-11" },
-  { src: "/partners/logo-4.jpg", url: "#", name: "Association 3", imgClassName: "max-h-11" },
-  { src: "/partners/logo-3.jpg", url: "#", name: "Association 4", imgClassName: "max-h-15" },
-  { src: "/partners/aisia.png", url: "#", name: "Association 5", imgClassName: "max-h-11" },
+  { src: "/partners/logo-1.jpg", url: "https://www.araiindia.com/", name: "Association 1", imgClassName: "max-h-11" },
+  { src: "/partners/ace.png", url: "https://iievshow.com/#", name: "Association 2", imgClassName: "max-h-11" },
+  { src: "/partners/logo-4.jpg", url: "https://indiaesa.info/", name: "Association 3", imgClassName: "max-h-11" },
+  { src: "/partners/logo-3.jpg", url: "https://smartemobility.org/", name: "Association 4", imgClassName: "max-h-15" },
+  { src: "/partners/aisia.png", url: "https://aisia.org.in/", name: "Association 5", imgClassName: "max-h-11" },
   { src: "/partners/rsa.png", url: "#", name: "Association 6", imgClassName: "max-h-13" },
-  { src: "/partners/NETRA.jpeg", url: "#", name: "Association 7", imgClassName: "max-h-11" },
-  { src: "/partners/ibsa.png", url: "#", name: "Association 8", imgClassName: "max-h-11" },
+  { src: "/partners/NETRA.jpeg", url: "https://netraglobal.org/", name: "Association 7", imgClassName: "max-h-11" },
+  { src: "/partners/ibsa.png", url: "https://ibsa.org.in/", name: "Association 8", imgClassName: "max-h-11" },
   { src: "/partners/logo-5.jpg", url: "#", name: "Association 9", imgClassName: "max-h-11" },
 ];
 
