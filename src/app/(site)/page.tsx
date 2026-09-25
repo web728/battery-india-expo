@@ -18,6 +18,7 @@ import {
   whyVisitBenefits,
 } from "@/lib/content/home-content";
 import { siteConfig } from "@/lib/site-config";
+import Partners from "@/components/sections/partners";
 
 export const metadata: Metadata = {
   title: `${siteConfig.eventName} | ${siteConfig.dates.display}, ${siteConfig.venue.city}`,
@@ -32,6 +33,7 @@ export default function HomePage() {
       <QuickActionCards />
       <EventOverview />
       <StatsSection />
+      {/* <Partners /> */}
       {/* <SectorsGrid /> */}
       {/* <BenefitSection
         eyebrow="Why Exhibit"
@@ -51,7 +53,7 @@ export default function HomePage() {
       {/* <ShowHighlights /> */}
       <CoLocatedShows />
       {/* <ConfirmedExhibitorsStrip /> */}
-      <GallerySection />
+      {/* <GallerySection /> */}
       <WhyPuneSection />
       <VenueSection />
       <NewsletterSection />
