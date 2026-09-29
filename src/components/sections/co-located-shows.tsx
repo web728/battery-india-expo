@@ -25,7 +25,7 @@ const row1: { label: string; logos: PartnerLogo[] }[] = [
     logos: [{ src: "/partners/masma.webp", url: "https://www.youhonk.com/", name: "Masma Pavilion", imgClassName: "max-h-14" }],
   },
   {
-    label: "Co-Sponsor",
+    label: "Co-Partner",
     logos: [{ src: "/partners/youhonk.png", url: "https://www.youhonk.com/", name: "Co-Sponsor", imgClassName: "max-h-14" }],
   },
   {
