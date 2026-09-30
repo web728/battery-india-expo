@@ -127,6 +127,7 @@ const infiniteMediaLogos: PartnerLogo[] = [
   { src: "/partners/er-city.png", url: "#", name: "Media 11", imgClassName: "max-h-12" },
   { src: "/partners/auto-ev-times.png", url: "#", name: "Media 12", imgClassName: "max-h-12" },
   { src: "/partners/smart-energy.png", url: "#", name: "Media 13", imgClassName: "max-h-12" },
+  { src: "/partners/teztech.jpeg", url: "#", name: "Media 13", imgClassName: "max-h-12" },
 ];
 
 // ============================================================
