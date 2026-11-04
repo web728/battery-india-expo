@@ -1,13 +1,35 @@
+
 import { google } from "googleapis";
 
-const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID!;
-const SHEET_NAME = process.env.GOOGLE_SHEET_TAB_NAME || "Sheet1";
-const HEADER_ANCHOR = "Company Name"; // koi bhi header text jo hamesha header row me milega
+const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;
+const SHEET_NAME =
+  process.env.GOOGLE_SHEET_TAB_NAME || "Sheet1";
 
-// tab naam me space/special chars hone par range fail hota hai,
-// isliye naam ko single quotes me wrap karna zaroori hai
+const HEADER_ANCHOR = "Company Name";
+
+type SheetValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | null
+  | undefined;
+
+export type SheetRowData = Record<string, SheetValue>;
+
+type SheetsClient = ReturnType<typeof google.sheets>;
+
 function quotedSheetRange(range: string): string {
-  return `'${SHEET_NAME}'!${range}`;
+  const safeName = SHEET_NAME.replace(/'/g, "''");
+  return `'${safeName}'!${range}`;
+}
+
+function isConfigured(): boolean {
+  return Boolean(
+    SPREADSHEET_ID &&
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL &&
+      process.env.GOOGLE_SHEETS_PRIVATE_KEY_BASE64
+  );
 }
 
 function getAuth() {
@@ -19,12 +41,13 @@ function getAuth() {
   return new google.auth.JWT({
     email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
     key: privateKey,
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    scopes: [
+      "https://www.googleapis.com/auth/spreadsheets",
+    ],
   });
 }
 
-// Format matches your sheet: "July 3, 2026 20:19"
-function formatDateTime(date: Date = new Date()): string {
+function formatDateTime(date = new Date()): string {
   const datePart = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Kolkata",
     month: "long",
@@ -42,95 +65,209 @@ function formatDateTime(date: Date = new Date()): string {
   return `${datePart} ${timePart}`;
 }
 
-// Exact column order of your sheet (STATUS columns chhod diye, wo manual hain)
-const COLUMNS = [
-  "Date & Time",
-  "Platform",
-  "Register As",
-  "Company Name",
-  "Product profile",
-  "Contact Person",
-  "Designation",
-  "Email Id",
-  "Mobile No.",
-  "Booth Size Requirement",
-  "Products/Services to Display",
-  "Sponsorship/Branding Opportunities Interest",
-  "Website",
-  "Address",
-  "Country",
-  "Area of Interest",
-  "Info. Get From",
-  "Message",
-  "Corrections",
-] as const;
+function formatValue(value: SheetValue): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
 
-export type SheetRowData = Partial<Record<(typeof COLUMNS)[number], string>>;
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
 
-type SheetsClient = ReturnType<typeof google.sheets>;
+  return String(value);
+}
 
-// Header row ko dhoondo — anchor text scan karke (pehli ~10 rows me)
-async function findHeaderRow(sheets: SheetsClient): Promise<number> {
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: quotedSheetRange("A1:ZZ10"),
-  });
-  const rows = res.data.values || [];
+async function findHeaderRow(
+  sheets: SheetsClient
+): Promise<{
+  rowNumber: number;
+  headers: string[];
+}> {
+  const response =
+    await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: quotedSheetRange("A1:ZZ20"),
+    });
 
-  for (let i = 0; i < rows.length; i++) {
-    if (rows[i].some((cell) => String(cell).trim() === HEADER_ANCHOR)) {
-      return i + 1; // 1-indexed row number
+  const rows = response.data.values || [];
+
+  for (let index = 0; index < rows.length; index++) {
+    const headers = (rows[index] || []).map(
+      (value) => String(value).trim()
+    );
+
+    if (headers.includes(HEADER_ANCHOR)) {
+      return {
+        rowNumber: index + 1,
+        headers,
+      };
     }
   }
 
-  // Header nahi mila to safe default: row 1 ko hi header maan lo
-  return 1;
+  throw new Error(
+    `Header row not found. Expected "${HEADER_ANCHOR}" in "${SHEET_NAME}".`
+  );
 }
 
-// Header ke baad ka pehla khali row nikaalo (append() ka table-detection
-// bug avoid karne ke liye — wo kabhi kabhi top pe insert kar deta hai)
 async function getNextEmptyRow(
   sheets: SheetsClient,
   dataStartRow: number
 ): Promise<number> {
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: quotedSheetRange(`A${dataStartRow}:A`),
-  });
-  const rows = res.data.values || [];
-
-  let lastFilled = 0;
-  rows.forEach((r, idx) => {
-    if (r.some((cell) => String(cell).trim() !== "")) lastFilled = idx + 1;
-  });
-
-  return dataStartRow + lastFilled;
-}
-
-export async function appendToSheet(data: SheetRowData) {
-  try {
-    const auth = getAuth();
-    const sheets = google.sheets({ version: "v4", auth });
-
-    const headerRow = await findHeaderRow(sheets);
-    const dataStartRow = headerRow + 1;
-    const nextRow = await getNextEmptyRow(sheets, dataStartRow);
-
-    const row = COLUMNS.map((col) => {
-      if (col === "Date & Time") return formatDateTime();
-      return data[col] ?? "";
+  const response =
+    await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: quotedSheetRange(
+        `A${dataStartRow}:ZZ`
+      ),
     });
 
-    // append() ki jagah update() use kar rahe — exact row number pe likhte
-    // hai, isliye kabhi bhi galti se top pe insert nahi hoga
+  const rows = response.data.values || [];
+
+  let lastFilledIndex = -1;
+
+  rows.forEach((row, index) => {
+    const hasData = row.some(
+      (cell) => String(cell ?? "").trim() !== ""
+    );
+
+    if (hasData) {
+      lastFilledIndex = index;
+    }
+  });
+
+  return dataStartRow + lastFilledIndex + 1;
+}
+
+function normalizeFields(
+  formName: string,
+  fields: SheetRowData
+): SheetRowData {
+  const normalized: SheetRowData = {
+    ...fields,
+    Platform: formName || fields.Platform || "",
+  };
+
+  // Exhibitor form aliases.
+  if (
+    normalized["Contact Person"] === undefined &&
+    fields.fullName !== undefined
+  ) {
+    normalized["Contact Person"] = fields.fullName;
+  }
+
+  if (
+    normalized["Products/Services to Display"] ===
+    undefined
+  ) {
+    normalized["Products/Services to Display"] =
+      fields["Products & Services"] ??
+      fields.productsServices ??
+      "";
+  }
+
+  if (
+    normalized["Booth Size Requirement"] === undefined
+  ) {
+    normalized["Booth Size Requirement"] =
+      fields["Preferred Booth Size"] ??
+      fields.preferredBoothSize ??
+      "";
+  }
+
+  // Visitor form aliases.
+  if (
+    normalized["Area of Interest"] === undefined
+  ) {
+    normalized["Area of Interest"] =
+      fields["Business / Category"] ??
+      fields.businessCategory ??
+      "";
+  }
+
+  return normalized;
+}
+
+// Supports both:
+//
+// appendToSheet({ Platform: "...", ... })
+//
+// appendToSheet("Visitor Form", { ... })
+//
+export function appendToSheet(
+  data: SheetRowData
+): Promise<void>;
+
+export function appendToSheet(
+  formName: string,
+  fields: SheetRowData
+): Promise<void>;
+
+export async function appendToSheet(
+  formNameOrData: string | SheetRowData,
+  fields?: SheetRowData
+): Promise<void> {
+  const formName =
+    typeof formNameOrData === "string"
+      ? formNameOrData
+      : formatValue(formNameOrData.Platform);
+
+  const inputFields: SheetRowData =
+    typeof formNameOrData === "string"
+      ? fields ?? {}
+      : formNameOrData;
+
+  if (!isConfigured()) {
+    console.error(
+      "[sheets] Missing Google Sheets configuration."
+    );
+    return;
+  }
+
+  const sheets = google.sheets({
+    version: "v4",
+    auth: getAuth(),
+  });
+
+  const normalized = normalizeFields(
+    formName,
+    inputFields
+  );
+
+  try {
+    const { rowNumber, headers } =
+      await findHeaderRow(sheets);
+
+    const nextRow = await getNextEmptyRow(
+      sheets,
+      rowNumber + 1
+    );
+
+    const newRow = headers.map((header) => {
+      if (header === "Date & Time") {
+        return formatDateTime();
+      }
+
+      return formatValue(normalized[header]);
+    });
+
     await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
       range: quotedSheetRange(`A${nextRow}`),
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: [row] },
+      valueInputOption: "RAW",
+      requestBody: {
+        values: [newRow],
+      },
     });
-  } catch (err) {
-    // Sheet fail ho bhi jaye to form submission fail nahi hona chahiye
-    console.error("Google Sheets append failed:", err);
+
+    console.info(
+      `[sheets] Saved "${formName}" at row ${nextRow}.`
+    );
+  } catch (error) {
+    console.error(
+      `[sheets] Failed to save "${formName}":`,
+      error
+    );
+
+    throw error;
   }
 }
