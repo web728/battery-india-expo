@@ -25,7 +25,7 @@ export const siteConfig = {
     mapQuery: "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune",
   },
   organizer: {
-    name: "Futurex",
+    name: "Futurex Trade Fair & Events Pvt. Ltd.",
   },
  // Replace line 29:
 siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim() !== "")
@@ -44,18 +44,20 @@ siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.t
     },
   ],
   contacts: [
+     {
+      name: "Mr. Namit Gupta",
+      // role: "Sales & General Enquiries",
+      phone: "+91 9810855697",
+      email: "namit@futurextrade.co",
+    },
+
     {
       name: "Ms. Nidhi Sharma",
       // role: "Exhibitor & Partnership Enquiries",
       phone: "+91 98718 39040",
       email: "nidhi@futurextrade.com",
     },
-    {
-      name: "Mr. Namit Gupta",
-      // role: "Sales & General Enquiries",
-      phone: "+91 9810855697",
-      email: "namit@futurextrade.co",
-    },
+   
   ],
   whatsapp: {
     number: "919871839040",

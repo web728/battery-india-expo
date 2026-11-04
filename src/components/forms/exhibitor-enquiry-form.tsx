@@ -1,173 +1,399 @@
+
 "use client";
 
-import { useCallback, useState, type FormEvent } from "react";
-import { Loader2, CheckCircle2, RotateCcw, User, Building2 } from "lucide-react";
-import { exhibitorEnquirySchema } from "@/lib/validations/forms";
-import { TextField, TextAreaField, CheckboxField } from "@/components/ui/form-fields";
-import { Button } from "@/components/ui/button";
-import { Recaptcha } from "@/components/ui/recaptcha";
-import { trackEvent, AnalyticsEvents } from "@/lib/analytics";
+import {
+  useCallback,
+  useState,
+  type FormEvent,
+} from "react";
 
-const initialState = {
-  fullName: "",
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
+
+import {
+  TextField,
+  SelectField,
+  TextAreaField,
+  CheckboxField,
+} from "@/components/ui/form-fields";
+
+import { Recaptcha } from "@/components/ui/recaptcha";
+
+import {
+  exhibitorRegistrationSchema,
+  type ExhibitorRegistrationValues,
+} from "@/lib/validations/registration-forms";
+
+import { countryOptions } from "@/lib/content/form-options";
+
+const API_ENDPOINT = "/api/exhibitor-enquiry";
+
+const boothOptions = [
+  { label: "Select booth size (optional)", value: "" },
+  { label: "9 sq. m.", value: "9 sqm" },
+  { label: "18 sq. m.", value: "18 sqm" },
+  { label: "27 sq. m.", value: "27 sqm" },
+  { label: "36 sq. m.", value: "36 sqm" },
+  { label: "Free Size / Custom Area", value: "Free Size" },
+];
+
+const makeInitialValues = (): ExhibitorRegistrationValues => ({
   companyName: "",
   designation: "",
+  contactPerson: "",
   businessEmail: "",
-  phone: "",
-  country: "",
-  city: "",
-  companyWebsite: "",
-  sponsorshipInterest: false,
-  message: "",
+  mobileNumber: "",
+  country: "India",
+  productsServices: "",
+  preferredBoothSize: "",
   privacyConsent: false,
-  marketingConsent: false,
   recaptchaToken: "",
-};
+});
 
 export function ExhibitorEnquiryForm() {
-  const [values, setValues] = useState(initialState);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [values, setValues] = useState(
+    makeInitialValues
+  );
 
-  function update<K extends keyof typeof initialState>(key: K, value: (typeof initialState)[K]) {
-    setValues((prev) => ({ ...prev, [key]: value }));
+  const [errors, setErrors] = useState<
+    Record<string, string>
+  >({});
+
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+
+  const [serverError, setServerError] = useState<
+    string | null
+  >(null);
+
+  const [referenceNumber, setReferenceNumber] =
+    useState<string | null>(null);
+
+  function update<K extends keyof ExhibitorRegistrationValues>(
+    key: K,
+    value: ExhibitorRegistrationValues[K]
+  ) {
+    setValues((previous) => ({
+      ...previous,
+      [key]: value,
+    }));
+
+    setErrors((previous) => {
+      if (!previous[key]) return previous;
+      const next = { ...previous };
+      delete next[key];
+      return next;
+    });
   }
 
-  const onRecaptchaChange = useCallback((token: string | null) => {
-    setValues((prev) => ({ ...prev, recaptchaToken: token ?? "" }));
-  }, []);
+  const onRecaptchaChange = useCallback(
+    (token: string | null) => {
+      setValues((previous) => ({
+        ...previous,
+        recaptchaToken: token ?? "",
+      }));
+    },
+    []
+  );
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (status === "loading") return;
+
     setServerError(null);
 
-    const parsed = exhibitorEnquirySchema.safeParse(values);
+    const parsed =
+      exhibitorRegistrationSchema.safeParse(values);
+
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
+
       for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as string;
-        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+        const field = String(issue.path[0] ?? "");
+
+        if (field && !fieldErrors[field]) {
+          fieldErrors[field] = issue.message;
+        }
       }
+
       setErrors(fieldErrors);
+      setStatus("idle");
       return;
     }
+
     setErrors({});
     setStatus("loading");
 
     try {
-      const res = await fetch("/api/exhibitor-enquiry", {
+      const response = await fetch(API_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(parsed.data),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Submission failed");
 
-      setReferenceNumber(json.referenceNumber);
+      const result = await response
+        .json()
+        .catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          result?.error ||
+            "Unable to submit your enquiry. Please try again."
+        );
+      }
+
+      setReferenceNumber(
+        typeof result?.referenceNumber === "string"
+          ? result.referenceNumber
+          : null
+      );
+
       setStatus("success");
-      trackEvent(AnalyticsEvents.EXHIBITOR_ENQUIRY_SUBMIT);
-    } catch (err) {
+    } catch (error) {
       setStatus("error");
-      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setServerError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
     }
   }
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-green/30 bg-green/5 p-10 text-center shadow-sm">
-        <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-green" aria-hidden="true" />
-        <h3 className="font-heading text-xl font-bold text-navy-dark">Enquiry Received</h3>
-        <p className="mt-2 text-sm text-grey-medium">
-          Thank you. Your enquiry reference is <strong>{referenceNumber}</strong>. Our exhibitor sales team
-          will contact you shortly with stand options and rates.
+      <div
+        role="status"
+        className="rounded-xl border border-[#e4e7e3] bg-[#fafbf9] px-6 py-10 text-center sm:px-9"
+      >
+        <CheckCircle2
+          className="mx-auto h-11 w-11 text-[#13a853]"
+          strokeWidth={1.7}
+          aria-hidden="true"
+        />
+
+        <h3 className="mt-5 font-heading text-2xl font-bold tracking-[-0.035em] text-[#202024]">
+          Enquiry Submitted
+        </h3>
+
+        <p className="mx-auto mt-3 max-w-sm text-sm leading-7 text-[#696970]">
+          Thank you for your interest in exhibiting.
+          Your enquiry has been submitted.
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          className="mt-6"
+
+        {referenceNumber && (
+          <p className="mt-4 text-sm text-[#47474d]">
+            Reference:{" "}
+            <strong>{referenceNumber}</strong>
+          </p>
+        )}
+
+        <button
+          type="button"
           onClick={() => {
-            setValues(initialState);
+            setValues(makeInitialValues());
+            setErrors({});
+            setServerError(null);
+            setReferenceNumber(null);
             setStatus("idle");
           }}
+          className="mt-7 inline-flex min-h-11 items-center justify-center rounded-md border border-[#d9d7d3] bg-white px-5 text-sm font-bold text-[#29292e] transition-colors hover:border-[#ed3138] hover:text-[#d52d35]"
         >
-          <RotateCcw className="h-4 w-4" /> Submit Another Enquiry
-        </Button>
+          Submit Another Enquiry
+        </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
-      {/* Section 1 — About you */}
-      <section className="rounded-2xl border border-navy-dark/10 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red/10 text-red">
-            <User className="h-4 w-4" />
-          </span>
-          <h3 className="font-heading text-lg font-bold text-navy-dark">Your Details</h3>
-        </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <TextField id="fullName" label="Full Name" required value={values.fullName} onChange={(e) => update("fullName", e.target.value)} error={errors.fullName} />
-          <TextField id="designation" label="Designation" required value={values.designation} onChange={(e) => update("designation", e.target.value)} error={errors.designation} />
-          <TextField id="businessEmail" type="email" label="Email" required value={values.businessEmail} onChange={(e) => update("businessEmail", e.target.value)} error={errors.businessEmail} />
-          <TextField id="phone" type="tel" label="Phone" required value={values.phone} onChange={(e) => update("phone", e.target.value)} error={errors.phone} />
-        </div>
-      </section>
-
-      {/* Section 2 — Company */}
-      <section className="rounded-2xl border border-navy-dark/10 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red/10 text-red">
-            <Building2 className="h-4 w-4" />
-          </span>
-          <h3 className="font-heading text-lg font-bold text-navy-dark">Company</h3>
-        </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <TextField id="companyName" label="Company Name" required value={values.companyName} onChange={(e) => update("companyName", e.target.value)} error={errors.companyName} />
-          <TextField id="companyWebsite" type="url" label="Website URL" hint="Optional" value={values.companyWebsite} onChange={(e) => update("companyWebsite", e.target.value)} error={errors.companyWebsite} />
-          <TextField id="country" label="Country" required value={values.country} onChange={(e) => update("country", e.target.value)} error={errors.country} />
-          <TextField id="city" label="City" required value={values.city} onChange={(e) => update("city", e.target.value)} error={errors.city} />
-        </div>
-      </section>
-
-      <TextAreaField id="message" label="Message" hint="Optional" value={values.message} onChange={(e) => update("message", e.target.value)} error={errors.message} />
-
-      <div className="flex flex-col gap-4">
-        <CheckboxField
-          id="sponsorshipInterest"
-          label="I am also interested in sponsorship opportunities"
-          checked={values.sponsorshipInterest}
-          onChange={(e) => update("sponsorshipInterest", e.target.checked)}
-        />
-        <CheckboxField
-          id="marketingConsent"
-          label="I agree to receive marketing communications about the event"
-          checked={values.marketingConsent}
-          onChange={(e) => update("marketingConsent", e.target.checked)}
-        />
-        <CheckboxField
-          id="privacyConsent"
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      aria-busy={status === "loading"}
+      className="space-y-6"
+    >
+      <div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
+        <TextField
+          id="ex-company"
+          label="Company Name"
           required
-          label={<>I accept the <a href="/privacy-policy" className="underline text-red">Privacy Policy</a> and consent to my data being processed for this enquiry.</>}
-          checked={values.privacyConsent}
-          onChange={(e) => update("privacyConsent", e.target.checked)}
-          error={errors.privacyConsent}
+          value={values.companyName}
+          onChange={(event) =>
+            update("companyName", event.target.value)
+          }
+          error={errors.companyName}
         />
 
-        <Recaptcha onChange={onRecaptchaChange} error={errors.recaptchaToken} />
+        <TextField
+          id="ex-contact"
+          label="Contact Person"
+          required
+          value={values.contactPerson}
+          onChange={(event) =>
+            update("contactPerson", event.target.value)
+          }
+          error={errors.contactPerson}
+        />
+
+        <TextField
+          id="ex-designation"
+          label="Designation"
+          required
+          value={values.designation}
+          onChange={(event) =>
+            update("designation", event.target.value)
+          }
+          error={errors.designation}
+        />
+
+        <TextField
+          id="ex-email"
+          label="Business Email"
+          type="email"
+          required
+          value={values.businessEmail}
+          onChange={(event) =>
+            update("businessEmail", event.target.value)
+          }
+          error={errors.businessEmail}
+        />
+
+        <TextField
+          id="ex-mobile"
+          label="Mobile / WhatsApp Number"
+          type="tel"
+          required
+          value={values.mobileNumber}
+          onChange={(event) =>
+            update("mobileNumber", event.target.value)
+          }
+          error={errors.mobileNumber}
+        />
+
+        <SelectField
+          id="ex-country"
+          label="Country"
+          required
+          value={values.country}
+          onChange={(event) =>
+            update("country", event.target.value)
+          }
+          error={errors.country}
+          options={countryOptions.map((country) => ({
+            label: country,
+            value: country,
+          }))}
+        />
+      </div>
+
+      <div className="border-t border-[#eceae7] pt-6">
+        <TextAreaField
+          id="ex-products"
+          label="Products & Services"
+          required
+          value={values.productsServices}
+          onChange={(event) =>
+            update("productsServices", event.target.value)
+          }
+          error={errors.productsServices}
+        />
+
+        <p className="mt-2 text-xs leading-5 text-[#85858b]">
+          Briefly describe your products or services.
+          No minimum word count.
+        </p>
+      </div>
+
+      <div className="border-t border-[#eceae7] pt-6">
+        <SelectField
+          id="ex-booth"
+          label="Preferred Booth Size"
+          hint="Optional"
+          value={values.preferredBoothSize ?? ""}
+          onChange={(event) =>
+            update(
+              "preferredBoothSize",
+              event.target.value
+            )
+          }
+          error={errors.preferredBoothSize}
+          options={boothOptions}
+        />
+      </div>
+
+      <div className="space-y-5 border-t border-[#eceae7] pt-6">
+        <CheckboxField
+          id="ex-privacy"
+          required
+          checked={values.privacyConsent}
+          onChange={(event) =>
+            update(
+              "privacyConsent",
+              event.target.checked
+            )
+          }
+          error={errors.privacyConsent}
+          label={
+            <>
+              I agree to the{" "}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#d52d35] underline underline-offset-2"
+              >
+                Privacy Policy
+              </a>
+              .
+            </>
+          }
+        />
+
+        <Recaptcha
+          onChange={onRecaptchaChange}
+          error={errors.recaptchaToken}
+        />
 
         {serverError && (
-          <p role="alert" className="text-sm font-medium text-red">
+          <p
+            role="alert"
+            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
             {serverError}
           </p>
         )}
 
-        <Button type="submit" disabled={status === "loading"} className="self-start">
-          {status === "loading" && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-          Submit Exhibitor Enquiry
-        </Button>
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[#ed3138] px-6 font-heading text-sm font-bold text-white transition-colors hover:bg-[#cc252d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ed3138] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        >
+          {status === "loading" ? (
+            <>
+              <Loader2
+                className="h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+              Submitting...
+            </>
+          ) : (
+            <>
+              Submit Enquiry
+              <ArrowRight
+                className="h-4 w-4"
+                aria-hidden="true"
+              />
+            </>
+          )}
+        </button>
       </div>
     </form>
   );

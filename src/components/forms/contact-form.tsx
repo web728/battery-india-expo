@@ -1,148 +1,407 @@
+
 "use client";
 
-import { useCallback, useState, type FormEvent } from "react";
-import { Loader2, CheckCircle2, RotateCcw, MessageSquare } from "lucide-react";
+import {
+  useCallback,
+  useState,
+  type FormEvent,
+} from "react";
+
+import {
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  RotateCcw,
+} from "lucide-react";
+
 import { contactFormSchema } from "@/lib/validations/forms";
-import { TextField, SelectField, TextAreaField, CheckboxField } from "@/components/ui/form-fields";
-import { Button } from "@/components/ui/button";
+
+import {
+  TextField,
+  SelectField,
+  TextAreaField,
+  CheckboxField,
+} from "@/components/ui/form-fields";
+
 import { Recaptcha } from "@/components/ui/recaptcha";
 import { departmentOptions } from "@/lib/content/form-options";
 
-const initialState = {
-  name: "",
-  email: "",
-  phone: "",
-  company: "",
-  department: "General Enquiry" as (typeof departmentOptions)[number],
-  message: "",
-  privacyConsent: false,
-  recaptchaToken: "",
+type Department = (typeof departmentOptions)[number];
+
+type ContactValues = {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  department: Department;
+  message: string;
+  privacyConsent: boolean;
+  recaptchaToken: string;
 };
 
-export function ContactForm({ defaultDepartment }: { defaultDepartment?: string }) {
-  const [values, setValues] = useState({
-    ...initialState,
-    department: (defaultDepartment as (typeof departmentOptions)[number]) ?? initialState.department,
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
-  const [serverError, setServerError] = useState<string | null>(null);
+type SubmissionStatus =
+  | "idle"
+  | "loading"
+  | "success"
+  | "error";
 
-  function update<K extends keyof typeof initialState>(key: K, value: (typeof initialState)[K]) {
-    setValues((prev) => ({ ...prev, [key]: value }));
+function getInitialValues(
+  defaultDepartment?: string
+): ContactValues {
+  const validDepartment =
+    defaultDepartment &&
+    departmentOptions.includes(
+      defaultDepartment as Department
+    )
+      ? (defaultDepartment as Department)
+      : ("General Enquiry" as Department);
+
+  return {
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    department: validDepartment,
+    message: "",
+    privacyConsent: false,
+    recaptchaToken: "",
+  };
+}
+
+export function ContactForm({
+  defaultDepartment,
+}: {
+  defaultDepartment?: string;
+}) {
+  const [values, setValues] = useState<ContactValues>(
+    () => getInitialValues(defaultDepartment)
+  );
+
+  const [errors, setErrors] = useState<
+    Record<string, string>
+  >({});
+
+  const [status, setStatus] =
+    useState<SubmissionStatus>("idle");
+
+  const [referenceNumber, setReferenceNumber] =
+    useState<string | null>(null);
+
+  const [serverError, setServerError] =
+    useState<string | null>(null);
+
+  function update<K extends keyof ContactValues>(
+    field: K,
+    value: ContactValues[K]
+  ) {
+    setValues((previous) => ({
+      ...previous,
+      [field]: value,
+    }));
+
+    setErrors((previous) => {
+      if (!previous[field]) return previous;
+
+      const next = { ...previous };
+      delete next[field];
+      return next;
+    });
+
+    if (serverError) setServerError(null);
   }
 
-  const onRecaptchaChange = useCallback((token: string | null) => {
-    setValues((prev) => ({ ...prev, recaptchaToken: token ?? "" }));
-  }, []);
+  const onRecaptchaChange = useCallback(
+    (token: string | null) => {
+      setValues((previous) => ({
+        ...previous,
+        recaptchaToken: token ?? "",
+      }));
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
+      setErrors((previous) => {
+        if (!previous.recaptchaToken) return previous;
+        const next = { ...previous };
+        delete next.recaptchaToken;
+        return next;
+      });
+    },
+    []
+  );
+
+  async function onSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (status === "loading") return;
+
     setServerError(null);
+
     const parsed = contactFormSchema.safeParse(values);
+
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
+
       for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as string;
-        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+        const key = String(issue.path[0] ?? "");
+
+        if (key && !fieldErrors[key]) {
+          fieldErrors[key] = issue.message;
+        }
       }
+
       setErrors(fieldErrors);
+      setStatus("idle");
       return;
     }
+
     setErrors({});
     setStatus("loading");
+
     try {
-      const res = await fetch("/api/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(parsed.data),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Submission failed");
-      setReferenceNumber(json.referenceNumber);
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          typeof data?.error === "string"
+            ? data.error
+            : "Unable to send your message. Please try again."
+        );
+      }
+
+      setReferenceNumber(
+        typeof data?.referenceNumber === "string"
+          ? data.referenceNumber
+          : null
+      );
+
       setStatus("success");
-    } catch (err) {
+    } catch (error) {
       setStatus("error");
-      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+
+      setServerError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
     }
+  }
+
+  function resetForm() {
+    setValues(getInitialValues(defaultDepartment));
+    setErrors({});
+    setReferenceNumber(null);
+    setServerError(null);
+    setStatus("idle");
   }
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-green/30 bg-green/5 p-10 text-center shadow-sm">
-        <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-green" aria-hidden="true" />
-        <h3 className="font-heading text-xl font-bold text-navy-dark">Message Sent</h3>
-        <p className="mt-2 text-sm text-grey-medium">
-          Thank you. Your reference is <strong>{referenceNumber}</strong>. We will respond as soon as possible.
+      <div
+        role="status"
+        className="flex flex-col items-center rounded-xl border border-[#e2e8e2] bg-[#fafbf9] px-6 py-11 text-center sm:px-9"
+      >
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#13a853]/10">
+          <CheckCircle2
+            className="h-8 w-8 text-[#13a853]"
+            strokeWidth={1.7}
+            aria-hidden="true"
+          />
+        </div>
+
+        <h3 className="mt-5 font-heading text-2xl font-bold tracking-[-0.035em] text-[#202024]">
+          Message Sent
+        </h3>
+
+        <p className="mt-3 max-w-sm text-sm leading-7 text-[#68686e]">
+          Thank you for contacting us. Your enquiry
+          has been submitted to our team.
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          className="mt-6"
-          onClick={() => {
-            setValues(initialState);
-            setStatus("idle");
-          }}
+
+        {referenceNumber && (
+          <div className="mt-5 rounded-md border border-[#e3e3e0] bg-white px-4 py-3 text-sm text-[#525258]">
+            Reference Number:{" "}
+            <strong className="text-[#242428]">
+              {referenceNumber}
+            </strong>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={resetForm}
+          className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-[#d8d7d4] bg-white px-5 text-sm font-bold text-[#29292e] transition-colors hover:border-[#ed3138] hover:text-[#d52d35]"
         >
-          <RotateCcw className="h-4 w-4" /> Send Another Message
-        </Button>
+          <RotateCcw
+            className="h-4 w-4"
+            aria-hidden="true"
+          />
+          Send Another Message
+        </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
-      <div className="rounded-2xl border border-navy-dark/10 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mb-6 flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-red/10 text-red">
-            <MessageSquare className="h-4 w-4" />
-          </span>
-          <h3 className="font-heading text-lg font-bold text-navy-dark">Get in Touch</h3>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <TextField id="c-name" label="Name" required value={values.name} onChange={(e) => update("name", e.target.value)} error={errors.name} />
-          <TextField id="c-email" type="email" label="Email" required value={values.email} onChange={(e) => update("email", e.target.value)} error={errors.email} />
-          <TextField id="c-phone" type="tel" label="Phone" hint="Optional" value={values.phone} onChange={(e) => update("phone", e.target.value)} error={errors.phone} />
-          <TextField id="c-company" label="Company" hint="Optional" value={values.company} onChange={(e) => update("company", e.target.value)} error={errors.company} />
-        </div>
-
-        <div className="mt-5">
-          <SelectField
-            id="c-department"
-            label="Interest"
-            required
-            value={values.department}
-            onChange={(e) => update("department", e.target.value as (typeof initialState)["department"])}
-            error={errors.department}
-            options={departmentOptions.map((d) => ({ label: d, value: d }))}
-          />
-        </div>
-
-        <div className="mt-5">
-          <TextAreaField id="c-message" label="Message" required value={values.message} onChange={(e) => update("message", e.target.value)} error={errors.message} />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <CheckboxField
-          id="c-privacyConsent"
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      aria-busy={status === "loading"}
+      className="space-y-6"
+    >
+      <div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
+        <TextField
+          id="contact-name"
+          label="Full Name"
           required
-          label={<>I accept the <a href="/privacy-policy" className="underline text-red">Privacy Policy</a>.</>}
-          checked={values.privacyConsent}
-          onChange={(e) => update("privacyConsent", e.target.checked)}
-          error={errors.privacyConsent}
+          value={values.name}
+          onChange={(event) =>
+            update("name", event.target.value)
+          }
+          error={errors.name}
         />
 
-        <Recaptcha onChange={onRecaptchaChange} error={errors.recaptchaToken} />
+        <TextField
+          id="contact-email"
+          label="Email Address"
+          type="email"
+          required
+          value={values.email}
+          onChange={(event) =>
+            update("email", event.target.value)
+          }
+          error={errors.email}
+        />
 
-        {serverError && <p role="alert" className="text-sm font-medium text-red">{serverError}</p>}
+        <TextField
+          id="contact-phone"
+          label="Mobile / WhatsApp Number"
+          type="tel"
+          hint="Optional"
+          value={values.phone}
+          onChange={(event) =>
+            update("phone", event.target.value)
+          }
+          error={errors.phone}
+        />
 
-        <Button type="submit" disabled={status === "loading"} className="self-start">
-          {status === "loading" && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-          Send Message
-        </Button>
+        <TextField
+          id="contact-company"
+          label="Company / Organisation"
+          hint="Optional"
+          value={values.company}
+          onChange={(event) =>
+            update("company", event.target.value)
+          }
+          error={errors.company}
+        />
+      </div>
+
+      <div className="border-t border-[#efedea] pt-6">
+        <SelectField
+          id="contact-department"
+          label="Enquiry Type"
+          required
+          value={values.department}
+          onChange={(event) =>
+            update(
+              "department",
+              event.target.value as Department
+            )
+          }
+          error={errors.department}
+          options={departmentOptions.map((item) => ({
+            label: item,
+            value: item,
+          }))}
+        />
+      </div>
+
+      <div>
+        <TextAreaField
+          id="contact-message"
+          label="Your Message"
+          required
+          value={values.message}
+          onChange={(event) =>
+            update("message", event.target.value)
+          }
+          error={errors.message}
+        />
+      </div>
+
+      <div className="space-y-5 border-t border-[#efedea] pt-6">
+        <CheckboxField
+          id="contact-consent"
+          required
+          checked={values.privacyConsent}
+          onChange={(event) =>
+            update(
+              "privacyConsent",
+              event.target.checked
+            )
+          }
+          error={errors.privacyConsent}
+          label={
+            <>
+              I agree to the{" "}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[#d52d35] underline underline-offset-2"
+              >
+                Privacy Policy
+              </a>
+              .
+            </>
+          }
+        />
+
+        <Recaptcha
+          onChange={onRecaptchaChange}
+          error={errors.recaptchaToken}
+        />
+
+        {serverError && (
+          <p
+            role="alert"
+            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
+          >
+            {serverError}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[#ed3138] px-6 font-heading text-sm font-bold text-white transition-colors duration-300 hover:bg-[#cc252d] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ed3138] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        >
+          {status === "loading" ? (
+            <>
+              <Loader2
+                className="h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+              Sending...
+            </>
+          ) : (
+            <>
+              Send Message
+              <ArrowRight
+                className="h-4 w-4"
+                aria-hidden="true"
+              />
+            </>
+          )}
+        </button>
       </div>
     </form>
   );

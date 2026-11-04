@@ -101,7 +101,7 @@ export default function VisitorGuidePage() {
             ))}
           </div>
           <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <Button href="https://app.warpbay.com/qPMIy6ii" size="lg">
+            <Button href="/visit/register" size="lg">
               Register to Visit
             </Button>
             <Button href="/venue/travel" variant="outline" size="lg">

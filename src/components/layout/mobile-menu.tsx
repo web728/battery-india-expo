@@ -116,14 +116,14 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
         {/* Action Buttons Footer inside Mobile Menu */}
         <div className="mt-8 flex flex-col gap-3">
           <Button
-            href="https://app.warpbay.com/LmfC1aDd"
+            href="/exhibit/book-a-stand"
             variant="primary"
             className="w-full justify-center py-3"
           >
             Book a Stand
           </Button>
           <Button
-            href="https://app.warpbay.com/qPMIy6ii"
+            href="/visit/register"
             variant="outline-white"
             className="w-full justify-center py-3"
           >

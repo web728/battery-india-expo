@@ -1,84 +1,284 @@
+
+"use client";
+
 import Image from "next/image";
-import { MapPinned } from "lucide-react";
+import {
+  ArrowUpRight,
+  MapPin,
+  Factory,
+  Building2,
+  Route,
+  UsersRound,
+} from "lucide-react";
+
+import {
+  LazyMotion,
+  domAnimation,
+  m,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
+
 import { Container } from "@/components/ui/container";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { whyPunePoints } from "@/lib/content/home-content";
+import { siteConfig } from "@/lib/site-config";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const fadeUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease,
+    },
+  },
+};
+
+const stagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const icons = [
+  Factory,
+  Route,
+  Building2,
+  UsersRound,
+] as const;
 
 export function WhyPuneSection() {
+  const reducedMotion = useReducedMotion();
+
+  const venueName =
+    siteConfig.venue.name ||
+    siteConfig.venue.line1 ||
+    "Auto Cluster Exhibition Centre";
+
+  const venueLocation = [
+    siteConfig.venue.city,
+    siteConfig.venue.state,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const directionsUrl =
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(
+      siteConfig.venue.mapQuery ||
+        "Auto Cluster Exhibition Centre, Chinchwad, Pune"
+    );
+
+  const motionProps = {
+    initial: reducedMotion ? false : "hidden",
+    whileInView: "visible",
+    viewport: {
+      once: true,
+      amount: 0.12,
+    },
+  } as const;
+
   return (
-    <section className="relative overflow-hidden bg-navy-dark py-20 sm:py-28">
-      {/* ambient accent glow */}
-      <div className="pointer-events-none absolute -top-40 right-0 h-[420px] w-[420px] rounded-full bg-green/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] rounded-full bg-green/5 blur-3xl" />
-
-      <Container className="relative">
-        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          {/* Left column: heading + image composition */}
-          <div>
-            <SectionHeading
-              eyebrow="Why Pune"
-              title="A Strategic Host City for the Battery Industry"
-              light
-            />
-
-            <div className="mt-6 flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green/15">
-                <MapPinned className="h-5 w-5 text-green" aria-hidden="true" />
-              </span>
-              <p className="text-sm leading-snug text-white/70">
-                Auto Cluster Exhibition Center, Chinchwad,
-                <br className="hidden sm:block" /> Pimpri-Chinchwad, Pune, Maharashtra
-              </p>
-            </div>
-
-            {/* Image composition — main + accent, offset for a layered premium feel */}
-            <div className="relative mt-10 pb-8 pr-8 sm:pb-10 sm:pr-10">
-              <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10">
-                <Image
-                  src="/images/expo-ev-powertrain-demo.jpg"
-                  alt="An exhibitor demonstrating an EV powertrain to visitors at a previous edition"
-                  width={2000}
-                  height={1333}
-                  className="h-full w-full object-cover"
-                  sizes="(min-width: 1024px) 35vw, 100vw"
+    <LazyMotion features={domAnimation}>
+      <section
+        id="why-pune"
+        aria-labelledby="why-pune-heading"
+        className="relative overflow-hidden bg-[#faf9f7] py-16 text-[#19191b] sm:py-20 lg:py-24"
+      >
+        <Container>
+          <m.div
+            {...motionProps}
+            variants={stagger}
+            className="grid items-start gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 xl:gap-20"
+          >
+            {/* LEFT: EDITORIAL CONTENT */}
+            <m.div
+              variants={fadeUp}
+              className="min-w-0 lg:pt-3"
+            >
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-[2px] w-8 bg-[#ed3138]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/60 via-transparent to-transparent" />
-              </div>
 
-              {/* accent image, offset bottom-right for depth */}
-              <div className="absolute bottom-0 right-0 h-28 w-40 overflow-hidden rounded-xl ring-4 ring-navy-dark sm:h-36 sm:w-52">
-                <Image
-                  src="https://info.batteryindiaexpo.com/wp-content/uploads/2026/03/SBP_3172-min-scaled-1.jpg"
-                  alt="Aerial view of the exhibition hall floor"
-                  width={800}
-                  height={533}
-                  className="h-full w-full object-cover"
-                  sizes="220px"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Right column: sequenced reason cards */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {whyPunePoints.map((point, index) => (
-              <div
-                key={point.title}
-                className="group relative rounded-xl border border-white/10 bg-white/[0.04] p-6 transition-colors duration-300 hover:border-green/30 hover:bg-white/[0.06]"
-              >
-                <span className="font-mono text-xs tracking-widest text-green/70">
-                  {String(index + 1).padStart(2, "0")}
+                <span className="font-heading text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#c82d34]">
+                  Why Pune
                 </span>
-                <h3 className="mt-3 text-sm font-bold text-white">{point.title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-white/60">
-                  {point.description}
-                </p>
-                <div className="mt-4 h-px w-8 bg-green/40 transition-all duration-300 group-hover:w-14" />
               </div>
-            ))}
-          </div>
-        </div>
-      </Container>
-    </section>
+
+              <h2
+                id="why-pune-heading"
+                className="max-w-[590px] font-heading text-[clamp(2rem,3.7vw,3.35rem)] font-extrabold leading-[1.12] tracking-[-0.05em] text-[#19191b]"
+              >
+                A strong industrial base for the{" "}
+                <span className="text-[#ed3138]">
+                  battery industry.
+                </span>
+              </h2>
+
+              <p className="mt-6 max-w-[550px] text-[15px] leading-[1.85] text-[#606067] sm:text-base">
+                Pune is an established automotive and
+                manufacturing centre, with access to vehicle
+                manufacturers, engineering companies, component
+                suppliers and research institutions.
+              </p>
+
+              <p className="mt-4 max-w-[550px] text-[15px] leading-[1.85] text-[#606067] sm:text-base">
+                Its industrial network makes it a relevant
+                location for battery technologies, energy
+                storage solutions and businesses serving
+                electric mobility and industrial applications.
+              </p>
+
+              {/* VENUE INFORMATION */}
+              <div className="mt-8 max-w-[560px] border-t border-[#e2e1de] pt-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fcebec] text-[#d52d35]">
+                    <MapPin
+                      className="h-5 w-5"
+                      strokeWidth={1.8}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[#9a4b4f]">
+                      Exhibition Venue
+                    </p>
+
+                    <h3 className="mt-1 font-heading text-base font-bold leading-6 text-[#202024]">
+                      {venueName}
+                    </h3>
+
+                    <p className="mt-1 text-sm leading-6 text-[#68686d]">
+                      {venueLocation}
+                    </p>
+
+                    <a
+                      href={directionsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group mt-4 inline-flex items-center gap-2 font-heading text-[13px] font-bold text-[#d52d35] transition-colors hover:text-[#a82027] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
+                    >
+                      View location
+                      <ArrowUpRight
+                        className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </m.div>
+
+            {/* RIGHT: PHOTO + INDUSTRY DETAILS */}
+            <m.div
+              variants={fadeUp}
+              className="min-w-0"
+            >
+              <figure className="group relative overflow-hidden rounded-xl bg-[#242428]">
+                <div className="relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10]">
+                  <Image
+                    src="/images/expo-ev-powertrain-demo.jpg"
+                    alt="Electric vehicle technology demonstration at an industry exhibition"
+                    fill
+                    sizes="(min-width: 1024px) 52vw, 100vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035] motion-reduce:transform-none"
+                  />
+
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent"
+                  />
+
+                  <figcaption className="absolute inset-x-0 bottom-0 px-5 pb-5 pt-14 sm:px-7 sm:pb-6">
+                    <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.13em] text-white/85">
+                      Automotive & Manufacturing
+                    </span>
+
+                    <p className="mt-1 font-heading text-base font-bold text-white sm:text-lg">
+                      Pune, Maharashtra
+                    </p>
+                  </figcaption>
+                </div>
+              </figure>
+
+              {/* INDUSTRY HIGHLIGHTS */}
+              <div className="mt-5 overflow-hidden rounded-xl border border-[#e8e6e3] bg-white">
+                <div className="grid grid-cols-1 divide-y divide-[#eeece9] sm:grid-cols-2 sm:divide-y-0">
+                  {whyPunePoints.map((point, index) => {
+                    const Icon = icons[index % icons.length];
+
+                    return (
+                      <m.div
+                        key={`${point.title}-${index}`}
+                        initial={
+                          reducedMotion
+                            ? false
+                            : { opacity: 0, y: 12 }
+                        }
+                        whileInView={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        viewport={{
+                          once: true,
+                          amount: 0.2,
+                        }}
+                        transition={{
+                          duration: 0.48,
+                          delay: reducedMotion
+                            ? 0
+                            : index * 0.07,
+                          ease,
+                        }}
+                        className={[
+                          "group flex min-w-0 items-start gap-3.5 p-5 transition-colors duration-300 hover:bg-[#fbf8f7] sm:p-6",
+                          index % 2 === 0
+                            ? "sm:border-r sm:border-[#eeece9]"
+                            : "",
+                          index >= 2
+                            ? "sm:border-t sm:border-[#eeece9]"
+                            : "",
+                        ].join(" ")}
+                      >
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#f9eded] text-[#d52d35] transition-colors duration-300 group-hover:bg-[#ed3138] group-hover:text-white">
+                          <Icon
+                            className="h-[18px] w-[18px]"
+                            strokeWidth={1.8}
+                            aria-hidden="true"
+                          />
+                        </span>
+
+                        <div className="min-w-0">
+                          <h3 className="font-heading text-[14px] font-bold leading-5 tracking-[-0.015em] text-[#242428]">
+                            {point.title}
+                          </h3>
+
+                          <p className="mt-2 text-[13px] leading-[1.7] text-[#6c6b70]">
+                            {point.description}
+                          </p>
+                        </div>
+                      </m.div>
+                    );
+                  })}
+                </div>
+              </div>
+            </m.div>
+          </m.div>
+        </Container>
+      </section>
+    </LazyMotion>
   );
 }
