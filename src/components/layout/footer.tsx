@@ -59,7 +59,7 @@
                 className="inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
               >
                 <Image
-                  src="/logo/battery-solar-logo.png"
+                  src="/logo/battery-white.png"
                   alt="India Battery International Show"
                   width={200}
                   height={75}

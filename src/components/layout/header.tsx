@@ -207,7 +207,7 @@ export function Header() {
             )}
           >
             <Image
-              src="/logo/battery-solar-logo.png"
+              src="/logo/battery-white.png"
               alt="India Battery International Show"
               width={174}
               height={66}
@@ -426,7 +426,7 @@ export function Header() {
                 className={focusStyle}
               >
                 <Image
-                  src="/logo/battery-solar-logo.png"
+                  src="/logo/battery-white.png"
                   alt="India Battery International Show"
                   width={160}
                   height={60}

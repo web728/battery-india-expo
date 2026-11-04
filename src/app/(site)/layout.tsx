@@ -45,13 +45,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.eventName,
     title: `${siteConfig.eventName} — 14–16 October 2027`,
     description: siteConfig.tagline,
-    images: [{ url: "/images/battery-show-logo.png", width: 2048, height: 830 }],
+    images: [{ url: "/logo/battery.png", width: 2048, height: 830 }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.eventName} — 14–16 October 2027`,
     description: siteConfig.tagline,
-    images: ["/images/battery-show-logo.png"],
+    images: ["/logo/battery.png"],
   },
   robots: { index: true, follow: true },
 };
