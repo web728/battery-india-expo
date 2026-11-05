@@ -194,30 +194,30 @@ export function Header() {
             "transition-[height] duration-300"
           )}
         >
-          <Link
-            href="/"
-            aria-label="India Battery International Show home"
-            onClick={() => {
-              setOpenDropdown(null);
-              setMobileOpen(false);
-            }}
-            className={cn(
-              "relative flex shrink-0 items-center rounded-md",
-              focusStyle
-            )}
-          >
-            <Image
-              src="/logo/battery-white.png"
-              alt="India Battery International Show"
-              width={174}
-              height={66}
-              priority
-              className={cn(
-                "w-auto object-contain transition-[height] duration-300",
-                scrolled ? "h-10" : "h-11"
-              )}
-            />
-          </Link>
+      <Link
+  href="/"
+  aria-label="India Battery International Show home"
+  onClick={() => {
+    setOpenDropdown(null);
+    setMobileOpen(false);
+  }}
+  className={cn(
+    "relative flex shrink-0 items-center rounded-md",
+    focusStyle
+  )}
+>
+  <Image
+    src="/logo/battery-white.png"
+    alt="India Battery International Show"
+    width={210}
+    height={80}
+    priority
+    className={cn(
+      "w-auto object-contain transition-[height] duration-300",
+      scrolled ? "h-12" : "h-14"
+    )}
+  />
+</Link>
 
           {/* Desktop */}
           <nav
@@ -425,13 +425,13 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 className={focusStyle}
               >
-                <Image
-                  src="/logo/battery-white.png"
-                  alt="India Battery International Show"
-                  width={160}
-                  height={60}
-                  className="h-10 w-auto object-contain"
-                />
+              <Image
+  src="/logo/battery-white.png"
+  alt="India Battery International Show"
+  width={220}
+  height={100}
+  className="h-18 w-auto object-contain"
+/>
               </Link>
 
               <button

@@ -54,18 +54,18 @@
             {/* Brand */}
             <div>
               <Link
-                href="/"
-                aria-label="India Battery International Show home"
-                className="inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
-              >
-                <Image
-                  src="/logo/battery-white.png"
-                  alt="India Battery International Show"
-                  width={200}
-                  height={75}
-                  className="h-14 w-auto object-contain"
-                />
-              </Link>
+  href="/"
+  aria-label="India Battery International Show home"
+  className="inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
+>
+  <Image
+    src="/logo/battery-white.png"
+    alt="India Battery International Show"
+    width={230}
+    height={86}
+    className="h-18 w-auto object-contain"
+  />
+</Link>
 
               <p className="mt-5 max-w-xs font-heading text-sm font-semibold leading-6 text-white/85">
                 {siteConfig.eventName}
