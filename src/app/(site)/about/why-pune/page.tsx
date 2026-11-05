@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
@@ -7,18 +6,16 @@ import { VenueSection } from "@/components/sections/venue-section";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/lib/site-config";
 
-const pageTitle =
-  "Why Pune | India Battery International Show 2027";
+const pageTitle = "Why Pune | India International Battery Show 2027";
 
 const pageDescription =
-  "Explore why Pune hosts India Battery International Show 2027. Discover its automotive manufacturing ecosystem, engineering expertise and industrial supply chain.";
+  "Explore why Pune hosts India International Battery Show 2027. Discover its automotive manufacturing ecosystem, engineering expertise and industrial supply chain.";
 
 const pagePath = "/about/why-pune";
 const siteUrl = siteConfig.siteUrl.replace(/\/$/, "");
 const pageUrl = `${siteUrl}${pagePath}`;
 
-const heroImage =
-  "/images/expo-ev-battery-showcase.jpg";
+const heroImage = "/images/expo-ev-battery-showcase.jpg";
 
 export const metadata: Metadata = {
   title: {

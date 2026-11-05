@@ -34,7 +34,7 @@ export async function notifyAdmins(params: {
         ${fieldsTable(fields)}
       </div>
       <div style="padding:18px 32px; background:#F4F6F8; font-size:12px; color:#667085;">
-        <p style="margin:0;">India Battery International Show 2026 — Website Notification</p>
+        <p style="margin:0;">India International Battery Show 2026 — Website Notification</p>
       </div>
     </div>
   </div>`;
@@ -42,6 +42,6 @@ export async function notifyAdmins(params: {
   const subject = `New ${formName} — ${referenceNumber}`;
 
   await Promise.all(
-    ADMIN_RECIPIENTS.map((to) => sendEmail({ to, subject, html }))
+    ADMIN_RECIPIENTS.map((to) => sendEmail({ to, subject, html })),
   );
 }

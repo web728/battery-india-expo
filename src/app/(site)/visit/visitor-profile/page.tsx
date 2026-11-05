@@ -12,16 +12,16 @@ const registrationUrl = "/visit/register";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Visitor Profile | India Battery International Show 2027",
+    absolute: "Visitor Profile | India International Battery Show 2027",
   },
   description:
-    "Explore the professional visitor categories relevant to India Battery International Show 2027, from automotive and energy companies to technology buyers and researchers.",
+    "Explore the professional visitor categories relevant to India International Battery Show 2027, from automotive and energy companies to technology buyers and researchers.",
   alternates: {
     canonical: "/visit/visitor-profile",
   },
   openGraph: {
     type: "website",
-    title: "Visitor Profile | India Battery International Show 2027",
+    title: "Visitor Profile | India International Battery Show 2027",
     description:
       "Discover the industry professionals and organisations the battery exhibition is designed for.",
     url: "/visit/visitor-profile",

@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
@@ -7,11 +6,9 @@ import { siteConfig } from "@/lib/site-config";
 
 import { OrganizerPageContent } from "./organizer-page-content";
 
-const pageTitle =
-  "About the Organizer | India Battery International Show 2027";
+const pageTitle = "About the Organizer | India International Battery Show 2027";
 
-const pageDescription =
-  `Learn about ${siteConfig.organizer.name}, the organizer of India Battery International Show 2027, taking place 14–16 October at Auto Cluster Exhibition Centre, Pune.`;
+const pageDescription = `Learn about ${siteConfig.organizer.name}, the organizer of India International Battery Show 2027, taking place 14–16 October at Auto Cluster Exhibition Centre, Pune.`;
 
 export const metadata: Metadata = {
   title: {
@@ -30,7 +27,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/images/expo-vip-lounge-branding.jpg",
-        alt: "India Battery International Show exhibition branding",
+        alt: "India International Battery Show exhibition branding",
       },
     ],
   },
@@ -65,7 +62,7 @@ export default function OrganizerPage() {
       <PageHero
         eyebrow="About the Organizer"
         title="Meet the Organizer"
-        description={`${siteConfig.organizer.name}, organizer of India Battery International Show 2027 in Pune.`}
+        description={`${siteConfig.organizer.name}, organizer of India International Battery Show 2027 in Pune.`}
         breadcrumbs={[
           {
             label: "About the Show",
@@ -77,7 +74,7 @@ export default function OrganizerPage() {
         ]}
         backgroundImage={{
           src: "/images/expo-vip-lounge-branding.jpg",
-          alt: "Exhibition branding from a previous edition of India Battery International Show",
+          alt: "Exhibition branding from a previous edition of India International Battery Show",
         }}
       />
 

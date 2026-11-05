@@ -25,7 +25,7 @@ export function AboutPageContent() {
               className="max-w-[620px]"
             >
               <p className="mb-4 font-heading text-[11px] font-bold uppercase tracking-[0.17em] text-[#d62e36]">
-                India Battery International Show
+                India International Battery Show
               </p>
 
               <h2
@@ -37,16 +37,17 @@ export function AboutPageContent() {
 
               <div className="mt-6 space-y-4 text-[15px] leading-[1.85] text-[#56565b] sm:text-base">
                 <p>
-                  India Battery International Show is a trade exhibition dedicated
-                  to battery technologies, manufacturing and energy storage.
-                  The show brings together battery manufacturers, cell makers,
-                  pack integrators, component suppliers and research organisations.
+                  India International Battery Show is a trade exhibition
+                  dedicated to battery technologies, manufacturing and energy
+                  storage. The show brings together battery manufacturers, cell
+                  makers, pack integrators, component suppliers and research
+                  organisations.
                 </p>
                 <p>
-                  The exhibition covers battery cells and packs, battery management
-                  systems, production equipment, testing, recycling and energy
-                  storage solutions for electric mobility, renewable energy and
-                  industrial applications.
+                  The exhibition covers battery cells and packs, battery
+                  management systems, production equipment, testing, recycling
+                  and energy storage solutions for electric mobility, renewable
+                  energy and industrial applications.
                 </p>
                 <p>
                   Alongside product displays, the programme includes technical
@@ -59,7 +60,11 @@ export function AboutPageContent() {
               initial={reduceMotion ? false : { opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: reduceMotion ? 0 : 0.1, ease }}
+              transition={{
+                duration: 0.7,
+                delay: reduceMotion ? 0 : 0.1,
+                ease,
+              }}
               className="min-w-0"
             >
               <div className="group relative aspect-[5/4] overflow-hidden rounded-lg bg-[#202024] sm:aspect-[6/4] lg:aspect-[5/4]">
@@ -71,7 +76,6 @@ export function AboutPageContent() {
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:transform-none"
                 />
               </div>
-             
             </m.figure>
           </div>
         </Container>

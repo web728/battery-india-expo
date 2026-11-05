@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "Participant Login",
   description:
-    "Log in to your India Battery International Show 2026 participant dashboard.",
+    "Log in to your India International Battery Show 2026 participant dashboard.",
   alternates: { canonical: "/login" },
   robots: { index: false, follow: false },
 };

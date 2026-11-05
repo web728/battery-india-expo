@@ -10,7 +10,7 @@ import { Search } from "lucide-react";
 export const metadata: Metadata = {
   title: "Exhibitor Directory",
   description:
-    "Search the exhibitor directory for India Battery International Show 2026 by company, country, product category and more.",
+    "Search the exhibitor directory for India International Battery Show 2026 by company, country, product category and more.",
   alternates: { canonical: "/exhibitors" },
 };
 

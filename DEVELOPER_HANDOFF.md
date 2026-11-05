@@ -1,4 +1,4 @@
-# Developer Handoff — India Battery International Show 2026 Website
+# Developer Handoff — India International Battery Show 2026 Website
 
 This is a complete Next.js 16 website. It **runs immediately with zero configuration** —
 forms work, all pages render — you're only configuring things to move from "demo mode" to
@@ -45,12 +45,14 @@ database and send real emails instead of console-logging them.
 ## 5. Deploy
 
 **Vercel (recommended, zero config):**
+
 1. Push this repo to GitHub/GitLab.
 2. Import into Vercel.
 3. Add the env vars from `.env.example` under Project Settings → Environment Variables.
 4. Deploy.
 
 **Any other Node host:**
+
 ```bash
 npm run build
 npm run start

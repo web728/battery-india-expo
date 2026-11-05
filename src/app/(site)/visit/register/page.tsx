@@ -11,16 +11,16 @@ const registrationUrl = "/visit/register";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Visitor Registration | India Battery International Show 2027",
+    absolute: "Visitor Registration | India International Battery Show 2027",
   },
   description:
-    "Register your interest in attending India Battery International Show 2027, taking place 14–16 October at Auto Cluster Exhibition Centre in Pune.",
+    "Register your interest in attending India International Battery Show 2027, taking place 14–16 October at Auto Cluster Exhibition Centre in Pune.",
   alternates: {
     canonical: "/visit/register",
   },
   openGraph: {
     type: "website",
-    title: "Visitor Registration | India Battery International Show 2027",
+    title: "Visitor Registration | India International Battery Show 2027",
     description:
       "Visitor registration information for the 2027 battery exhibition in Pune.",
     url: "/visit/register",
@@ -48,7 +48,7 @@ export default function VisitorRegisterPage() {
       <PageHero
         eyebrow="Visit"
         title="Visitor Registration"
-        description="Register to attend India Battery International Show 2027 in Pune, 14–16 October."
+        description="Register to attend India International Battery Show 2027 in Pune, 14–16 October."
         breadcrumbs={[
           { label: "Visit", href: "/visit" },
           { label: "Visitor Registration" },
@@ -93,8 +93,6 @@ export default function VisitorRegisterPage() {
               <VisitorRegistrationForm />
             </div>
           </div>
-
-        
         </Container>
       </section>
     </>

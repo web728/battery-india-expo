@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Venue Overview",
-  description: `India Battery International Show 2026 takes place at the ${siteConfig.venue.name}, ${siteConfig.venue.city}.`,
+  description: `India International Battery Show 2026 takes place at the ${siteConfig.venue.name}, ${siteConfig.venue.city}.`,
   alternates: { canonical: "/venue" },
 };
 

@@ -7,7 +7,7 @@ import { AboutPageContent } from "./about-page-content";
 
 const pageTitle = "About the Show | Battery Exhibition Pune 2027";
 const pageDescription =
-  "Learn about India Battery International Show, taking place 14–16 October 2027 in Pune. Explore battery manufacturing, energy storage, testing and recycling.";
+  "Learn about India International Battery Show, taking place 14–16 October 2027 in Pune. Explore battery manufacturing, energy storage, testing and recycling.";
 
 const siteUrl = siteConfig.siteUrl.replace(/\/$/, "");
 const pageUrl = `${siteUrl}/about`;
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: imageUrl,
-        alt: "India Battery International Show exhibition and industry networking",
+        alt: "India International Battery Show exhibition and industry networking",
       },
     ],
   },
@@ -82,18 +82,16 @@ export default function AboutPage() {
         }}
       />
 
-      <BreadcrumbJsonLd
-        items={[{ label: "About the Show", href: "/about" }]}
-      />
+      <BreadcrumbJsonLd items={[{ label: "About the Show", href: "/about" }]} />
 
       <PageHero
         eyebrow="About the Show"
-        title="About India Battery International Show 2027"
+        title="About India International Battery Show 2027"
         description="A dedicated exhibition for battery technologies, manufacturing, energy storage and recycling, taking place 14–16 October 2027 in Pune."
         breadcrumbs={[{ label: "About the Show" }]}
         backgroundImage={{
           src: "/images/expo-vip-lounge-branding.jpg",
-          alt: "Industry networking at India Battery International Show",
+          alt: "Industry networking at India International Battery Show",
         }}
       />
 

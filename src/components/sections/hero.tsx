@@ -291,7 +291,7 @@ export function Hero() {
               <div className="mb-6 flex flex-wrap items-center gap-3 text-[11px] font-bold uppercase tracking-[0.16em] sm:text-xs">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#13A853]" />
                 <span className="text-white/65">
-                  India Battery International Show
+                  India International Battery Show
                 </span>
                 <span className="h-3 w-px bg-white/25" />
                 <span className="text-[#ED3138]">2nd Edition · 2027</span>

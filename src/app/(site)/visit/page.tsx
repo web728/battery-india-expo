@@ -53,16 +53,16 @@ const planningDetails = [
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Why Visit | India Battery International Show 2027",
+    absolute: "Why Visit | India International Battery Show 2027",
   },
   description:
-    "Discover why to visit India Battery International Show 2027 in Pune, 14–16 October. Explore battery technologies, industry meetings and practical visitor information.",
+    "Discover why to visit India International Battery Show 2027 in Pune, 14–16 October. Explore battery technologies, industry meetings and practical visitor information.",
   alternates: {
     canonical: "/visit",
   },
   openGraph: {
     type: "website",
-    title: "Why Visit | India Battery International Show 2027",
+    title: "Why Visit | India International Battery Show 2027",
     description:
       "Explore the battery and energy storage exhibition in Pune and plan your visit for 14–16 October 2027.",
     url: "/visit",
@@ -88,7 +88,7 @@ export default function VisitPage() {
 
       <PageHero
         eyebrow="Visit the Show"
-        title="Why Visit India Battery International Show?"
+        title="Why Visit India International Battery Show?"
         description="Explore battery technologies, meet industry suppliers and learn about solutions for energy storage, electric mobility and industrial applications."
         breadcrumbs={[{ label: "Visit" }]}
         backgroundImage={{
@@ -112,7 +112,7 @@ export default function VisitPage() {
               </h2>
 
               <p className="mt-5 max-w-xl text-[15px] leading-8 text-[#68686e]">
-                India Battery International Show offers a place to explore
+                India International Battery Show offers a place to explore
                 battery products, manufacturing technologies, energy storage
                 systems and supporting solutions.
               </p>

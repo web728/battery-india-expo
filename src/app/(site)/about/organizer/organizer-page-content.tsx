@@ -1,14 +1,9 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  ArrowUpRight,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { ArrowUpRight, Mail, Phone } from "lucide-react";
 
 import {
   LazyMotion,
@@ -40,7 +35,6 @@ const reveal: Variants = {
 
 const organizerLogo = "/partners/futurex-logo.png";
 
-
 export function OrganizerPageContent() {
   const reduceMotion = useReducedMotion();
 
@@ -62,21 +56,17 @@ export function OrganizerPageContent() {
         <Container>
           <div className="grid items-center gap-9 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14 xl:gap-20">
             {/* Organizer identity */}
-            <m.div
-              {...motionProps}
-              variants={reveal}
-              className="min-w-0"
-            >
+            <m.div {...motionProps} variants={reveal} className="min-w-0">
               <div className="overflow-hidden rounded-xl border border-[#eae8e5] bg-[#faf9f7] p-6 sm:p-8">
                 <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-[#eeece9] bg-white px-7 py-9 sm:min-h-[220px]">
-                <Image
-  src={organizerLogo}
-  alt={`${siteConfig.organizer.name} official logo`}
-  width={600}
-  height={250}
-  priority
-  className="h-auto max-h-[110px] w-auto max-w-full object-contain"
-/>
+                  <Image
+                    src={organizerLogo}
+                    alt={`${siteConfig.organizer.name} official logo`}
+                    width={600}
+                    height={250}
+                    priority
+                    className="h-auto max-h-[110px] w-auto max-w-full object-contain"
+                  />
                 </div>
 
                 <div className="mt-5 border-t border-[#e6e3df] pt-5">
@@ -92,16 +82,9 @@ export function OrganizerPageContent() {
             </m.div>
 
             {/* About the organizer */}
-            <m.div
-              {...motionProps}
-              variants={reveal}
-              className="min-w-0"
-            >
+            <m.div {...motionProps} variants={reveal} className="min-w-0">
               <div className="mb-4 flex items-center gap-3">
-                <span
-                  aria-hidden="true"
-                  className="h-[2px] w-8 bg-[#ed3138]"
-                />
+                <span aria-hidden="true" className="h-[2px] w-8 bg-[#ed3138]" />
 
                 <span className="font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
                   About the Organizer
@@ -119,24 +102,21 @@ export function OrganizerPageContent() {
               </h2>
 
               <p className="mt-6 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                {siteConfig.organizer.name} organizes India
-                Battery International Show, a business exhibition
-                dedicated to battery technologies, manufacturing
-                and energy storage.
+                {siteConfig.organizer.name} organizes India Battery
+                International Show, a business exhibition dedicated to battery
+                technologies, manufacturing and energy storage.
               </p>
 
               <p className="mt-4 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                The 2027 edition will take place from 14–16 October
-                at Auto Cluster Exhibition Centre,
-                Pimpri-Chinchwad, Pune, alongside India EV Show
-                and India Solar International Show.
+                The 2027 edition will take place from 14–16 October at Auto
+                Cluster Exhibition Centre, Pimpri-Chinchwad, Pune, alongside
+                India EV Show and 2nd India International Solar Show 2027.
               </p>
 
               <p className="mt-4 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                The exhibition provides a setting for product
-                displays, industry meetings and discussions
-                related to battery manufacturing, electric
-                mobility and energy storage applications.
+                The exhibition provides a setting for product displays, industry
+                meetings and discussions related to battery manufacturing,
+                electric mobility and energy storage applications.
               </p>
 
               <div className="mt-7 border-t border-[#e9e7e4] pt-6">
@@ -145,7 +125,6 @@ export function OrganizerPageContent() {
                   className="group inline-flex items-center gap-2 font-heading text-sm font-bold text-[#d52d35] transition-colors hover:text-[#aa222a] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
                 >
                   Contact the organizing team
-
                   <ArrowUpRight
                     className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     aria-hidden="true"
@@ -181,8 +160,7 @@ export function OrganizerPageContent() {
               </h2>
 
               <p className="mt-3 text-sm leading-7 text-[#6b6b70] sm:text-[15px]">
-                For exhibition participation and
-                event-related enquiries.
+                For exhibition participation and event-related enquiries.
               </p>
             </m.div>
 
@@ -190,11 +168,7 @@ export function OrganizerPageContent() {
               {siteConfig.contacts.map((contact, index) => (
                 <m.article
                   key={`${contact.email}-${index}`}
-                  initial={
-                    reduceMotion
-                      ? false
-                      : { opacity: 0, y: 12 }
-                  }
+                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
                   whileInView={{
                     opacity: 1,
                     y: 0,
@@ -205,9 +179,7 @@ export function OrganizerPageContent() {
                   }}
                   transition={{
                     duration: 0.5,
-                    delay: reduceMotion
-                      ? 0
-                      : index * 0.07,
+                    delay: reduceMotion ? 0 : index * 0.07,
                     ease,
                   }}
                   className="rounded-xl border border-[#e9e7e4] bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:border-[#ed3138]/25 hover:shadow-[0_10px_26px_rgba(0,0,0,0.035)] sm:p-6"

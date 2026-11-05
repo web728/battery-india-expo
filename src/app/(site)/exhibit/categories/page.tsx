@@ -12,16 +12,16 @@ const bookingUrl = "/exhibit/book-a-stand";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Exhibitor Categories | India Battery International Show 2027",
+    absolute: "Exhibitor Categories | India International Battery Show 2027",
   },
   description:
-    "Explore exhibitor categories at India Battery International Show 2027, covering battery manufacturing, energy storage and related technologies.",
+    "Explore exhibitor categories at India International Battery Show 2027, covering battery manufacturing, energy storage and related technologies.",
   alternates: {
     canonical: "/exhibit/categories",
   },
   openGraph: {
     type: "website",
-    title: "Exhibitor Categories | India Battery International Show 2027",
+    title: "Exhibitor Categories | India International Battery Show 2027",
     description:
       "Explore the products and technologies represented at the battery exhibition in Pune.",
     url: "/exhibit/categories",
@@ -80,7 +80,7 @@ export default function ExhibitCategoriesPage() {
 
             <p className="mt-4 text-[15px] leading-7 text-[#66666d]">
               Browse the exhibition categories to understand the areas covered
-              by India Battery International Show 2027.
+              by India International Battery Show 2027.
             </p>
           </div>
 

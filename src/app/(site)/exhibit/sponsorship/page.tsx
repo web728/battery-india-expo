@@ -1,11 +1,7 @@
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import {
-  ArrowUpRight,
-  Mail,
-} from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 
 import { PageHero } from "@/components/sections/page-hero";
 import { Container } from "@/components/ui/container";
@@ -16,17 +12,16 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: {
     absolute:
-      "Sponsorship Opportunities | India Battery International Show 2027",
+      "Sponsorship Opportunities | India International Battery Show 2027",
   },
   description:
-    "Explore sponsorship and partnership opportunities at India Battery International Show 2027 in Pune. Contact the organising team to discuss your objectives.",
+    "Explore sponsorship and partnership opportunities at India International Battery Show 2027 in Pune. Contact the organising team to discuss your objectives.",
   alternates: {
     canonical: "/exhibit/sponsorship",
   },
   openGraph: {
     type: "website",
-    title:
-      "Sponsorship Opportunities | India Battery International Show 2027",
+    title: "Sponsorship Opportunities | India International Battery Show 2027",
     description:
       "Discuss sponsorship and partnership opportunities for the 2027 exhibition in Pune.",
     url: "/exhibit/sponsorship",
@@ -56,7 +51,7 @@ export default function SponsorshipPage() {
       <PageHero
         eyebrow="Partner With Us"
         title="Sponsorship Opportunities"
-        description="Explore sponsorship and partnership options for India Battery International Show 2027."
+        description="Explore sponsorship and partnership options for India International Battery Show 2027."
         breadcrumbs={[
           { label: "Exhibit", href: "/exhibit" },
           { label: "Sponsorship Opportunities" },
@@ -85,19 +80,16 @@ export default function SponsorshipPage() {
               </h2>
 
               <p className="mt-5 max-w-lg text-[15px] leading-8 text-[#67676e]">
-                India Battery International Show brings
-                businesses together around battery
-                technologies, manufacturing and energy
-                storage. Sponsorship offers an opportunity
-                to present your brand within this
-                industry-focused exhibition.
+                India International Battery Show brings businesses together
+                around battery technologies, manufacturing and energy storage.
+                Sponsorship offers an opportunity to present your brand within
+                this industry-focused exhibition.
               </p>
 
               <p className="mt-4 max-w-lg text-[15px] leading-8 text-[#67676e]">
-                Share your organisation&apos;s objectives,
-                preferred type of involvement and
-                requirements. Our team can discuss
-                relevant opportunities and available options.
+                Share your organisation&apos;s objectives, preferred type of
+                involvement and requirements. Our team can discuss relevant
+                opportunities and available options.
               </p>
 
               {primaryContact && (
@@ -149,8 +141,8 @@ export default function SponsorshipPage() {
                 </h2>
 
                 <p className="mt-2 text-sm leading-7 text-[#696970]">
-                  Submit your details and partnership
-                  interests using the form below.
+                  Submit your details and partnership interests using the form
+                  below.
                 </p>
               </div>
 

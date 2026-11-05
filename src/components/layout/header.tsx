@@ -1,22 +1,12 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
-import {
-  ArrowUpRight,
-  ChevronDown,
-  Menu,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 
 import {
   BOOK_STAND_URL,
@@ -42,12 +32,8 @@ export function Header() {
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<
-    string | null
-  >(null);
-  const [mobileSection, setMobileSection] = useState<
-    string | null
-  >(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
 
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 20);
@@ -72,8 +58,7 @@ export function Header() {
   useEffect(() => {
     if (!mobileOpen) return;
 
-    const previousOverflow =
-      document.body.style.overflow;
+    const previousOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
 
@@ -84,49 +69,34 @@ export function Header() {
       }
 
       if (event.key === "Tab" && drawerRef.current) {
-        const focusables =
-          drawerRef.current.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled])'
-          );
+        const focusables = drawerRef.current.querySelectorAll<HTMLElement>(
+          "a[href], button:not([disabled])",
+        );
 
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
 
         if (!first || !last) return;
 
-        if (
-          event.shiftKey &&
-          document.activeElement === first
-        ) {
+        if (event.shiftKey && document.activeElement === first) {
           event.preventDefault();
           last.focus();
-        } else if (
-          !event.shiftKey &&
-          document.activeElement === last
-        ) {
+        } else if (!event.shiftKey && document.activeElement === last) {
           event.preventDefault();
           first.focus();
         }
       }
     };
 
-    document.addEventListener(
-      "keydown",
-      closeOnEscape
-    );
+    document.addEventListener("keydown", closeOnEscape);
 
     drawerRef.current
-      ?.querySelector<HTMLButtonElement>(
-        '[data-mobile-close]'
-      )
+      ?.querySelector<HTMLButtonElement>("[data-mobile-close]")
       ?.focus();
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener(
-        "keydown",
-        closeOnEscape
-      );
+      document.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileOpen]);
 
@@ -136,9 +106,7 @@ export function Header() {
     const closeOutside = (event: PointerEvent) => {
       if (
         headerRef.current &&
-        !headerRef.current.contains(
-          event.target as Node
-        )
+        !headerRef.current.contains(event.target as Node)
       ) {
         setOpenDropdown(null);
       }
@@ -150,29 +118,16 @@ export function Header() {
       }
     };
 
-    document.addEventListener(
-      "pointerdown",
-      closeOutside
-    );
-    document.addEventListener(
-      "keydown",
-      closeEscape
-    );
+    document.addEventListener("pointerdown", closeOutside);
+    document.addEventListener("keydown", closeEscape);
 
     return () => {
-      document.removeEventListener(
-        "pointerdown",
-        closeOutside
-      );
-      document.removeEventListener(
-        "keydown",
-        closeEscape
-      );
+      document.removeEventListener("pointerdown", closeOutside);
+      document.removeEventListener("keydown", closeEscape);
     };
   }, [openDropdown]);
 
-  const transparent =
-    pathname === "/" && !scrolled && !mobileOpen;
+  const transparent = pathname === "/" && !scrolled && !mobileOpen;
 
   return (
     <>
@@ -183,7 +138,7 @@ export function Header() {
           "transition-[background-color,border-color,box-shadow] duration-300",
           transparent
             ? "border-white/10 bg-[#121214]/35 backdrop-blur-md"
-            : "border-white/10 bg-[#18181b]/95 shadow-[0_12px_35px_rgba(0,0,0,0.14)] backdrop-blur-xl"
+            : "border-white/10 bg-[#18181b]/95 shadow-[0_12px_35px_rgba(0,0,0,0.14)] backdrop-blur-xl",
         )}
       >
         <div
@@ -191,33 +146,33 @@ export function Header() {
             "mx-auto flex w-full max-w-[1440px] items-center justify-between gap-4",
             "px-4 sm:px-6 xl:px-10",
             scrolled ? "h-[70px]" : "h-[78px]",
-            "transition-[height] duration-300"
+            "transition-[height] duration-300",
           )}
         >
-      <Link
-  href="/"
-  aria-label="India Battery International Show home"
-  onClick={() => {
-    setOpenDropdown(null);
-    setMobileOpen(false);
-  }}
-  className={cn(
-    "relative flex shrink-0 items-center rounded-md",
-    focusStyle
-  )}
->
-  <Image
-    src="/logo/battery-white.png"
-    alt="India Battery International Show"
-    width={210}
-    height={80}
-    priority
-    className={cn(
-      "w-auto object-contain transition-[height] duration-300",
-      scrolled ? "h-12" : "h-14"
-    )}
-  />
-</Link>
+          <Link
+            href="/"
+            aria-label="India International Battery Show home"
+            onClick={() => {
+              setOpenDropdown(null);
+              setMobileOpen(false);
+            }}
+            className={cn(
+              "relative flex shrink-0 items-center rounded-md",
+              focusStyle,
+            )}
+          >
+            <Image
+              src="/logo/battery-white.png"
+              alt="India International Battery Show"
+              width={210}
+              height={80}
+              priority
+              className={cn(
+                "w-auto object-contain transition-[height] duration-300",
+                scrolled ? "h-12" : "h-14",
+              )}
+            />
+          </Link>
 
           {/* Desktop */}
           <nav
@@ -226,23 +181,16 @@ export function Header() {
             onMouseLeave={() => setOpenDropdown(null)}
           >
             {mainNav.map((item) => {
-              const hasChildren =
-                Boolean(item.children?.length);
-              const isOpen =
-                openDropdown === item.href;
-              const active = isNavGroupActive(
-                pathname,
-                item
-              );
+              const hasChildren = Boolean(item.children?.length);
+              const isOpen = openDropdown === item.href;
+              const active = isNavGroupActive(pathname, item);
 
               return (
                 <div
                   key={item.href}
                   className="relative flex items-center"
                   onMouseEnter={() =>
-                    setOpenDropdown(
-                      hasChildren ? item.href : null
-                    )
+                    setOpenDropdown(hasChildren ? item.href : null)
                   }
                   onFocusCapture={() => {
                     if (hasChildren) {
@@ -252,7 +200,7 @@ export function Header() {
                   onBlurCapture={(event) => {
                     if (
                       !event.currentTarget.contains(
-                        event.relatedTarget as Node | null
+                        event.relatedTarget as Node | null,
                       )
                     ) {
                       setOpenDropdown(null);
@@ -274,20 +222,18 @@ export function Header() {
                         aria-expanded={isOpen}
                         aria-controls={`nav-${item.href.slice(1)}`}
                         onClick={() =>
-                          setOpenDropdown(
-                            isOpen ? null : item.href
-                          )
+                          setOpenDropdown(isOpen ? null : item.href)
                         }
                         className={cn(
                           "-ml-1 flex h-10 w-6 items-center justify-center rounded-sm text-white/65 transition-colors hover:text-white",
-                          focusStyle
+                          focusStyle,
                         )}
                       >
                         <ChevronDown
                           aria-hidden="true"
                           className={cn(
                             "h-3.5 w-3.5 transition-transform duration-200",
-                            isOpen && "rotate-180 text-[#ed3138]"
+                            isOpen && "rotate-180 text-[#ed3138]",
                           )}
                         />
                       </button>
@@ -299,37 +245,30 @@ export function Header() {
                           "transition-[opacity,visibility,transform] duration-200",
                           isOpen
                             ? "visible translate-y-0 opacity-100"
-                            : "pointer-events-none invisible -translate-y-1 opacity-0"
+                            : "pointer-events-none invisible -translate-y-1 opacity-0",
                         )}
                       >
                         <div className="overflow-hidden rounded-lg border border-[#e8e8e8] bg-white p-1.5 shadow-[0_20px_55px_rgba(0,0,0,0.17)]">
                           {item.children?.map((child) => {
-                            const childActive =
-                              isExactActive(
-                                pathname,
-                                child.href
-                              );
+                            const childActive = isExactActive(
+                              pathname,
+                              child.href,
+                            );
 
                             return (
                               <Link
                                 key={child.href}
                                 href={child.href}
-                                aria-current={
-                                  childActive
-                                    ? "page"
-                                    : undefined
-                                }
+                                aria-current={childActive ? "page" : undefined}
                                 tabIndex={isOpen ? 0 : -1}
-                                onClick={() =>
-                                  setOpenDropdown(null)
-                                }
+                                onClick={() => setOpenDropdown(null)}
                                 className={cn(
                                   "block rounded-md px-3.5 py-3 font-heading text-[13px]",
                                   "transition-colors duration-200",
                                   childActive
                                     ? "bg-[#fff0f0] font-bold text-[#d52d35]"
                                     : "font-medium text-[#44444a] hover:bg-[#f6f6f6] hover:text-[#d52d35]",
-                                  focusStyle
+                                  focusStyle,
                                 )}
                               >
                                 {child.label}
@@ -354,7 +293,7 @@ export function Header() {
                 "font-heading text-xs font-bold text-white transition-colors hover:border-white/60 hover:bg-white/10",
                 isExactActive(pathname, "/exhibit/book-a-stand") &&
                   "border-[#ed3138] bg-white/10",
-                focusStyle
+                focusStyle,
               )}
             >
               Book a Stand
@@ -365,14 +304,11 @@ export function Header() {
               className={cn(
                 "inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-[#ed3138] px-4",
                 "font-heading text-xs font-bold text-white transition-colors hover:bg-[#cf252d]",
-                focusStyle
+                focusStyle,
               )}
             >
               Register to Visit
-              <ArrowUpRight
-                className="h-3.5 w-3.5"
-                aria-hidden="true"
-              />
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </Link>
           </div>
 
@@ -390,13 +326,10 @@ export function Header() {
             className={cn(
               "flex h-11 w-11 items-center justify-center rounded-md border border-white/20 text-white",
               "transition-colors hover:bg-white/10 xl:hidden",
-              focusStyle
+              focusStyle,
             )}
           >
-            <Menu
-              className="h-5 w-5"
-              aria-hidden="true"
-            />
+            <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
       </header>
@@ -425,13 +358,13 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 className={focusStyle}
               >
-              <Image
-  src="/logo/battery-white.png"
-  alt="India Battery International Show"
-  width={220}
-  height={100}
-  className="h-18 w-auto object-contain"
-/>
+                <Image
+                  src="/logo/battery-white.png"
+                  alt="India International Battery Show"
+                  width={220}
+                  height={100}
+                  className="h-18 w-auto object-contain"
+                />
               </Link>
 
               <button
@@ -444,13 +377,10 @@ export function Header() {
                 }}
                 className={cn(
                   "flex h-10 w-10 items-center justify-center rounded-md border border-white/15",
-                  focusStyle
+                  focusStyle,
                 )}
               >
-                <X
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                />
+                <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
 
@@ -459,20 +389,12 @@ export function Header() {
               className="min-h-0 flex-1 overflow-y-auto px-5 py-5"
             >
               {mainNav.map((item) => {
-                const hasChildren =
-                  Boolean(item.children?.length);
-                const expanded =
-                  mobileSection === item.href;
-                const active = isNavGroupActive(
-                  pathname,
-                  item
-                );
+                const hasChildren = Boolean(item.children?.length);
+                const expanded = mobileSection === item.href;
+                const active = isNavGroupActive(pathname, item);
 
                 return (
-                  <div
-                    key={item.href}
-                    className="border-b border-white/10"
-                  >
+                  <div key={item.href} className="border-b border-white/10">
                     <div className="flex items-center">
                       <MobileAnchor
                         item={item}
@@ -486,19 +408,17 @@ export function Header() {
                           aria-label={`Toggle ${item.label} links`}
                           aria-expanded={expanded}
                           onClick={() =>
-                            setMobileSection(
-                              expanded ? null : item.href
-                            )
+                            setMobileSection(expanded ? null : item.href)
                           }
                           className={cn(
                             "flex h-12 w-11 shrink-0 items-center justify-center text-white/70",
-                            focusStyle
+                            focusStyle,
                           )}
                         >
                           <ChevronDown
                             className={cn(
                               "h-4 w-4 transition-transform",
-                              expanded && "rotate-180"
+                              expanded && "rotate-180",
                             )}
                             aria-hidden="true"
                           />
@@ -509,30 +429,23 @@ export function Header() {
                     {hasChildren && expanded && (
                       <div className="space-y-1 pb-3 pl-4">
                         {item.children?.map((child) => {
-                          const childActive =
-                            isExactActive(
-                              pathname,
-                              child.href
-                            );
+                          const childActive = isExactActive(
+                            pathname,
+                            child.href,
+                          );
 
                           return (
                             <Link
                               key={child.href}
                               href={child.href}
-                              aria-current={
-                                childActive
-                                  ? "page"
-                                  : undefined
-                              }
-                              onClick={() =>
-                                setMobileOpen(false)
-                              }
+                              aria-current={childActive ? "page" : undefined}
+                              onClick={() => setMobileOpen(false)}
                               className={cn(
                                 "block rounded-md px-3 py-2.5 text-[13px] transition-colors",
                                 childActive
                                   ? "bg-white/10 font-bold text-[#ff656b]"
                                   : "text-white/65 hover:bg-white/5 hover:text-white",
-                                focusStyle
+                                focusStyle,
                               )}
                             >
                               {child.label}
@@ -594,26 +507,19 @@ function NavAnchor({
       href={item.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      aria-current={
-        active && !item.children ? "page" : undefined
-      }
+      aria-current={active && !item.children ? "page" : undefined}
       onClick={close}
       className={cn(
         "group relative flex h-11 items-center gap-1 rounded-md px-3 font-heading text-[13px] font-semibold",
         "transition-colors duration-200",
-        active
-          ? "text-white"
-          : "text-white/70 hover:text-white",
-        focusStyle
+        active ? "text-white" : "text-white/70 hover:text-white",
+        focusStyle,
       )}
     >
       {item.label}
 
       {external && (
-        <ArrowUpRight
-          className="h-3 w-3 text-white/60"
-          aria-hidden="true"
-        />
+        <ArrowUpRight className="h-3 w-3 text-white/60" aria-hidden="true" />
       )}
 
       <span
@@ -621,9 +527,7 @@ function NavAnchor({
         className={cn(
           "absolute bottom-1 left-3 right-3 h-[2px] origin-left rounded-full bg-[#ed3138]",
           "transition-transform duration-200",
-          active
-            ? "scale-x-100"
-            : "scale-x-0 group-hover:scale-x-100"
+          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
         )}
       />
     </Link>
@@ -646,25 +550,16 @@ function MobileAnchor({
       href={item.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      aria-current={
-        active && !item.children ? "page" : undefined
-      }
+      aria-current={active && !item.children ? "page" : undefined}
       onClick={close}
       className={cn(
         "flex min-h-12 flex-1 items-center gap-2 py-3 font-heading text-sm font-semibold",
-        active
-          ? "text-[#ff656b]"
-          : "text-white/80",
-        focusStyle
+        active ? "text-[#ff656b]" : "text-white/80",
+        focusStyle,
       )}
     >
       {item.label}
-      {external && (
-        <ArrowUpRight
-          className="h-3.5 w-3.5"
-          aria-hidden="true"
-        />
-      )}
+      {external && <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />}
     </Link>
   );
 }

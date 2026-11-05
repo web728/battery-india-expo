@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
@@ -7,18 +6,17 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      "Co-Located Shows | India Battery International Show 2027",
+    absolute: "Co-Located Shows | India International Battery Show 2027",
   },
   description:
-    "India Battery International Show 2027 takes place alongside India International EV Show and India Solar International Show in Pune, 14–16 October 2027.",
+    "India International Battery Show 2027 takes place alongside 9th India International EV Show and 2nd India International Solar Show in Pune, 14–16 October 2027.",
   alternates: {
     canonical: "/about/co-located-shows",
   },
   openGraph: {
-    title: "Co-Located Shows | India Battery International Show 2027",
+    title: "Co-Located Shows | India International Battery Show 2027",
     description:
-      "Explore the EV and solar exhibitions taking place alongside India Battery International Show 2027 in Pune.",
+      "Explore the EV and solar exhibitions taking place alongside India International Battery Show 2027 in Pune.",
     url: "/about/co-located-shows",
     type: "website",
     images: ["/images/expo-floor-ev-booth-visitors.jpg"],

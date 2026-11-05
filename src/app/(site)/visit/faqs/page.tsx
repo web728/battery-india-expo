@@ -12,16 +12,16 @@ const registrationUrl = "/visit/register";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Visitor FAQs | India Battery International Show 2027",
+    absolute: "Visitor FAQs | India International Battery Show 2027",
   },
   description:
-    "Find answers to common questions about visiting India Battery International Show 2027 in Pune, including registration, venue details and planning your visit.",
+    "Find answers to common questions about visiting India International Battery Show 2027 in Pune, including registration, venue details and planning your visit.",
   alternates: {
     canonical: "/visit/faqs",
   },
   openGraph: {
     type: "website",
-    title: "Visitor FAQs | India Battery International Show 2027",
+    title: "Visitor FAQs | India International Battery Show 2027",
     description:
       "Visitor information and frequently asked questions for the 2027 exhibition in Pune.",
     url: "/visit/faqs",
@@ -53,7 +53,7 @@ export default function VisitorFaqsPage() {
       <PageHero
         eyebrow="Visitor Information"
         title="Visitor FAQs"
-        description="Answers to common questions about attending India Battery International Show 2027."
+        description="Answers to common questions about attending India International Battery Show 2027."
         breadcrumbs={[
           { label: "Visit", href: "/visit" },
           { label: "Visitor FAQs" },

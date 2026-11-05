@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "Visitor Guide",
   description:
-    "Practical guidance for planning your visit to India Battery International Show 2026 — dates, registration, venue and travel.",
+    "Practical guidance for planning your visit to India International Battery Show 2026 — dates, registration, venue and travel.",
   alternates: { canonical: "/visit/guide" },
 };
 
@@ -71,7 +71,7 @@ export default function VisitorGuidePage() {
       <PageHero
         eyebrow="Visit"
         title="Visitor Guide"
-        description="Everything you need to plan your visit to India Battery International Show 2026."
+        description="Everything you need to plan your visit to India International Battery Show 2026."
         breadcrumbs={[
           { label: "Visit", href: "/visit" },
           { label: "Visitor Guide" },

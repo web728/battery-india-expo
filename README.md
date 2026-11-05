@@ -1,6 +1,6 @@
-# India Battery International Show 2026 — Website
+# India International Battery Show 2026 — Website
 
-Production website for **India Battery International Show 2026** (2–4 October 2026, Auto Cluster
+Production website for **India International Battery Show 2026** (2–4 October 2026, Auto Cluster
 Exhibition Center, Pune) — built with Next.js 16 (App Router), TypeScript, Tailwind CSS, and Supabase.
 
 The site is fully functional today with **zero configuration**: every page renders, every form
@@ -36,16 +36,16 @@ question via the enquiry form rather than presenting fabricated packages.
 
 ## Tech stack
 
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router, Turbopack) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Forms/validation | React Hook Form patterns + Zod |
-| Database/auth | Supabase (Postgres + Auth) |
-| Email | Resend |
-| Icons | lucide-react (+ custom SVGs for brand/social icons, which lucide no longer ships) |
-| QR codes | `qrcode` |
+| Layer            | Choice                                                                            |
+| ---------------- | --------------------------------------------------------------------------------- |
+| Framework        | Next.js 16 (App Router, Turbopack)                                                |
+| Language         | TypeScript                                                                        |
+| Styling          | Tailwind CSS v4                                                                   |
+| Forms/validation | React Hook Form patterns + Zod                                                    |
+| Database/auth    | Supabase (Postgres + Auth)                                                        |
+| Email            | Resend                                                                            |
+| Icons            | lucide-react (+ custom SVGs for brand/social icons, which lucide no longer ships) |
+| QR codes         | `qrcode`                                                                          |
 
 > **Note on Next.js version**: this project pins to Next 16, which renamed `middleware.ts` to
 > `proxy.ts` and made `params`/`searchParams` promises. If you're used to older Next conventions,
@@ -72,13 +72,13 @@ cp .env.example .env.local
 Everything is optional. Nothing crashes if it's missing — see the table below for what each variable
 unlocks.
 
-| Variable | Unlocks |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Participant login (`/login`), dashboard (`/dashboard`) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Form submissions persist to Postgres; Admin CMS (`/admin`) becomes reachable |
-| `RESEND_API_KEY`, `EMAIL_FROM_ADDRESS` | Real transactional emails (confirmations, acknowledgements) instead of console logs |
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` / `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` / `NEXT_PUBLIC_LINKEDIN_PARTNER_ID` | Analytics scripts (only loaded after cookie consent) |
-| `NEXT_PUBLIC_SITE_URL` | Overrides the production domain used in metadata/sitemap/emails |
+| Variable                                                                                                                 | Unlocks                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`                                                              | Participant login (`/login`), dashboard (`/dashboard`)                              |
+| `SUPABASE_SERVICE_ROLE_KEY`                                                                                              | Form submissions persist to Postgres; Admin CMS (`/admin`) becomes reachable        |
+| `RESEND_API_KEY`, `EMAIL_FROM_ADDRESS`                                                                                   | Real transactional emails (confirmations, acknowledgements) instead of console logs |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` / `NEXT_PUBLIC_GTM_ID` / `NEXT_PUBLIC_META_PIXEL_ID` / `NEXT_PUBLIC_LINKEDIN_PARTNER_ID` | Analytics scripts (only loaded after cookie consent)                                |
+| `NEXT_PUBLIC_SITE_URL`                                                                                                   | Overrides the production domain used in metadata/sitemap/emails                     |
 
 ### Setting up Supabase (database, auth, admin CMS)
 
@@ -86,10 +86,10 @@ unlocks.
 2. Open the SQL editor and run `supabase/schema.sql` — this creates every table (registrations,
    leads, exhibitors, sponsors, gallery items, testimonials, consent records, audit logs, etc.),
    enums, and starter row-level-security policies.
-3. Copy **Project URL**, **anon public key**, and **service role key** from *Project Settings → API*
+3. Copy **Project URL**, **anon public key**, and **service role key** from _Project Settings → API_
    into `.env.local`.
 4. Create your own account by signing up through Supabase Auth (e.g. via the `/login` page's password
-   reset flow, or directly in the Supabase dashboard under *Authentication → Users*).
+   reset flow, or directly in the Supabase dashboard under _Authentication → Users_).
 5. In the `profiles` table, set your row's `role` to `super_admin` (or any of the roles listed in the
    `user_role` enum in `schema.sql`) — this is what grants access to `/admin`.
 6. Restart the dev server. `/admin`, `/dashboard`, and `/login` now work end-to-end; every form
@@ -108,16 +108,16 @@ Almost all copy that isn't a full page of prose lives in small, typed files unde
 `src/lib/content/` and `src/lib/site-config.ts` — edit these directly (no rebuild step beyond
 `npm run dev`/`build` picking up the change):
 
-| File | Controls |
-|---|---|
-| `src/lib/site-config.ts` | Event name, dates, venue, organizer, contacts, WhatsApp number, social links |
-| `src/lib/content/nav.ts` | Header/footer navigation |
-| `src/lib/content/sectors.ts` | The 13 Exhibitor Profile categories (verbatim from the brochure) |
-| `src/lib/content/exhibitor-categories.ts` | The 14 Visitor Profile categories (verbatim from the brochure) |
-| `src/lib/content/stats.ts` | Homepage statistic cards — replace placeholder text with real numbers once confirmed |
-| `src/lib/content/faqs.ts` | Exhibitor/visitor FAQs |
-| `src/lib/content/home-content.ts` | Why Exhibit / Why Visit benefits, Why Pune points, download list |
-| `src/lib/content/exhibitors.ts` | Exhibitor directory + testimonials — **intentionally empty**, see below |
+| File                                      | Controls                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------------------------ |
+| `src/lib/site-config.ts`                  | Event name, dates, venue, organizer, contacts, WhatsApp number, social links         |
+| `src/lib/content/nav.ts`                  | Header/footer navigation                                                             |
+| `src/lib/content/sectors.ts`              | The 13 Exhibitor Profile categories (verbatim from the brochure)                     |
+| `src/lib/content/exhibitor-categories.ts` | The 14 Visitor Profile categories (verbatim from the brochure)                       |
+| `src/lib/content/stats.ts`                | Homepage statistic cards — replace placeholder text with real numbers once confirmed |
+| `src/lib/content/faqs.ts`                 | Exhibitor/visitor FAQs                                                               |
+| `src/lib/content/home-content.ts`         | Why Exhibit / Why Visit benefits, Why Pune points, download list                     |
+| `src/lib/content/exhibitors.ts`           | Exhibitor directory + testimonials — **intentionally empty**, see below              |
 
 **Do not add placeholder companies, people, or numbers to `exhibitors.ts` or the testimonials array.**
 These are empty by design per the no-fabrication requirement; populate them only with organizer-confirmed
@@ -159,6 +159,7 @@ npm run start
 ```
 
 **Vercel:**
+
 1. Push this repo to GitHub.
 2. Import it in Vercel.
 3. Add the environment variables from `.env.example` in Project Settings → Environment Variables.
@@ -170,6 +171,7 @@ special serverless configuration is required, though Vercel will deploy them as 
 automatically.
 
 Before going live:
+
 - [ ] Run `supabase/schema.sql` against your production Supabase project and set production env vars.
 - [ ] Set a real `RESEND_API_KEY` and verify your sending domain.
 - [ ] Replace placeholder statistics once confirmed by the organizer.

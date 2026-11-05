@@ -1,13 +1,7 @@
-
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  CalendarDays,
-  MapPin,
-  Navigation,
-} from "lucide-react";
+import { ArrowUpRight, CalendarDays, MapPin, Navigation } from "lucide-react";
 
 import {
   LazyMotion,
@@ -40,8 +34,7 @@ const reveal: Variants = {
 export function VenueSection() {
   const reduceMotion = useReducedMotion();
 
-  const venueName =
-    siteConfig.venue.name || "Auto Cluster Exhibition Centre";
+  const venueName = siteConfig.venue.name || "Auto Cluster Exhibition Centre";
 
   const venueAddress =
     siteConfig.venue.full ||
@@ -52,11 +45,11 @@ export function VenueSection() {
     "Auto Cluster Exhibition Centre, Chinchwad, Pune, Maharashtra";
 
   const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(
-    mapQuery
+    mapQuery,
   )}&output=embed`;
 
   const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-    mapQuery
+    mapQuery,
   )}`;
 
   const motionProps = {
@@ -83,10 +76,7 @@ export function VenueSection() {
             className="mb-8 max-w-2xl sm:mb-10"
           >
             <div className="mb-4 flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="h-[2px] w-7 bg-[#ed3138]"
-              />
+              <span aria-hidden="true" className="h-[2px] w-7 bg-[#ed3138]" />
 
               <span className="font-heading text-[11px] font-bold uppercase tracking-[0.17em] text-[#d52d35]">
                 Exhibition Venue
@@ -97,14 +87,12 @@ export function VenueSection() {
               id="venue-heading"
               className="font-heading text-[clamp(1.8rem,3.3vw,2.85rem)] font-extrabold leading-tight tracking-[-0.045em] text-[#19191c]"
             >
-              Find us in{" "}
-              <span className="text-[#ed3138]">Pune.</span>
+              Find us in <span className="text-[#ed3138]">Pune.</span>
             </h2>
 
             <p className="mt-3 max-w-xl text-sm leading-7 text-[#6b6b70] sm:text-[15px]">
-              India Battery International Show 2027 will take place
-              at Auto Cluster Exhibition Centre in
-              Pimpri-Chinchwad, Pune.
+              India International Battery Show 2027 will take place at Auto
+              Cluster Exhibition Centre in Pimpri-Chinchwad, Pune.
             </p>
           </m.div>
 
@@ -210,9 +198,8 @@ export function VenueSection() {
             variants={reveal}
             className="mt-5 text-xs leading-6 text-[#85858a]"
           >
-            Use the map above to view the venue location and
-            directions. Travel and arrival arrangements should
-            be checked before your visit.
+            Use the map above to view the venue location and directions. Travel
+            and arrival arrangements should be checked before your visit.
           </m.p>
         </Container>
       </section>

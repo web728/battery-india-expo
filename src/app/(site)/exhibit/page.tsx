@@ -13,18 +13,18 @@ const bookingUrl = "/exhibit/book-a-stand";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Why Exhibit | India Battery International Show 2027",
+    absolute: "Why Exhibit | India International Battery Show 2027",
   },
   description:
-    "Explore opportunities to exhibit at India Battery International Show 2027, taking place 14–16 October in Pune. Showcase battery technologies and connect with industry professionals.",
+    "Explore opportunities to exhibit at India International Battery Show 2027, taking place 14–16 October in Pune. Showcase battery technologies and connect with industry professionals.",
   alternates: {
     canonical: "/exhibit",
   },
   openGraph: {
     type: "website",
-    title: "Why Exhibit | India Battery International Show 2027",
+    title: "Why Exhibit | India International Battery Show 2027",
     description:
-      "Discover exhibitor opportunities at India Battery International Show 2027 in Pune.",
+      "Discover exhibitor opportunities at India International Battery Show 2027 in Pune.",
     url: "/exhibit",
     images: ["/images/expo-motor-technology-booth.jpg"],
   },
@@ -41,7 +41,7 @@ export default function ExhibitPage() {
 
       <PageHero
         eyebrow="Exhibit"
-        title="Exhibit at India Battery International Show"
+        title="Exhibit at India International Battery Show"
         description="Present your products and technologies to professionals working across batteries, energy storage and related industries."
         breadcrumbs={[{ label: "Exhibit" }]}
         backgroundImage={{
@@ -65,7 +65,7 @@ export default function ExhibitPage() {
               </h2>
 
               <p className="mt-5 max-w-xl text-[15px] leading-8 text-[#66666d]">
-                India Battery International Show brings manufacturers, suppliers
+                India International Battery Show brings manufacturers, suppliers
                 and technology providers into an exhibition environment focused
                 on battery manufacturing, energy storage and associated
                 technologies.

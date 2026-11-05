@@ -3,7 +3,7 @@
 // to change event details site-wide.
 
 export const siteConfig = {
-  eventName: "India Battery International Show 2026",
+  eventName: "India International Battery Show 2026",
   shortName: "Battery India Expo",
   tagline:
     "Complete Platform for Advanced Batteries, Technology, Energy Storage Systems & Innovative Power Solutions",
@@ -22,15 +22,18 @@ export const siteConfig = {
     state: "Maharashtra",
     country: "India",
     full: "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune, Maharashtra, India",
-    mapQuery: "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune",
+    mapQuery:
+      "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune",
   },
   organizer: {
     name: "Futurex Trade Fair & Events Pvt. Ltd.",
   },
- // Replace line 29:
-siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim() !== "")
-  ? process.env.NEXT_PUBLIC_SITE_URL 
-  : "https://www.batteryindiaexpo.com",
+  // Replace line 29:
+  siteUrl:
+    process.env.NEXT_PUBLIC_SITE_URL &&
+    process.env.NEXT_PUBLIC_SITE_URL.trim() !== ""
+      ? process.env.NEXT_PUBLIC_SITE_URL
+      : "https://www.batteryindiaexpo.com",
   coLocatedShows: [
     {
       name: "India International EV  Show",
@@ -38,13 +41,13 @@ siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.t
       url: null as string | null,
     },
     {
-      name: "India Solar International Show",
+      name: "India International Solar Show",
       slug: "india-solar-international-show",
       url: null as string | null,
     },
   ],
   contacts: [
-     {
+    {
       name: "Mr. Namit Gupta",
       // role: "Sales & General Enquiries",
       phone: "+91 9810855697",
@@ -57,12 +60,11 @@ siteUrl: (process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.t
       phone: "+91 98718 39040",
       email: "nidhi@futurextrade.com",
     },
-   
   ],
   whatsapp: {
     number: "919871839040",
     message:
-      "Hello, I would like more information about India Battery International Show 2026.",
+      "Hello, I would like more information about India International Battery Show 2026.",
   },
   social: {
     linkedin: null as string | null,

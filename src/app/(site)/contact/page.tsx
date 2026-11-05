@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -19,24 +18,20 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      "Contact Us | India Battery International Show 2027",
+    absolute: "Contact Us | India International Battery Show 2027",
   },
   description:
-    "Contact the India Battery International Show 2027 team for exhibiting, visiting, sponsorship, media and general enquiries. The exhibition takes place 14–16 October in Pune.",
+    "Contact the India International Battery Show 2027 team for exhibiting, visiting, sponsorship, media and general enquiries. The exhibition takes place 14–16 October in Pune.",
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
     type: "website",
-    title:
-      "Contact Us | India Battery International Show 2027",
+    title: "Contact Us | India International Battery Show 2027",
     description:
-      "Get in touch with the India Battery International Show 2027 team for exhibition-related enquiries.",
+      "Get in touch with the India International Battery Show 2027 team for exhibition-related enquiries.",
     url: "/contact",
-    images: [
-      "/images/expo-telematics-booth-discussion.jpg",
-    ],
+    images: ["/images/expo-telematics-booth-discussion.jpg"],
   },
   robots: {
     index: true,
@@ -45,17 +40,13 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  const whatsappNumber =
-    siteConfig.whatsapp.number.replace(/[^\d]/g, "");
+  const whatsappNumber = siteConfig.whatsapp.number.replace(/[^\d]/g, "");
 
-  const whatsappUrl =
-    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-      siteConfig.whatsapp.message
-    )}`;
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+    siteConfig.whatsapp.message,
+  )}`;
 
-  const venueName =
-    siteConfig.venue.name ||
-    "Auto Cluster Exhibition Centre";
+  const venueName = siteConfig.venue.name || "Auto Cluster Exhibition Centre";
 
   const venueAddress =
     siteConfig.venue.full ||
@@ -65,15 +56,13 @@ export default function ContactPage() {
     siteConfig.venue.mapQuery ||
     "Auto Cluster Exhibition Centre, Pimpri-Chinchwad, Pune";
 
-  const mapEmbedSrc =
-    `https://www.google.com/maps?q=${encodeURIComponent(
-      mapQuery
-    )}&output=embed`;
+  const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(
+    mapQuery,
+  )}&output=embed`;
 
-  const directionsHref =
-    `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-      mapQuery
-    )}`;
+  const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    mapQuery,
+  )}`;
 
   return (
     <>
@@ -119,68 +108,55 @@ export default function ContactPage() {
                 className="mt-4 max-w-lg font-heading text-[clamp(1.9rem,3vw,2.75rem)] font-extrabold leading-[1.15] tracking-[-0.045em]"
               >
                 Speak with our
-                <span className="text-[#ed3138]">
-                  {" "}team.
-                </span>
+                <span className="text-[#ed3138]"> team.</span>
               </h2>
 
               <p className="mt-5 max-w-lg text-[15px] leading-8 text-[#696970]">
-                Whether you are planning to exhibit,
-                attend or explore a partnership,
-                our team can assist with information
-                about India Battery International
-                Show 2027.
+                Whether you are planning to exhibit, attend or explore a
+                partnership, our team can assist with information about India
+                Battery International Show 2027.
               </p>
 
               {/* Contact persons */}
               {siteConfig.contacts.length > 0 && (
                 <div className="mt-8 divide-y divide-[#e4e1dd] border-y border-[#e4e1dd]">
-                  {siteConfig.contacts.map(
-                    (contact, index) => (
-                      <div
-                        key={`${contact.email}-${index}`}
-                        className="py-5"
-                      >
-                        <h3 className="font-heading text-base font-bold text-[#252529]">
-                          {contact.name}
-                        </h3>
+                  {siteConfig.contacts.map((contact, index) => (
+                    <div key={`${contact.email}-${index}`} className="py-5">
+                      <h3 className="font-heading text-base font-bold text-[#252529]">
+                        {contact.name}
+                      </h3>
 
-                        <div className="mt-3 space-y-2.5">
-                          {contact.phone && (
-                            <a
-                              href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
-                              className="group flex w-fit items-start gap-3 text-sm leading-6 text-[#696970] transition-colors hover:text-[#d52d35]"
-                            >
-                              <Phone
-                                className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
-                                strokeWidth={1.8}
-                                aria-hidden="true"
-                              />
-                              <span>
-                                {contact.phone}
-                              </span>
-                            </a>
-                          )}
+                      <div className="mt-3 space-y-2.5">
+                        {contact.phone && (
+                          <a
+                            href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+                            className="group flex w-fit items-start gap-3 text-sm leading-6 text-[#696970] transition-colors hover:text-[#d52d35]"
+                          >
+                            <Phone
+                              className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
+                              strokeWidth={1.8}
+                              aria-hidden="true"
+                            />
+                            <span>{contact.phone}</span>
+                          </a>
+                        )}
 
-                          {contact.email && (
-                            <a
-                              href={`mailto:${contact.email}`}
-                              className="group flex w-fit items-start gap-3 break-all text-sm leading-6 text-[#696970] transition-colors hover:text-[#d52d35]"
-                            >
-                              <Mail
-                                className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
-                                strokeWidth={1.8}
-                                aria-hidden="true"
-                              />
-                              <span>
-                                {contact.email}
-                              </span>
-                            </a>
-                          )}
-                        </div>
+                        {contact.email && (
+                          <a
+                            href={`mailto:${contact.email}`}
+                            className="group flex w-fit items-start gap-3 break-all text-sm leading-6 text-[#696970] transition-colors hover:text-[#d52d35]"
+                          >
+                            <Mail
+                              className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
+                              strokeWidth={1.8}
+                              aria-hidden="true"
+                            />
+                            <span>{contact.email}</span>
+                          </a>
+                        )}
                       </div>
-                    )
-                  )}
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -256,9 +232,8 @@ export default function ContactPage() {
                 </h2>
 
                 <p className="mt-3 max-w-md text-sm leading-7 text-[#696970]">
-                  Complete the form below with your
-                  enquiry. Our team will review
-                  your message.
+                  Complete the form below with your enquiry. Our team will
+                  review your message.
                 </p>
               </div>
 
@@ -296,10 +271,7 @@ export default function ContactPage() {
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-sm font-bold text-[#d52d35] hover:text-[#b8232b]"
             >
-              <Navigation
-                className="h-4 w-4"
-                aria-hidden="true"
-              />
+              <Navigation className="h-4 w-4" aria-hidden="true" />
               Open in Google Maps
               <ArrowUpRight
                 className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -320,8 +292,8 @@ export default function ContactPage() {
           </div>
 
           <p className="mt-4 text-xs leading-6 text-[#88888d]">
-            The map shows the exhibition venue, not
-            the organiser&apos;s office address.
+            The map shows the exhibition venue, not the organiser&apos;s office
+            address.
           </p>
         </Container>
       </section>

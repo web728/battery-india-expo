@@ -7,7 +7,8 @@ import { Images, Download } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Media Centre",
-  description: "Photo gallery and downloads for India Battery International Show 2026.",
+  description:
+    "Photo gallery and downloads for India International Battery Show 2026.",
   alternates: { canonical: "/media" },
 };
 
@@ -25,15 +26,23 @@ export default function MediaCentrePage() {
         title="Media Centre"
         description="Photo gallery and downloads for journalists and media partners."
         breadcrumbs={[{ label: "Media" }]}
-        
       />
       <section className="py-16 sm:py-20">
         <Container>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className="flex flex-col items-start rounded-xl border border-grey-light bg-white p-7 shadow-sm hover:shadow-md">
-                <link.icon className="mb-4 h-8 w-8 text-red" aria-hidden="true" />
-                <h3 className="font-heading text-base font-bold text-navy-dark">{link.title}</h3>
+              <a
+                key={link.href}
+                href={link.href}
+                className="flex flex-col items-start rounded-xl border border-grey-light bg-white p-7 shadow-sm hover:shadow-md"
+              >
+                <link.icon
+                  className="mb-4 h-8 w-8 text-red"
+                  aria-hidden="true"
+                />
+                <h3 className="font-heading text-base font-bold text-navy-dark">
+                  {link.title}
+                </h3>
               </a>
             ))}
           </div>

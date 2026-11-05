@@ -13,18 +13,18 @@ const bookingUrl = "/exhibit/book-a-stand";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Book a Stand | India Battery International Show 2027",
+    absolute: "Book a Stand | India International Battery Show 2027",
   },
   description:
-    "Enquire about exhibition stands at India Battery International Show 2027, taking place 14–16 October in Pune. Contact the team about stand requirements and availability.",
+    "Enquire about exhibition stands at India International Battery Show 2027, taking place 14–16 October in Pune. Contact the team about stand requirements and availability.",
   alternates: {
     canonical: "/exhibit/book-a-stand",
   },
   openGraph: {
     type: "website",
-    title: "Book a Stand | India Battery International Show 2027",
+    title: "Book a Stand | India International Battery Show 2027",
     description:
-      "Send your stand enquiry for India Battery International Show 2027 in Pune.",
+      "Send your stand enquiry for India International Battery Show 2027 in Pune.",
     url: "/exhibit/book-a-stand",
     images: ["/images/expo-vip-lounge-branding.jpg"],
   },
@@ -50,7 +50,7 @@ export default function BookAStandPage() {
       <PageHero
         eyebrow="Exhibit"
         title="Book a Stand"
-        description="Send your exhibiting requirements to the India Battery International Show 2027 team."
+        description="Send your exhibiting requirements to the India International Battery Show 2027 team."
         breadcrumbs={[
           { label: "Exhibit", href: "/exhibit" },
           { label: "Book a Stand" },
@@ -150,7 +150,7 @@ export default function BookAStandPage() {
             <div className="min-w-0 overflow-hidden rounded-xl border border-[#e7e4e0] bg-white shadow-[0_16px_45px_rgba(0,0,0,0.04)]">
               <div className="border-b border-[#eeece9] px-6 py-7 sm:px-8">
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
-                  India Battery International Show 2027
+                  India International Battery Show 2027
                 </p>
 
                 <h2 className="mt-3 font-heading text-2xl font-bold tracking-[-0.035em] text-[#252529]">

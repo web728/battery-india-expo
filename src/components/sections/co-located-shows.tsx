@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -32,16 +31,14 @@ const reveal: Variants = {
 
 const shows = [
   {
-    name: "India International EV Show",
-    description:
-      "Electric mobility and associated technologies.",
+    name: "9th India International EV Show 2027",
+    description: "Electric mobility and associated technologies.",
     logo: "/logo/ev.png",
     href: "https://iievshow.com/",
   },
   {
-    name: "India Solar International Show",
-    description:
-      "Solar energy and renewable power technologies.",
+    name: "2nd India International Solar Show 2027",
+    description: "Solar energy and renewable power technologies.",
     logo: "/logo/solar.png",
     href: "https://indiasolarshow.com/",
   },
@@ -67,11 +64,7 @@ export function CoLocatedShows() {
       >
         <Container>
           {/* Section heading */}
-          <m.div
-            {...motionProps}
-            variants={reveal}
-            className="mb-9 max-w-2xl"
-          >
+          <m.div {...motionProps} variants={reveal} className="mb-9 max-w-2xl">
             <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[0.17em] text-[#d52d35]">
               Co-Located With
             </p>
@@ -81,16 +74,12 @@ export function CoLocatedShows() {
               className="font-heading text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold leading-tight tracking-[-0.04em]"
             >
               Connected exhibitions.
-              <span className="text-[#ed3138]">
-                {" "}One venue.
-              </span>
+              <span className="text-[#ed3138]"> One venue.</span>
             </h2>
 
             <p className="mt-4 text-[15px] leading-7 text-[#626269]">
-              India Battery International Show 2027
-              will be co-located with two industry
-              exhibitions covering electric mobility
-              and solar energy.
+              India International Battery Show 2027 will be co-located with two
+              industry exhibitions covering electric mobility and solar energy.
             </p>
           </m.div>
 
@@ -103,11 +92,7 @@ export function CoLocatedShows() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visit ${show.name} website`}
-                initial={
-                  reduceMotion
-                    ? false
-                    : { opacity: 0, y: 14 }
-                }
+                initial={reduceMotion ? false : { opacity: 0, y: 14 }}
                 whileInView={{
                   opacity: 1,
                   y: 0,
@@ -118,9 +103,7 @@ export function CoLocatedShows() {
                 }}
                 transition={{
                   duration: 0.5,
-                  delay: reduceMotion
-                    ? 0
-                    : index * 0.08,
+                  delay: reduceMotion ? 0 : index * 0.08,
                   ease,
                 }}
                 className="group flex min-h-[250px] flex-col rounded-xl border border-[#e8e6e3] bg-white p-6 transition-[border-color,box-shadow] duration-300 hover:border-[#ed3138]/30 hover:shadow-[0_12px_30px_rgba(0,0,0,0.045)] sm:p-8"
@@ -167,8 +150,7 @@ export function CoLocatedShows() {
               </h3>
 
               <p className="mt-2 max-w-lg text-sm leading-6 text-[#6b6b70]">
-                Organiser of India Battery
-                International Show 2027.
+                Organiser of India Battery International Show 2027.
               </p>
             </div>
 
