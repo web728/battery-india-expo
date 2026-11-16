@@ -10,23 +10,53 @@ import {
 
 import { Container } from "@/components/ui/container";
 
+/* --------------------------------------------------
+   INDIA BATTERY SHOW
+   Section: Event Statistics
+
+   Design: Hybrid Industrial Editorial
+
+   - Warm off-white background
+   - Editorial statistics layout
+   - Minimal brand-red accents
+   - No excessive shadows or gradients
+   - Accessible typography
+   - Restrained Framer Motion
+   - Responsive 1 / 3 column grid
+-------------------------------------------------- */
+
+/*
+  IMPORTANT:
+  These figures are preserved from your
+  existing component.
+
+  Verify them against your official 2026
+  post-event report before publishing.
+*/
+
 const stats = [
   {
     value: "20%",
-    label: "Battery & energy storage",
+    label: "Battery & Energy Storage",
     detail: "Share of visitors by industry",
   },
   {
     value: "65%",
-    label: "Business leadership",
+    label: "Business Leadership",
     detail: "Owners, managers & senior leaders",
   },
   {
     value: "41",
-    label: "Letters of intent",
+    label: "Letters of Intent",
     detail: "Startup engagement",
   },
 ] as const;
+
+/* --------------------------------------------------
+   ANIMATION CONFIGURATION
+-------------------------------------------------- */
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export function StatsSection() {
   const reduceMotion = useReducedMotion();
@@ -34,62 +64,229 @@ export function StatsSection() {
   return (
     <LazyMotion features={domAnimation}>
       <section
+        id="event-statistics"
         aria-labelledby="stats-title"
-        className="relative bg-[#f7f7f6] py-12 text-[#171719] sm:py-14 lg:py-16"
+        className={[
+          "relative isolate",
+          "overflow-hidden",
+          "bg-background",
+          "text-foreground",
+          "py-16",
+          "sm:py-20",
+          "lg:py-24",
+          "xl:py-28",
+        ].join(" ")}
       >
         <Container>
-          <div className="mb-7 flex flex-col gap-2 sm:mb-8 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-            <div>
-              <p className="mb-2 font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-[#c82e35]">
-                2026 Event Highlights
-              </p>
+          {/* -----------------------------------
+              SECTION INTRODUCTION
+          ----------------------------------- */}
 
+          <div
+            className={[
+              "mb-10",
+              "flex flex-col",
+              "gap-5",
+              "sm:mb-12",
+              "lg:mb-14",
+              "lg:flex-row",
+              "lg:items-end",
+              "lg:justify-between",
+              "lg:gap-10",
+            ].join(" ")}
+          >
+            {/* Heading group */}
+            <div className="max-w-[740px]">
+              {/* Eyebrow */}
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-[2px] w-7 shrink-0 bg-brand-red"
+                />
+
+                <p
+                  className={[
+                    "font-heading",
+                    "text-[11px]",
+                    "font-bold",
+                    "uppercase",
+                    "tracking-[0.15em]",
+                    "text-brand-red",
+                    "sm:text-xs",
+                  ].join(" ")}
+                >
+                  2026 Event Highlights
+                </p>
+              </div>
+
+              {/* Main heading */}
               <h2
                 id="stats-title"
-                className="font-heading text-[clamp(1.5rem,2.6vw,2.15rem)] font-extrabold leading-tight tracking-[-0.035em]"
+                className={[
+                  "font-heading",
+                  "text-[clamp(2rem,3.5vw,3rem)]",
+                  "font-bold",
+                  "leading-[1.15]",
+                  "tracking-[-0.035em]",
+                  "text-foreground",
+                  "[text-wrap:balance]",
+                ].join(" ")}
               >
                 Industry in numbers
-                <span className="text-[#ed3138]">.</span>
+                <span className="text-brand-red">.</span>
               </h2>
             </div>
 
-           
+            {/* Supporting copy */}
+            <p
+              className={[
+                "max-w-[420px]",
+                "font-body",
+                "text-sm",
+                "leading-[1.75]",
+                "text-muted",
+                "sm:text-base",
+                "lg:pb-1",
+              ].join(" ")}
+            >
+              A snapshot of industry participation,
+              leadership and business engagement
+              from the previous edition.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+          {/* -----------------------------------
+              EDITORIAL DIVIDER
+          ----------------------------------- */}
+
+          <div
+            aria-hidden="true"
+            className="h-px w-full bg-border"
+          />
+
+          {/* -----------------------------------
+              STATISTICS GRID
+          ----------------------------------- */}
+
+          <div
+            className={[
+              "grid",
+              "grid-cols-1",
+              "sm:grid-cols-3",
+            ].join(" ")}
+          >
             {stats.map((stat, index) => (
-              <m.div
+              <div
                 key={stat.label}
-                initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 0.45,
-                  delay: reduceMotion ? 0 : index * 0.07,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="group rounded-xl border border-[#e9e9e8] bg-white px-5 py-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-[#ed3138]/25 hover:shadow-[0_10px_28px_rgba(30,30,30,0.045)] sm:px-6 sm:py-6"
+                className={[
+                  "group",
+                  "relative",
+                  "border-b",
+                  "border-border",
+                  "py-8",
+                  "sm:border-b-0",
+                  "sm:py-10",
+                  "lg:py-12",
+
+                  index === 0
+                    ? "sm:pr-6 lg:pr-10"
+                    : "",
+
+                  index > 0
+                    ? [
+                        "sm:border-l",
+                        "sm:border-border",
+                        "sm:pl-6",
+                        "lg:pl-10",
+                      ].join(" ")
+                    : "",
+                ].join(" ")}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <span className="font-heading text-[clamp(2rem,3.2vw,2.6rem)] font-extrabold leading-none tracking-[-0.05em] tabular-nums text-[#171719]">
-                    {stat.value}
-                  </span>
+                {/* Large statistic number */}
+                <p
+                  className={[
+                    "font-heading",
+                    "text-[clamp(3rem,5vw,4.75rem)]",
+                    "font-extrabold",
+                    "leading-none",
+                    "tracking-[-0.06em]",
+                    "tabular-nums",
+                    "text-foreground",
+                  ].join(" ")}
+                >
+                  {stat.value}
+                </p>
 
-                  <span
-                    aria-hidden="true"
-                    className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#ed3138]"
-                  />
-                </div>
+                {/* Controlled brand-red detail */}
+                <m.div
+                  aria-hidden="true"
+                  className={[
+                    "mt-7",
+                    "h-[3px]",
+                    "w-9",
+                    "origin-left",
+                    "bg-brand-red",
+                  ].join(" ")}
+                  initial={
+                    reduceMotion
+                      ? false
+                      : { scaleX: 0.55 }
+                  }
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{
+                    once: true,
+                    amount: 0.5,
+                  }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.55,
+                    delay: reduceMotion
+                      ? 0
+                      : index * 0.08,
+                    ease,
+                  }}
+                />
 
-                <h3 className="mt-4 font-heading text-sm font-bold leading-5 text-[#242426] sm:text-[15px]">
+                {/* Statistic label */}
+                <h3
+                  className={[
+                    "mt-6",
+                    "max-w-[270px]",
+                    "font-heading",
+                    "text-[17px]",
+                    "font-bold",
+                    "leading-[1.4]",
+                    "tracking-[-0.02em]",
+                    "text-foreground",
+                    "sm:text-lg",
+                    "lg:text-xl",
+                  ].join(" ")}
+                >
                   {stat.label}
                 </h3>
 
-                <p className="mt-1 text-xs leading-5 text-[#77777b]">
+                {/* Supporting context */}
+                <p
+                  className={[
+                    "mt-2",
+                    "max-w-[260px]",
+                    "font-body",
+                    "text-sm",
+                    "leading-[1.7]",
+                    "text-muted",
+                  ].join(" ")}
+                >
                   {stat.detail}
                 </p>
-              </m.div>
+              </div>
             ))}
+          </div>
+
+          {/* -----------------------------------
+              SECTION BOTTOM
+          ----------------------------------- */}
+
+          <div className="border-t border-border pt-5">
+            
           </div>
         </Container>
       </section>

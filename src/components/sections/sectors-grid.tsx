@@ -1,34 +1,45 @@
+
 "use client";
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+
 import {
   LazyMotion,
   domAnimation,
   m,
   useReducedMotion,
-  type Variants,
 } from "framer-motion";
 
 import { Container } from "@/components/ui/container";
 import { SectorIcon } from "@/components/ui/sector-icon";
 import { sectors } from "@/lib/content/sectors";
 
-const stagger: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.055, delayChildren: 0.04 },
-  },
-};
+/* --------------------------------------------------
+   INDIA BATTERY INTERNATIONAL SHOW
 
-const reveal: Variants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+   Section: Exhibition Sectors
+   Theme: Hybrid Industrial Editorial
+
+   Design:
+   - Warm off-white background
+   - Premium industrial directory cards
+   - Large editorial typography
+   - Consistent SVG icon treatment
+   - Minimal brand-red accent
+   - Subtle card interactions
+   - Responsive grid
+   - Accessible navigation
+
+   Performance:
+   - No additional image requests
+   - No animated counters
+   - No expensive parallax
+   - Content visible immediately
+   - Lightweight Motion animation
+-------------------------------------------------- */
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export function SectorsGrid() {
   const reduceMotion = useReducedMotion();
@@ -38,86 +49,207 @@ export function SectorsGrid() {
       <section
         id="exhibition-sectors"
         aria-labelledby="sectors-title"
-        className="relative bg-[#f7f7f6] py-14 text-[#171719] sm:py-16 lg:py-20"
+        className={[
+          "relative isolate",
+          "overflow-hidden",
+          "bg-background",
+          "text-foreground",
+          "py-16",
+          "sm:py-20",
+          "lg:py-24",
+          "xl:py-28",
+        ].join(" ")}
       >
         <Container>
-          <m.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-8 flex flex-col gap-4 sm:mb-10 lg:flex-row lg:items-end lg:justify-between"
+          {/* -----------------------------------
+              SECTION HEADING
+          ----------------------------------- */}
+
+          <div
+            className={[
+              "mb-10",
+              "grid gap-6",
+              "sm:mb-12",
+              "lg:mb-14",
+              "lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]",
+              "lg:items-end",
+              "lg:gap-12",
+            ].join(" ")}
           >
-            <div className="max-w-2xl">
-              <p className="mb-2 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
-                Exhibition sectors
-              </p>
+            <div className="max-w-[780px]">
+              {/* Eyebrow */}
+
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-[2px] w-7 shrink-0 bg-brand-red"
+                />
+
+                <p className="font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-brand-red sm:text-xs">
+                  Exhibition Sectors
+                </p>
+              </div>
+
+              {/* Main section heading */}
+
               <h2
                 id="sectors-title"
-                className="font-heading text-[clamp(1.85rem,3vw,2.75rem)] font-extrabold leading-[1.15] tracking-[-0.045em]"
+                className={[
+                  "max-w-[740px]",
+                  "font-heading",
+                  "text-[clamp(2rem,3.5vw,3rem)]",
+                  "font-bold",
+                  "leading-[1.15]",
+                  "tracking-[-0.035em]",
+                  "text-foreground",
+                  "[text-wrap:balance]",
+                ].join(" ")}
               >
-                Explore the battery value chain<span className="text-[#ed3138]">.</span>
+                Explore the battery
+                <br className="hidden sm:block" />
+                {" "}value chain
+                <span className="text-brand-red">.</span>
               </h2>
             </div>
-            <p className="max-w-[370px] text-sm leading-6 text-[#68686d]">
-              From battery manufacturing and components to energy storage,
-              testing and recycling.
-            </p>
-          </m.div>
 
-          <m.div
-            variants={stagger}
-            initial={reduceMotion ? false : "hidden"}
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.08 }}
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4"
+            {/* Supporting description */}
+
+            <p className="max-w-[430px] font-body text-sm leading-[1.75] text-muted sm:text-base">
+              Discover the technologies, equipment and
+              solutions shaping the battery industry —
+              from manufacturing and components to
+              energy storage, testing and recycling.
+            </p>
+          </div>
+
+          {/* -----------------------------------
+              EDITORIAL SECTION DIVIDER
+          ----------------------------------- */}
+
+          <div
+            aria-hidden="true"
+            className="mb-7 h-px w-full bg-border sm:mb-9"
+          />
+
+          {/* -----------------------------------
+              SECTORS GRID
+
+              Mobile: 1 column
+              Tablet: 2 columns
+              Desktop: 4 columns
+
+              Data source is unchanged:
+              @/lib/content/sectors
+          ----------------------------------- */}
+
+          <ul
+            className={[
+              "grid grid-cols-1",
+              "gap-4",
+              "sm:grid-cols-2",
+              "lg:grid-cols-4",
+              "lg:gap-5",
+            ].join(" ")}
           >
-            {sectors.map((sector) => (
-              <m.div
-                key={sector.slug}
-                variants={reduceMotion ? undefined : reveal}
-                className="min-w-0"
-              >
+            {sectors.map((sector, index) => (
+              <li key={sector.slug} className="min-w-0">
                 <Link
                   href={`/exhibit/categories#${sector.slug}`}
-                  className="group flex h-full min-h-[225px] flex-col rounded-xl border border-[#e7e7e6] bg-white p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[#ed3138]/35 hover:shadow-[0_12px_32px_rgba(20,20,20,0.06)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ed3138] sm:min-h-[240px] sm:p-6"
-                  aria-label={`Explore ${sector.name}`}
+                  className={[
+                    "group relative",
+                    "flex h-full min-h-[232px]",
+                    "flex-col",
+                    "overflow-hidden",
+                    "rounded-card",
+                    "border border-border",
+                    "bg-surface",
+                    "p-6",
+                    "transition-[border-color,box-shadow,transform]",
+                    "duration-200",
+                    "ease-out",
+                    "hover:-translate-y-[3px]",
+                    "hover:border-brand-red/35",
+                    "hover:shadow-[0_12px_30px_rgba(25,28,33,0.055)]",
+                    "focus-visible:outline-2",
+                    "focus-visible:outline-offset-2",
+                    "focus-visible:outline-brand-red",
+                    "motion-reduce:transform-none",
+                    "sm:min-h-[255px]",
+                    "lg:p-7",
+                  ].join(" ")}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#fff0f0] text-[#db3037] transition-colors duration-300 group-hover:bg-[#ed3138] group-hover:text-white">
+                  {/* Card header */}
+
+                  <div className="flex items-start justify-between gap-4">
+                    {/* Sector icon */}
+
+                    <span
+                      className={[
+                        "flex h-12 w-12",
+                        "shrink-0",
+                        "items-center justify-center",
+                        "rounded-lg",
+                        "bg-background",
+                        "text-brand-red",
+                        "transition-[background-color,color]",
+                        "duration-200",
+                        "group-hover:bg-brand-red",
+                        "group-hover:text-white",
+                      ].join(" ")}
+                    >
                       <SectorIcon
                         icon={sector.icon}
-                        className="h-[21px] w-[21px]"
+                        className="h-6 w-6"
                         aria-hidden="true"
                       />
                     </span>
-                   
+
+                 
                   </div>
 
-                  <h3 className="mt-6 font-heading text-[17px] font-bold leading-snug tracking-[-0.025em] text-[#19191c] sm:text-lg">
-                    {sector.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-[13px] leading-[1.65] text-[#69696f]">
-                    {sector.description}
-                  </p>
-                 
-                </Link>
-              </m.div>
-            ))}
-          </m.div>
+                  {/* Card content */}
 
-          <div className="mt-7 flex justify-center sm:mt-9">
-            <Link
-              href="/exhibit/categories"
-              className="group inline-flex min-h-11 items-center gap-2 rounded-md border border-[#202024] bg-[#202024] px-5 font-heading text-[13px] font-bold text-white transition-colors duration-300 hover:border-[#ed3138] hover:bg-[#ed3138] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ed3138]"
-            >
-              View all categories
-              <ArrowUpRight
-                aria-hidden="true"
-                className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              />
-            </Link>
-          </div>
+                  <div className="mt-auto pt-8">
+                    <h3
+                      className={[
+                        "max-w-[270px]",
+                        "font-heading",
+                        "text-[17px]",
+                        "font-bold",
+                        "leading-[1.35]",
+                        "tracking-[-0.025em]",
+                        "text-foreground",
+                        "sm:text-lg",
+                      ].join(" ")}
+                    >
+                      {sector.name}
+                    </h3>
+
+                    <p
+                      className={[
+                        "mt-3",
+                        "max-w-[275px]",
+                        "line-clamp-3",
+                        "font-body",
+                        "text-[13px]",
+                        "leading-[1.7]",
+                        "text-muted",
+                        "sm:text-sm",
+                      ].join(" ")}
+                    >
+                      {sector.description}
+                    </p>
+                  </div>
+
+               
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+        
+
+        
         </Container>
       </section>
     </LazyMotion>

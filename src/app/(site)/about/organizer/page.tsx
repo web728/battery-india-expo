@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 
 import { PageHero } from "@/components/sections/page-hero";
@@ -6,46 +7,141 @@ import { siteConfig } from "@/lib/site-config";
 
 import { OrganizerPageContent } from "./organizer-page-content";
 
-const pageTitle = "About the Organizer | India International Battery Show 2027";
+/* -------------------------------------------
+   INDIA BATTERY INTERNATIONAL SHOW
 
-const pageDescription = `Learn about ${siteConfig.organizer.name}, the organizer of India International Battery Show 2027, taking place 14–16 October at Auto Cluster Exhibition Centre, Pune.`;
+   Page: About the Organizer
+   Route: /about/organizer
+
+   - Server Component
+   - Unique SEO metadata
+   - Absolute canonical URL
+   - Open Graph and Twitter
+   - AboutPage structured data
+   - Breadcrumb structured data
+   - Shared editorial PageHero
+------------------------------------------- */
+
+const pagePath = "/about/organizer";
+
+const pageUrl =
+  `${siteConfig.siteUrl}${pagePath}`;
+
+const heroImage =
+  "/images/expo-vip-lounge-branding.jpg";
+
+const socialImage =
+  `${siteConfig.siteUrl}${heroImage}`;
+
+const pageTitle =
+  `About the Organizer | ${siteConfig.eventName} 2027`;
+
+const pageDescription =
+  `Meet ${siteConfig.organizer.name}, organizer of ${siteConfig.eventName}. ` +
+  `Find event details and official contacts for ${siteConfig.dates.display} ` +
+  `at ${siteConfig.venue.name}, Pune, India.`;
+
+/* -------------------------------------------
+   PAGE METADATA
+------------------------------------------- */
 
 export const metadata: Metadata = {
   title: {
     absolute: pageTitle,
   },
+
   description: pageDescription,
+
   alternates: {
-    canonical: "/about/organizer",
+    canonical: pageUrl,
   },
+
   openGraph: {
     type: "website",
     locale: "en_IN",
+
+    url: pageUrl,
+
+    siteName: siteConfig.eventName,
+
     title: pageTitle,
     description: pageDescription,
-    url: "/about/organizer",
+
     images: [
       {
-        url: "/images/expo-vip-lounge-branding.jpg",
-        alt: "India International Battery Show exhibition branding",
+        url: socialImage,
+        alt: `${siteConfig.eventName} exhibition`,
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
+
     title: pageTitle,
     description: pageDescription,
-    images: ["/images/expo-vip-lounge-branding.jpg"],
+
+    images: [socialImage],
   },
+
   robots: {
     index: true,
     follow: true,
   },
 };
 
+/* -------------------------------------------
+   PAGE COMPONENT
+------------------------------------------- */
+
 export default function OrganizerPage() {
+  const pageJsonLd = {
+    "@context": "https://schema.org",
+
+    "@type": "AboutPage",
+
+    "@id": `${pageUrl}#webpage`,
+
+    url: pageUrl,
+
+    name: pageTitle,
+
+    description: pageDescription,
+
+    inLanguage: "en-IN",
+
+    isPartOf: {
+      "@type": "WebSite",
+
+      "@id": `${siteConfig.siteUrl}/#website`,
+
+      url: `${siteConfig.siteUrl}/`,
+
+      name: siteConfig.eventName,
+    },
+
+    about: {
+      "@type": "Organization",
+
+      name: siteConfig.organizer.name,
+    },
+  };
+
   return (
     <>
+      {/* ABOUT PAGE STRUCTURED DATA */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            pageJsonLd
+          ).replace(/</g, "\\u003c"),
+        }}
+      />
+
+      {/* BREADCRUMB STRUCTURED DATA */}
+
       <BreadcrumbJsonLd
         items={[
           {
@@ -54,15 +150,17 @@ export default function OrganizerPage() {
           },
           {
             label: "About the Organizer",
-            href: "/about/organizer",
+            href: pagePath,
           },
         ]}
       />
 
+      {/* SHARED EDITORIAL HERO */}
+
       <PageHero
         eyebrow="About the Organizer"
         title="Meet the Organizer"
-        description={`${siteConfig.organizer.name}, organizer of India International Battery Show 2027 in Pune.`}
+        description={`${siteConfig.organizer.name} organizes ${siteConfig.eventName}, taking place ${siteConfig.dates.display} at ${siteConfig.venue.name}, Pune, India.`}
         breadcrumbs={[
           {
             label: "About the Show",
@@ -73,10 +171,12 @@ export default function OrganizerPage() {
           },
         ]}
         backgroundImage={{
-          src: "/images/expo-vip-lounge-branding.jpg",
-          alt: "Exhibition branding from a previous edition of India International Battery Show",
+          src: heroImage,
+          alt: "Exhibition venue and industry networking at a battery trade show",
         }}
       />
+
+      {/* ORGANIZER EDITORIAL CONTENT */}
 
       <OrganizerPageContent />
     </>

@@ -1,42 +1,74 @@
-// Central, editable source of truth for confirmed event facts.
-// Update this file (or wire it to the `event_settings` table via the admin CMS)
-// to change event details site-wide.
+
+/**
+ * INDIA BATTERY INTERNATIONAL SHOW
+ * Central configuration for event information.
+ */
+
+export type EventContact = {
+  name: string;
+  phone: string;
+  email: string;
+};
+
+const configuredSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
 export const siteConfig = {
-  eventName: "India International Battery Show 2026",
-  shortName: "Battery India Expo",
+  eventName: "2nd India Battery International Show",
+
+  shortName: "2nd India Battery Show",
+
   tagline:
-    "Complete Platform for Advanced Batteries, Technology, Energy Storage Systems & Innovative Power Solutions",
+    "Battery Manufacturing, Technology, Energy Storage & Power Solutions",
+
   marketingLine:
     "Where Battery Manufacturing, Energy Storage and E-Mobility Business Meet",
+
   dates: {
-    start: "2026-10-02",
-    end: "2026-10-04",
-    display: "2–4 October 2026",
+    start: "2027-10-14",
+    end: "2027-10-16",
+    display: "14–16 October 2027",
   },
+
+  visitorHours: {
+    opens: "10:00",
+    closes: "18:00",
+    display: "10:00 AM – 6:00 PM",
+    timeZone: "Asia/Kolkata",
+    timeZoneLabel: "IST",
+  },
+
   venue: {
-    name: "Auto Cluster Exhibition Center",
-    line1: "Auto Cluster Exhibition Center",
+    name: "Auto Cluster Exhibition Centre",
+
+    line1: "Auto Cluster Exhibition Centre",
+
     line2: "Chinchwad, Pimpri-Chinchwad",
+
     city: "Pune",
     state: "Maharashtra",
     country: "India",
-    full: "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune, Maharashtra, India",
+
+    full:
+      "Auto Cluster Exhibition Centre, Chinchwad, Pimpri-Chinchwad, Pune, Maharashtra, India",
+
     mapQuery:
-      "Auto Cluster Exhibition Center, Chinchwad, Pimpri-Chinchwad, Pune",
+      "Auto Cluster Exhibition Centre, Chinchwad, Pimpri-Chinchwad, Pune, Maharashtra, India",
   },
+
   organizer: {
     name: "Futurex Trade Fair & Events Pvt. Ltd.",
   },
-  // Replace line 29:
-  siteUrl:
-    process.env.NEXT_PUBLIC_SITE_URL &&
-    process.env.NEXT_PUBLIC_SITE_URL.trim() !== ""
-      ? process.env.NEXT_PUBLIC_SITE_URL
-      : "https://www.batteryindiaexpo.com",
+
+  // Replace fallback with your verified production domain if different.
+  siteUrl: (
+    configuredSiteUrl ||
+    "https://www.indiabatteryshow.com"
+  ).replace(/\/+$/, ""),
+
   coLocatedShows: [
     {
-      name: "India International EV  Show",
+      name: "India International EV Show",
       slug: "india-EV-international-show",
       url: null as string | null,
     },
@@ -46,26 +78,27 @@ export const siteConfig = {
       url: null as string | null,
     },
   ],
+
   contacts: [
     {
       name: "Mr. Namit Gupta",
-      // role: "Sales & General Enquiries",
       phone: "+91 9810855697",
       email: "namit@futurextrade.co",
     },
-
     {
       name: "Ms. Nidhi Sharma",
-      // role: "Exhibitor & Partnership Enquiries",
       phone: "+91 98718 39040",
       email: "nidhi@futurextrade.com",
     },
-  ],
+  ] satisfies EventContact[],
+
   whatsapp: {
     number: "919871839040",
+
     message:
-      "Hello, I would like more information about India International Battery Show 2026.",
+      "Hello, I would like more information about India Battery International Show 2027.",
   },
+
   social: {
     linkedin: null as string | null,
     twitter: null as string | null,

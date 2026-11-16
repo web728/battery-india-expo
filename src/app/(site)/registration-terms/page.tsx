@@ -19,7 +19,7 @@ export default function RegistrationTermsPage() {
     >
       <p>
         These draft Registration Terms apply to visitor registration and
-        exhibitor booking for India Battery International Show 2026. Final terms
+        exhibitor booking for 2nd India Battery International Show 2026. Final terms
         — including entry eligibility, fees (if any), and conduct requirements —
         will be confirmed and published here ahead of the show, subject to legal
         review.

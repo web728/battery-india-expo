@@ -1,230 +1,346 @@
-"use client";
 
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
-
 import {
-  LazyMotion,
-  domAnimation,
-  m,
-  useReducedMotion,
-  type Variants,
-} from "framer-motion";
+  ArrowUpRight,
+  CalendarDays,
+  Clock3,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
 
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/site-config";
 
-const ease = [0.22, 1, 0.36, 1] as const;
+/**
+ * Organizer Page Content
+ *
+ * India Battery International Show
+ *
+ * Server Component
+ * - No Framer Motion
+ * - No client-side hooks
+ * - Event information from siteConfig
+ * - Type-safe organizer contacts
+ */
 
-const reveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 16,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease,
-    },
-  },
-};
-
-const organizerLogo = "/partners/futurex-logo.png";
+const ORGANIZER_LOGO = "/partners/futurex-logo.png";
 
 export function OrganizerPageContent() {
-  const reduceMotion = useReducedMotion();
-
-  const motionProps = {
-    initial: reduceMotion ? false : "hidden",
-    whileInView: "visible",
-    viewport: {
-      once: true,
-      amount: 0.15,
-    },
-  } as const;
+  const organizerName = siteConfig.organizer.name;
+  const contacts = siteConfig.contacts;
 
   return (
-    <LazyMotion features={domAnimation}>
+    <>
+      {/* ========================================
+          SECTION 1: ABOUT THE ORGANIZER
+      ======================================== */}
+
       <section
+        id="event-organizer"
         aria-labelledby="organizer-heading"
-        className="bg-white py-14 text-[#19191c] sm:py-16 lg:py-20"
+        className="bg-surface py-16 text-foreground sm:py-20 lg:py-24 xl:py-28"
       >
         <Container>
-          <div className="grid items-center gap-9 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14 xl:gap-20">
-            {/* Organizer identity */}
-            <m.div {...motionProps} variants={reveal} className="min-w-0">
-              <div className="overflow-hidden rounded-xl border border-[#eae8e5] bg-[#faf9f7] p-6 sm:p-8">
-                <div className="flex min-h-[180px] items-center justify-center rounded-lg border border-[#eeece9] bg-white px-7 py-9 sm:min-h-[220px]">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16 xl:gap-20">
+
+            {/* ORGANIZER LOGO */}
+
+            <div className="min-w-0">
+              <figure className="overflow-hidden rounded-[10px] border border-[#E4E2DE] bg-background p-5 sm:p-7">
+                <div className="flex min-h-[180px] items-center justify-center rounded-md border border-[#E4E2DE] bg-white px-6 py-10 sm:min-h-[220px]">
                   <Image
-                    src={organizerLogo}
-                    alt={`${siteConfig.organizer.name} official logo`}
+                    src={ORGANIZER_LOGO}
+                    alt={`${organizerName} official logo`}
                     width={600}
                     height={250}
-                    priority
+                    sizes="(min-width: 1024px) 420px, 80vw"
                     className="h-auto max-h-[110px] w-auto max-w-full object-contain"
                   />
                 </div>
 
-                <div className="mt-5 border-t border-[#e6e3df] pt-5">
-                  <p className="font-heading text-[10px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
-                    Exhibition Organizer
+                <figcaption className="mt-6 border-t border-[#E4E2DE] pt-5">
+                  <p className="font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-brand-red">
+                    Official Exhibition Organizer
                   </p>
 
-                  <h3 className="mt-2 font-heading text-xl font-bold tracking-[-0.025em] text-[#202024]">
-                    {siteConfig.organizer.name}
-                  </h3>
-                </div>
-              </div>
-            </m.div>
+                  <p className="mt-2 font-heading text-xl font-bold leading-snug tracking-[-0.025em] text-foreground sm:text-2xl">
+                    {organizerName}
+                  </p>
+                </figcaption>
+              </figure>
+            </div>
 
-            {/* About the organizer */}
-            <m.div {...motionProps} variants={reveal} className="min-w-0">
-              <div className="mb-4 flex items-center gap-3">
-                <span aria-hidden="true" className="h-[2px] w-8 bg-[#ed3138]" />
+            {/* ABOUT THE ORGANIZER */}
 
-                <span className="font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
+            <div className="min-w-0">
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-0.5 w-7 shrink-0 bg-brand-red"
+                />
+
+                <p className="font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-brand-red sm:text-xs">
                   About the Organizer
-                </span>
+                </p>
               </div>
 
               <h2
                 id="organizer-heading"
-                className="max-w-[620px] font-heading text-[clamp(1.9rem,3.3vw,2.85rem)] font-extrabold leading-[1.15] tracking-[-0.045em] text-[#19191c]"
+                className="max-w-[690px] font-heading text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.15] tracking-[-0.04em] text-foreground [text-wrap:balance]"
               >
-                Organized by{" "}
-                <span className="text-[#ed3138]">
-                  {siteConfig.organizer.name}
+                The team behind the{" "}
+                <span className="text-brand-red">
+                  show.
                 </span>
               </h2>
 
-              <p className="mt-6 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                {siteConfig.organizer.name} organizes India Battery
-                International Show, a business exhibition dedicated to battery
-                technologies, manufacturing and energy storage.
-              </p>
+              <div className="mt-7 max-w-[640px] space-y-4 font-body text-[15px] leading-[1.8] text-muted sm:text-base">
+                <p>
+                  {organizerName} organizes{" "}
+                  {siteConfig.eventName}, a trade exhibition
+                  focused on battery technologies,
+                  manufacturing, energy storage
+                  and related industrial applications.
+                </p>
 
-              <p className="mt-4 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                The 2027 edition will take place from 14–16 October at Auto
-                Cluster Exhibition Centre, Pimpri-Chinchwad, Pune, alongside
-                India EV Show and 2nd India International Solar Show 2027.
-              </p>
+                <p>
+                  The exhibition provides a platform
+                  for battery manufacturers, technology
+                  providers, component suppliers,
+                  research organisations and industry
+                  professionals to connect through
+                  product showcases, business meetings
+                  and technical discussions.
+                </p>
 
-              <p className="mt-4 max-w-[620px] text-[15px] leading-8 text-[#626269] sm:text-base">
-                The exhibition provides a setting for product displays, industry
-                meetings and discussions related to battery manufacturing,
-                electric mobility and energy storage applications.
-              </p>
+                <p>
+                  The 2027 edition takes place from{" "}
+                  {siteConfig.dates.display} at{" "}
+                  {siteConfig.venue.name} in{" "}
+                  {siteConfig.venue.city}, bringing
+                  together businesses working across
+                  the battery and electric mobility
+                  value chain.
+                </p>
+              </div>
 
-              <div className="mt-7 border-t border-[#e9e7e4] pt-6">
+              {/* CONTACT PAGE LINK */}
+
+              <div className="mt-8 border-t border-[#E4E2DE] pt-6">
                 <Link
                   href="/contact"
-                  className="group inline-flex items-center gap-2 font-heading text-sm font-bold text-[#d52d35] transition-colors hover:text-[#aa222a] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ed3138]"
+                  className="group inline-flex min-h-11 items-center gap-2 font-heading text-sm font-bold text-brand-red transition-colors duration-200 hover:text-brand-red-hover focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
                 >
-                  Contact the organizing team
+                  Contact the Organizing Team
+
                   <ArrowUpRight
-                    className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     aria-hidden="true"
+                    className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transform-none"
+                    strokeWidth={1.8}
                   />
                 </Link>
               </div>
-            </m.div>
+            </div>
+          </div>
+
+          {/* ====================================
+              EVENT INFORMATION STRIP
+          ==================================== */}
+
+          <div className="mt-14 grid gap-6 border-y border-[#E4E2DE] py-7 sm:mt-16 sm:grid-cols-3 sm:gap-0 lg:mt-20 lg:py-9">
+
+            {/* EVENT DATES */}
+
+            <div className="flex items-start gap-3 sm:pr-6">
+              <CalendarDays
+                aria-hidden="true"
+                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                strokeWidth={1.8}
+              />
+
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+                  Exhibition Dates
+                </p>
+
+                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
+                  {siteConfig.dates.display}
+                </p>
+              </div>
+            </div>
+
+            {/* VISITOR HOURS */}
+
+            <div className="flex items-start gap-3 sm:border-l sm:border-[#E4E2DE] sm:px-6 lg:px-10">
+              <Clock3
+                aria-hidden="true"
+                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                strokeWidth={1.8}
+              />
+
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+                  Visitor Hours
+                </p>
+
+                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
+                  {siteConfig.visitorHours.display}{" "}
+                  {siteConfig.visitorHours.timeZoneLabel}
+                </p>
+              </div>
+            </div>
+
+            {/* VENUE */}
+
+            <div className="flex items-start gap-3 sm:border-l sm:border-[#E4E2DE] sm:pl-6 lg:pl-10">
+              <MapPin
+                aria-hidden="true"
+                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                strokeWidth={1.8}
+              />
+
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+                  Exhibition Venue
+                </p>
+
+                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
+                  {siteConfig.venue.name}
+                </p>
+
+                <p className="mt-1 text-xs leading-relaxed text-muted">
+                  {siteConfig.venue.city},{" "}
+                  {siteConfig.venue.state},{" "}
+                  {siteConfig.venue.country}
+                </p>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Contact information */}
-      {siteConfig.contacts.length > 0 && (
+      {/* ========================================
+          SECTION 2: ORGANIZER CONTACTS
+      ======================================== */}
+
+      {contacts.length > 0 && (
         <section
+          id="organizer-contacts"
           aria-labelledby="organizer-contact-heading"
-          className="border-t border-[#eceae7] bg-[#faf9f7] py-14 text-[#19191c] sm:py-16"
+          className="border-t border-[#E4E2DE] bg-background py-16 text-foreground sm:py-20 lg:py-24"
         >
           <Container>
-            <m.div
-              {...motionProps}
-              variants={reveal}
-              className="mb-7 max-w-2xl"
-            >
-              <p className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
-                Contact
-              </p>
+            {/* SECTION HEADING */}
 
-              <h2
-                id="organizer-contact-heading"
-                className="font-heading text-[clamp(1.6rem,2.7vw,2.2rem)] font-extrabold leading-tight tracking-[-0.035em]"
-              >
-                Get in touch with our team.
-              </h2>
+            <div className="mb-10 grid gap-5 lg:mb-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
+              <div>
+                <div className="mb-5 flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="h-0.5 w-7 shrink-0 bg-brand-red"
+                  />
 
-              <p className="mt-3 text-sm leading-7 text-[#6b6b70] sm:text-[15px]">
-                For exhibition participation and event-related enquiries.
-              </p>
-            </m.div>
+                  <p className="font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-brand-red sm:text-xs">
+                    Organizer Contacts
+                  </p>
+                </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              {siteConfig.contacts.map((contact, index) => (
-                <m.article
-                  key={`${contact.email}-${index}`}
-                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-                  whileInView={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                    amount: 0.2,
-                  }}
-                  transition={{
-                    duration: 0.5,
-                    delay: reduceMotion ? 0 : index * 0.07,
-                    ease,
-                  }}
-                  className="rounded-xl border border-[#e9e7e4] bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:border-[#ed3138]/25 hover:shadow-[0_10px_26px_rgba(0,0,0,0.035)] sm:p-6"
+                <h2
+                  id="organizer-contact-heading"
+                  className="font-heading text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.15] tracking-[-0.035em] text-foreground"
                 >
-                  <h3 className="font-heading text-base font-bold text-[#202024]">
-                    {contact.name}
-                  </h3>
+                  Speak with our team
+                  <span className="text-brand-red">
+                    .
+                  </span>
+                </h2>
+              </div>
 
-                  <div className="mt-5 space-y-3 border-t border-[#efeeeb] pt-4">
-                    {contact.phone && (
-                      <a
-                        href={`tel:${contact.phone.replace(/[\s()-]/g, "")}`}
-                        className="flex items-start gap-3 text-sm leading-6 text-[#606067] transition-colors hover:text-[#d52d35]"
-                      >
-                        <Phone
-                          className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
-                          strokeWidth={1.8}
-                          aria-hidden="true"
-                        />
-
-                        <span>{contact.phone}</span>
-                      </a>
-                    )}
-
-                    {contact.email && (
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="flex items-start gap-3 break-all text-sm leading-6 text-[#606067] transition-colors hover:text-[#d52d35]"
-                      >
-                        <Mail
-                          className="mt-1 h-4 w-4 shrink-0 text-[#d52d35]"
-                          strokeWidth={1.8}
-                          aria-hidden="true"
-                        />
-
-                        <span>{contact.email}</span>
-                      </a>
-                    )}
-                  </div>
-                </m.article>
-              ))}
+              <p className="max-w-[430px] font-body text-sm leading-[1.75] text-muted sm:text-base">
+                For exhibition participation,
+                partnerships and event-related
+                enquiries, reach the relevant
+                organizer contact directly.
+              </p>
             </div>
+
+            {/* CONTACT CARDS */}
+
+            <ul className="grid gap-4 md:grid-cols-2 lg:gap-5">
+              {contacts.map((contact, index) => (
+                <li
+                  key={contact.email}
+                  className="min-w-0"
+                >
+                  <article className="h-full rounded-card border border-[#E4E2DE] bg-surface p-6 sm:p-7">
+
+                    {/* CONTACT NAME */}
+
+                    <div className="flex items-start justify-between gap-4">
+                      <h3 className="font-heading text-lg font-bold leading-snug tracking-[-0.02em] text-foreground">
+                        {contact.name}
+                      </h3>
+
+                      <span
+                        aria-hidden="true"
+                        className="shrink-0 text-xs font-medium tabular-nums text-muted"
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    {/* CONTACT DETAILS */}
+
+                    <div className="mt-6 space-y-4 border-t border-[#E4E2DE] pt-5">
+
+                      {/* PHONE NUMBER */}
+
+                      {contact.phone && (
+                        <a
+                          href={`tel:${contact.phone.replace(/[^+\d]/g, "")}`}
+                          className="flex min-w-0 items-start gap-3 text-sm leading-[1.7] text-muted transition-colors hover:text-brand-red focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+                        >
+                          <Phone
+                            aria-hidden="true"
+                            className="mt-0.5 h-[18px] w-[18px] shrink-0 text-brand-red"
+                            strokeWidth={1.8}
+                          />
+
+                          <span>
+                            {contact.phone}
+                          </span>
+                        </a>
+                      )}
+
+                      {/* EMAIL ADDRESS */}
+
+                      {contact.email && (
+                        <a
+                          href={`mailto:${contact.email}`}
+                          className="flex min-w-0 items-start gap-3 text-sm leading-[1.7] text-muted transition-colors hover:text-brand-red focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
+                        >
+                          <Mail
+                            aria-hidden="true"
+                            className="mt-0.5 h-[18px] w-[18px] shrink-0 text-brand-red"
+                            strokeWidth={1.8}
+                          />
+
+                          <span className="min-w-0 break-words [overflow-wrap:anywhere]">
+                            {contact.email}
+                          </span>
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
           </Container>
         </section>
       )}
-    </LazyMotion>
+    </>
   );
 }

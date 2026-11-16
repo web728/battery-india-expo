@@ -1,47 +1,163 @@
+
 @import "tailwindcss";
 
+/*
+  INDIA BATTERY SHOW
+  Design System: Hybrid Industrial Editorial
+  Tailwind CSS v4
+
+  CSS is restricted to:
+  - Global design tokens
+  - Tailwind theme registration
+  - Minimal document-level defaults
+  - Reduced-motion accessibility
+
+  All component styling should use Tailwind utilities.
+*/
+
 :root {
-  --background: #09090b;
-  --foreground: #f5f5f5;
-  --brand-green: #13a853;
-  --brand-red: #ed3138;
-  --surface: #151518;
-  --muted: #a1a1aa;
+  /* Brand colors */
+  --background: #f7f6f3;
+  --foreground: #191c21;
+
+  --brand-red: #c62832;
+  --brand-red-hover: #a91e29;
+  --brand-green: #267a60;
+
+  /* Neutral surfaces */
+  --surface: #ffffff;
+  --surface-muted: #f0efec;
+  --surface-dark: #191c21;
+  --surface-dark-elevated: #262a31;
+
+  /* Typography */
+  --muted: #626873;
+  --muted-dark: #b9bec7;
+
+  /* Borders */
+  --border: #e2e3e5;
+  --border-strong: #c9cbd0;
+  --border-dark: #3c4149;
+
+  /* Status colors */
+  --success: #267a60;
+  --danger: #c62832;
+
+  /* Focus */
+  --focus-ring: #c62832;
 }
+
+/*
+  Tailwind v4 theme configuration.
+
+  Existing utilities supported:
+  bg-background
+  text-foreground
+  bg-surface
+  text-muted
+  bg-brand-red
+  bg-brand-green
+  font-heading
+  font-body
+*/
 
 @theme inline {
+  /* Primary */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand-green: var(--brand-green);
+
+  /* Brand */
   --color-brand-red: var(--brand-red);
-  --font-heading: var(--font-manrope);
-  --font-body: var(--font-inter);
+  --color-brand-red-hover: var(--brand-red-hover);
+  --color-brand-green: var(--brand-green);
+
+  /* Surfaces */
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-elevated: var(
+    --surface-dark-elevated
+  );
+
+  /* Text */
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+
+  /* Borders */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-dark: var(--border-dark);
+
+  /* Status */
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  /* Fonts */
+  --font-heading: var(--font-manrope), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+
+  /* Layout */
+  --container-site: 1320px;
+
+  /* Consistent spacing scale */
+  --spacing-section-sm: 64px;
+  --spacing-section-md: 80px;
+  --spacing-section-lg: 112px;
+
+  /* Custom radii */
+  --radius-card: 12px;
+  --radius-button: 6px;
+  --radius-image: 10px;
+  --radius-field: 6px;
+
+  /* Motion timings */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-html { scroll-behavior: smooth; }
+/*
+  Browser-level defaults only.
+  No global h1/h2/button/card selectors.
+  Those belong in Tailwind utility classes.
+*/
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-::selection { background: var(--brand-red); color: #fff; }
 
-/* Reusable, restrained premium detailing */
-.expo-grid {
-  background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-  background-size: 76px 76px;
+::selection {
+  background-color: var(--brand-red);
+  color: #ffffff;
 }
-.expo-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
-}
+
+/*
+  Accessibility:
+  Users who request reduced motion should not
+  receive unnecessary animations or smooth scrolling.
+*/
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

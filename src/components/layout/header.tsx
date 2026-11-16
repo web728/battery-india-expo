@@ -3,49 +3,55 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import { useEffect, useRef, useState } from "react";
-
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 
 import {
-  BOOK_STAND_URL,
-  REGISTER_URL,
   isExactActive,
   isExternalLink,
   isNavGroupActive,
   mainNav,
   type NavItem,
 } from "@/lib/content/nav";
-
 import { cn } from "@/lib/utils";
 
-const focusStyle =
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ed3138]";
+const STAND_PATH = "/exhibit/book-a-stand";
+const REGISTER_PATH = "/visit/register";
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark";
+
+const navigationTransition = { duration: 0.18, ease: "easeOut" as const };
 
 export function Header() {
-  const pathname = usePathname();
-
+  const pathname = usePathname() ?? "/";
+  const reduceMotion = useReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
-  const mobileTriggerRef = useRef<HTMLButtonElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
 
+  const isHome = pathname === "/";
+  const transparent = isHome && !scrolled && !mobileOpen;
+
   useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 20);
-
-    update();
-
-    window.addEventListener("scroll", update, {
-      passive: true,
-    });
-
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24);
+        frame = 0;
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", update);
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
 
@@ -59,107 +65,93 @@ export function Header() {
     if (!mobileOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
+    drawerRef.current?.querySelector<HTMLButtonElement>("[data-close-menu]")?.focus();
 
-    const closeOnEscape = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setMobileOpen(false);
-        mobileTriggerRef.current?.focus();
+        event.preventDefault();
+        closeMobile();
+        return;
       }
+      if (event.key !== "Tab" || !drawerRef.current) return;
 
-      if (event.key === "Tab" && drawerRef.current) {
-        const focusables = drawerRef.current.querySelectorAll<HTMLElement>(
-          "a[href], button:not([disabled])",
-        );
+      const items = Array.from(
+        drawerRef.current.querySelectorAll<HTMLElement>(
+          'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"])',
+        ),
+      );
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (!first || !last) return;
 
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-
-        if (!first || !last) return;
-
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
-    document.addEventListener("keydown", closeOnEscape);
-
-    drawerRef.current
-      ?.querySelector<HTMLButtonElement>("[data-mobile-close]")
-      ?.focus();
-
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileOpen]);
 
   useEffect(() => {
     if (!openDropdown) return;
-
     const closeOutside = (event: PointerEvent) => {
-      if (
-        headerRef.current &&
-        !headerRef.current.contains(event.target as Node)
-      ) {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
       }
     };
-
     const closeEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setOpenDropdown(null);
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
       }
     };
-
     document.addEventListener("pointerdown", closeOutside);
     document.addEventListener("keydown", closeEscape);
-
     return () => {
       document.removeEventListener("pointerdown", closeOutside);
       document.removeEventListener("keydown", closeEscape);
     };
   }, [openDropdown]);
 
-  const transparent = pathname === "/" && !scrolled && !mobileOpen;
+  function closeMobile() {
+    setMobileOpen(false);
+    setMobileSection(null);
+    menuButtonRef.current?.focus();
+  }
 
   return (
     <>
       <header
         ref={headerRef}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b",
-          "transition-[background-color,border-color,box-shadow] duration-300",
+          "fixed inset-x-0 top-0 z-50 border-b text-white",
+          "transition-[background-color,border-color,box-shadow] duration-200",
           transparent
-            ? "border-white/10 bg-[#121214]/35 backdrop-blur-md"
-            : "border-white/10 bg-[#18181b]/95 shadow-[0_12px_35px_rgba(0,0,0,0.14)] backdrop-blur-xl",
+            ? "border-white/15 bg-surface-dark/75 backdrop-blur-md"
+            : "border-white/10 bg-surface-dark/95 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-lg",
         )}
       >
         <div
           className={cn(
-            "mx-auto flex w-full max-w-[1440px] items-center justify-between gap-4",
-            "px-4 sm:px-6 xl:px-10",
-            scrolled ? "h-[70px]" : "h-[78px]",
-            "transition-[height] duration-300",
+            "mx-auto flex h-[76px] w-full max-w-site items-center justify-between gap-4 px-4 md:px-6 xl:h-20 xl:px-12",
           )}
         >
           <Link
             href="/"
-            aria-label="India International Battery Show home"
-            onClick={() => {
-              setOpenDropdown(null);
-              setMobileOpen(false);
-            }}
-            className={cn(
-              "relative flex shrink-0 items-center rounded-md",
-              focusStyle,
-            )}
+            aria-label="India International Battery Show — Home"
+            onClick={() => setOpenDropdown(null)}
+            className={cn("relative flex shrink-0 items-center rounded-button", focusRing)}
           >
             <Image
               src="/logo/battery-white.png"
@@ -167,116 +159,98 @@ export function Header() {
               width={210}
               height={80}
               priority
-              className={cn(
-                "w-auto object-contain transition-[height] duration-300",
-                scrolled ? "h-12" : "h-14",
-              )}
+              sizes="(min-width: 1280px) 185px, 160px"
+              className="h-auto w-[150px] object-contain sm:w-[165px] xl:w-[185px]"
             />
           </Link>
 
-          {/* Desktop */}
           <nav
             aria-label="Primary navigation"
             className="hidden items-center gap-0.5 xl:flex"
-            onMouseLeave={() => setOpenDropdown(null)}
           >
-            {mainNav.map((item) => {
+            {mainNav.map((item, index) => {
               const hasChildren = Boolean(item.children?.length);
-              const isOpen = openDropdown === item.href;
+              const expanded = openDropdown === item.href;
               const active = isNavGroupActive(pathname, item);
+              const panelId = `desktop-nav-${index}`;
 
               return (
                 <div
-                  key={item.href}
+                  key={`${item.href}-${index}`}
                   className="relative flex items-center"
-                  onMouseEnter={() =>
-                    setOpenDropdown(hasChildren ? item.href : null)
-                  }
-                  onFocusCapture={() => {
-                    if (hasChildren) {
-                      setOpenDropdown(item.href);
-                    }
-                  }}
-                  onBlurCapture={(event) => {
-                    if (
-                      !event.currentTarget.contains(
-                        event.relatedTarget as Node | null,
-                      )
-                    ) {
+                  onMouseEnter={() => setOpenDropdown(hasChildren ? item.href : null)}
+                  onMouseLeave={() => hasChildren && setOpenDropdown(null)}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
                       setOpenDropdown(null);
                     }
                   }}
                 >
-                  <NavAnchor
-                    item={item}
-                    active={active}
-                    close={() => setOpenDropdown(null)}
-                  />
+                  <NavLink item={item} active={active} onNavigate={() => setOpenDropdown(null)} />
 
                   {hasChildren && (
                     <>
                       <button
                         type="button"
                         aria-label={`${item.label} submenu`}
+                        aria-expanded={expanded}
+                        aria-controls={panelId}
                         aria-haspopup="true"
-                        aria-expanded={isOpen}
-                        aria-controls={`nav-${item.href.slice(1)}`}
-                        onClick={() =>
-                          setOpenDropdown(isOpen ? null : item.href)
-                        }
+                        onClick={() => setOpenDropdown(expanded ? null : item.href)}
                         className={cn(
-                          "-ml-1 flex h-10 w-6 items-center justify-center rounded-sm text-white/65 transition-colors hover:text-white",
-                          focusStyle,
+                          "-ml-1 flex size-9 items-center justify-center rounded-button text-white/70 transition-colors hover:text-white",
+                          focusRing,
                         )}
                       >
                         <ChevronDown
                           aria-hidden="true"
                           className={cn(
-                            "h-3.5 w-3.5 transition-transform duration-200",
-                            isOpen && "rotate-180 text-[#ed3138]",
+                            "size-3.5 transition-transform duration-200",
+                            expanded && "rotate-180 text-white",
                           )}
                         />
                       </button>
-
-                      <div
-                        id={`nav-${item.href.slice(1)}`}
-                        className={cn(
-                          "absolute left-1/2 top-full w-[260px] -translate-x-1/2 pt-3",
-                          "transition-[opacity,visibility,transform] duration-200",
-                          isOpen
-                            ? "visible translate-y-0 opacity-100"
-                            : "pointer-events-none invisible -translate-y-1 opacity-0",
+                      <AnimatePresence>
+                        {expanded && (
+                          <motion.div
+                            key={panelId}
+                            id={panelId}
+                            initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: reduceMotion ? 0 : 4 }}
+                            transition={navigationTransition}
+                            style={{ left: "50%", x: "-50%" }}
+                            className="absolute top-full w-[268px] pt-3"
+                          >
+                            <div className="overflow-hidden rounded-lg border border-border bg-white p-1.5 shadow-[0_18px_45px_rgba(0,0,0,0.14)]">
+                              {item.children?.map((child) => {
+                                const childActive = isExactActive(pathname, child.href);
+                                const external = isExternalLink(child.href);
+                                return (
+                                  <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    target={external ? "_blank" : undefined}
+                                    rel={external ? "noopener noreferrer" : undefined}
+                                    aria-current={childActive ? "page" : undefined}
+                                    onClick={() => setOpenDropdown(null)}
+                                    className={cn(
+                                      "flex min-h-11 items-center justify-between gap-2 rounded-button px-3 py-2.5 font-body text-[13px] font-medium transition-colors",
+                                      childActive
+                                        ? "bg-brand-red/10 font-semibold text-brand-red"
+                                        : "text-foreground/85 hover:bg-surface-muted hover:text-brand-red",
+                                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red",
+                                    )}
+                                  >
+                                    {child.label}
+                                    {external && <ArrowUpRight className="size-3.5 shrink-0" aria-hidden="true" />}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
                         )}
-                      >
-                        <div className="overflow-hidden rounded-lg border border-[#e8e8e8] bg-white p-1.5 shadow-[0_20px_55px_rgba(0,0,0,0.17)]">
-                          {item.children?.map((child) => {
-                            const childActive = isExactActive(
-                              pathname,
-                              child.href,
-                            );
-
-                            return (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                aria-current={childActive ? "page" : undefined}
-                                tabIndex={isOpen ? 0 : -1}
-                                onClick={() => setOpenDropdown(null)}
-                                className={cn(
-                                  "block rounded-md px-3.5 py-3 font-heading text-[13px]",
-                                  "transition-colors duration-200",
-                                  childActive
-                                    ? "bg-[#fff0f0] font-bold text-[#d52d35]"
-                                    : "font-medium text-[#44444a] hover:bg-[#f6f6f6] hover:text-[#d52d35]",
-                                  focusStyle,
-                                )}
-                              >
-                                {child.label}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
+                      </AnimatePresence>
                     </>
                   )}
                 </div>
@@ -284,282 +258,249 @@ export function Header() {
             })}
           </nav>
 
-          {/* Desktop CTAs */}
           <div className="hidden shrink-0 items-center gap-2 xl:flex">
             <Link
-              href="/exhibit/book-a-stand"
+              href={REGISTER_PATH}
               className={cn(
-                "inline-flex h-10 items-center justify-center rounded-md border border-white/25 px-4",
-                "font-heading text-xs font-bold text-white transition-colors hover:border-white/60 hover:bg-white/10",
-                isExactActive(pathname, "/exhibit/book-a-stand") &&
-                  "border-[#ed3138] bg-white/10",
-                focusStyle,
-              )}
-            >
-              Book a Stand
-            </Link>
-
-            <Link
-              href="/visit/register"
-              className={cn(
-                "inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-[#ed3138] px-4",
-                "font-heading text-xs font-bold text-white transition-colors hover:bg-[#cf252d]",
-                focusStyle,
+                "inline-flex min-h-11 items-center justify-center rounded-button border border-white/30 px-4 font-body text-[13px] font-semibold text-white",
+                "transition-colors duration-200 hover:border-white/60 hover:bg-white/10",
+                focusRing,
               )}
             >
               Register to Visit
-              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
+            <Link
+              href={STAND_PATH}
+              className={cn(
+                "inline-flex min-h-11 items-center justify-center gap-1.5 rounded-button bg-brand-red px-4 font-body text-[13px] font-semibold text-white",
+                "transition-colors duration-200 hover:bg-brand-red-hover",
+                focusRing,
+              )}
+            >
+              Book a Stand
+              <ArrowUpRight aria-hidden="true" className="size-3.5" />
             </Link>
           </div>
 
-          {/* Mobile / tablet trigger */}
           <button
-            ref={mobileTriggerRef}
+            ref={menuButtonRef}
             type="button"
-            aria-label="Open navigation"
-            aria-expanded={mobileOpen}
+            aria-label="Open navigation menu"
             aria-controls="mobile-navigation"
+            aria-expanded={mobileOpen}
             onClick={() => {
               setMobileOpen(true);
               setOpenDropdown(null);
             }}
             className={cn(
-              "flex h-11 w-11 items-center justify-center rounded-md border border-white/20 text-white",
-              "transition-colors hover:bg-white/10 xl:hidden",
-              focusStyle,
+              "flex size-11 items-center justify-center rounded-button border border-white/25 text-white transition-colors hover:bg-white/10 xl:hidden",
+              focusRing,
             )}
           >
-            <Menu className="h-5 w-5" aria-hidden="true" />
+            <Menu aria-hidden="true" className="size-5" />
           </button>
         </div>
       </header>
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-[60] xl:hidden">
-          <button
-            type="button"
-            aria-label="Close navigation"
-            className="absolute inset-0 bg-black/65"
-            onClick={() => setMobileOpen(false)}
-          />
+      {/* Prevent fixed navigation from overlapping inner-page headings.
+          Homepage hero should deliberately extend beneath the navbar. */}
+      {!isHome && <div aria-hidden="true" className="h-[76px] xl:h-20" />}
 
-          <div
-            ref={drawerRef}
-            id="mobile-navigation"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-            className="absolute inset-y-0 right-0 flex w-[min(100%,390px)] flex-col bg-[#18181b] text-white shadow-2xl"
-          >
-            <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-white/10 px-5">
-              <Link
-                href="/"
-                onClick={() => setMobileOpen(false)}
-                className={focusStyle}
-              >
-                <Image
-                  src="/logo/battery-white.png"
-                  alt="India International Battery Show"
-                  width={220}
-                  height={100}
-                  className="h-18 w-auto object-contain"
-                />
-              </Link>
+      <AnimatePresence>
+        {mobileOpen && (
+          <div className="fixed inset-0 z-[60] xl:hidden">
+            <motion.button
+              type="button"
+              aria-label="Close navigation overlay"
+              onClick={closeMobile}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="absolute inset-0 bg-black/65"
+            />
 
-              <button
-                data-mobile-close
-                type="button"
-                aria-label="Close menu"
-                onClick={() => {
-                  setMobileOpen(false);
-                  mobileTriggerRef.current?.focus();
-                }}
-                className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-md border border-white/15",
-                  focusStyle,
-                )}
-              >
-                <X className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
-
-            <nav
-              aria-label="Mobile primary navigation"
-              className="min-h-0 flex-1 overflow-y-auto px-5 py-5"
+            <motion.div
+              ref={drawerRef}
+              id="mobile-navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation"
+              initial={{ x: reduceMotion ? 0 : "100%", opacity: reduceMotion ? 0 : 1 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: reduceMotion ? 0 : "100%", opacity: reduceMotion ? 0 : 1 }}
+              transition={reduceMotion ? { duration: 0.12 } : { type: "tween", duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-y-0 right-0 flex w-[min(100%,390px)] flex-col bg-surface-dark text-white shadow-2xl"
             >
-              {mainNav.map((item) => {
-                const hasChildren = Boolean(item.children?.length);
-                const expanded = mobileSection === item.href;
-                const active = isNavGroupActive(pathname, item);
-
-                return (
-                  <div key={item.href} className="border-b border-white/10">
-                    <div className="flex items-center">
-                      <MobileAnchor
-                        item={item}
-                        active={active}
-                        close={() => setMobileOpen(false)}
-                      />
-
-                      {hasChildren && (
-                        <button
-                          type="button"
-                          aria-label={`Toggle ${item.label} links`}
-                          aria-expanded={expanded}
-                          onClick={() =>
-                            setMobileSection(expanded ? null : item.href)
-                          }
-                          className={cn(
-                            "flex h-12 w-11 shrink-0 items-center justify-center text-white/70",
-                            focusStyle,
-                          )}
-                        >
-                          <ChevronDown
-                            className={cn(
-                              "h-4 w-4 transition-transform",
-                              expanded && "rotate-180",
-                            )}
-                            aria-hidden="true"
-                          />
-                        </button>
-                      )}
-                    </div>
-
-                    {hasChildren && expanded && (
-                      <div className="space-y-1 pb-3 pl-4">
-                        {item.children?.map((child) => {
-                          const childActive = isExactActive(
-                            pathname,
-                            child.href,
-                          );
-
-                          return (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              aria-current={childActive ? "page" : undefined}
-                              onClick={() => setMobileOpen(false)}
-                              className={cn(
-                                "block rounded-md px-3 py-2.5 text-[13px] transition-colors",
-                                childActive
-                                  ? "bg-white/10 font-bold text-[#ff656b]"
-                                  : "text-white/65 hover:bg-white/5 hover:text-white",
-                                focusStyle,
-                              )}
-                            >
-                              {child.label}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </nav>
-
-            <div className="shrink-0 border-t border-white/10 bg-[#202023] p-5">
-              <div className="grid grid-cols-2 gap-3">
-                <a
-                  href={BOOK_STAND_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-11 items-center justify-center rounded-md border border-white/25 px-3 text-center text-xs font-bold text-white"
+              <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-white/10 px-5">
+                <Link href="/" onClick={closeMobile} aria-label="India International Battery Show — Home" className={cn("rounded-button", focusRing)}>
+                  <Image
+                    src="/logo/battery-white.png"
+                    alt="India International Battery Show"
+                    width={210}
+                    height={80}
+                    className="h-auto w-[160px] object-contain"
+                  />
+                </Link>
+                <button
+                  data-close-menu
+                  type="button"
+                  aria-label="Close navigation menu"
+                  onClick={closeMobile}
+                  className={cn("flex size-11 items-center justify-center rounded-button border border-white/20 hover:bg-white/10", focusRing)}
                 >
-                  Book a Stand
-                </a>
-
-                <a
-                  href={REGISTER_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-11 items-center justify-center rounded-md bg-[#ed3138] px-3 text-center text-xs font-bold text-white"
-                >
-                  Register to Visit
-                </a>
+                  <X aria-hidden="true" className="size-5" />
+                </button>
               </div>
 
-              <p className="mt-4 text-center text-xs text-white/45">
-                14–16 October 2027 · Pune, India
-              </p>
-            </div>
+              <nav aria-label="Mobile primary navigation" className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+                {mainNav.map((item, index) => {
+                  const hasChildren = Boolean(item.children?.length);
+                  const expanded = mobileSection === item.href;
+                  const active = isNavGroupActive(pathname, item);
+                  const sectionId = `mobile-section-${index}`;
+
+                  return (
+                    <div key={`${item.href}-${index}`} className="border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <MobileLink item={item} active={active} onNavigate={closeMobile} />
+                        {hasChildren && (
+                          <button
+                            type="button"
+                            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label} links`}
+                            aria-controls={sectionId}
+                            aria-expanded={expanded}
+                            onClick={() => setMobileSection(expanded ? null : item.href)}
+                            className={cn("flex size-11 shrink-0 items-center justify-center rounded-button text-white/75 hover:bg-white/10", focusRing)}
+                          >
+                            <ChevronDown aria-hidden="true" className={cn("size-4 transition-transform duration-200", expanded && "rotate-180")} />
+                          </button>
+                        )}
+                      </div>
+                      <AnimatePresence initial={false}>
+                        {hasChildren && expanded && (
+                          <motion.div
+                            key={sectionId}
+                            id={sectionId}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: reduceMotion ? 0.01 : 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="space-y-1 pb-3 pl-4">
+                              {item.children?.map((child) => {
+                                const childActive = isExactActive(pathname, child.href);
+                                const external = isExternalLink(child.href);
+                                return (
+                                  <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    target={external ? "_blank" : undefined}
+                                    rel={external ? "noopener noreferrer" : undefined}
+                                    aria-current={childActive ? "page" : undefined}
+                                    onClick={closeMobile}
+                                    className={cn(
+                                      "flex min-h-11 items-center gap-2 rounded-button px-3 py-2.5 font-body text-[13px] transition-colors",
+                                      childActive ? "bg-white/10 font-semibold text-white" : "text-white/70 hover:bg-white/5 hover:text-white",
+                                      focusRing,
+                                    )}
+                                  >
+                                    {child.label}
+                                    {external && <ArrowUpRight aria-hidden="true" className="size-3.5" />}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </nav>
+
+              <div className="shrink-0 border-t border-white/10 bg-surface-dark-elevated px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-5">
+                <div className="grid grid-cols-2 gap-3">
+                  <Link
+                    href={REGISTER_PATH}
+                    onClick={closeMobile}
+                    className={cn("flex min-h-12 items-center justify-center rounded-button border border-white/30 px-3 text-center font-body text-xs font-semibold hover:bg-white/10", focusRing)}
+                  >
+                    Register to Visit
+                  </Link>
+                  <Link
+                    href={STAND_PATH}
+                    onClick={closeMobile}
+                    className={cn("flex min-h-12 items-center justify-center rounded-button bg-brand-red px-3 text-center font-body text-xs font-semibold hover:bg-brand-red-hover", focusRing)}
+                  >
+                    Book a Stand
+                  </Link>
+                </div>
+                <p className="mt-4 text-center font-body text-xs text-white/60">
+                  14–16 October 2027 · Pune, India
+                </p>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }
 
-function NavAnchor({
-  item,
-  active,
-  close,
-}: {
+type NavLinkProps = {
   item: NavItem;
   active: boolean;
-  close: () => void;
-}) {
-  const external = isExternalLink(item.href);
+  onNavigate: () => void;
+};
 
+function NavLink({ item, active, onNavigate }: NavLinkProps) {
+  const external = isExternalLink(item.href);
   return (
     <Link
       href={item.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      aria-current={active && !item.children ? "page" : undefined}
-      onClick={close}
+      aria-current={active && !item.children?.length ? "page" : undefined}
+      onClick={onNavigate}
       className={cn(
-        "group relative flex h-11 items-center gap-1 rounded-md px-3 font-heading text-[13px] font-semibold",
-        "transition-colors duration-200",
+        "group relative inline-flex min-h-11 items-center gap-1 rounded-button px-2.5 font-body text-[13px] font-semibold transition-colors duration-200",
         active ? "text-white" : "text-white/70 hover:text-white",
-        focusStyle,
+        focusRing,
       )}
     >
       {item.label}
-
-      {external && (
-        <ArrowUpRight className="h-3 w-3 text-white/60" aria-hidden="true" />
-      )}
-
+      {external && <ArrowUpRight aria-hidden="true" className="size-3" />}
       <span
         aria-hidden="true"
         className={cn(
-          "absolute bottom-1 left-3 right-3 h-[2px] origin-left rounded-full bg-[#ed3138]",
-          "transition-transform duration-200",
-          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+          "absolute inset-x-2.5 bottom-1 h-0.5 origin-left rounded-full bg-brand-red transition-transform duration-200",
+          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100",
         )}
       />
     </Link>
   );
 }
 
-function MobileAnchor({
-  item,
-  active,
-  close,
-}: {
-  item: NavItem;
-  active: boolean;
-  close: () => void;
-}) {
+function MobileLink({ item, active, onNavigate }: NavLinkProps) {
   const external = isExternalLink(item.href);
-
   return (
     <Link
       href={item.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
-      aria-current={active && !item.children ? "page" : undefined}
-      onClick={close}
+      aria-current={active && !item.children?.length ? "page" : undefined}
+      onClick={onNavigate}
       className={cn(
-        "flex min-h-12 flex-1 items-center gap-2 py-3 font-heading text-sm font-semibold",
-        active ? "text-[#ff656b]" : "text-white/80",
-        focusStyle,
+        "flex min-h-13 flex-1 items-center gap-2 rounded-button py-3 font-body text-sm font-semibold",
+        active ? "text-white" : "text-white/75 hover:text-white",
+        focusRing,
       )}
     >
+      {active && <span aria-hidden="true" className="h-4 w-0.5 rounded-full bg-brand-red" />}
       {item.label}
-      {external && <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />}
+      {external && <ArrowUpRight aria-hidden="true" className="size-3.5" />}
     </Link>
   );
 }
