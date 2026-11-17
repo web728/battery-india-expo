@@ -1,7 +1,7 @@
 
 /**
  * INDIA BATTERY INTERNATIONAL SHOW
- * Central configuration for event information.
+ * Central website configuration
  */
 
 export type EventContact = {
@@ -13,10 +13,17 @@ export type EventContact = {
 const configuredSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
+const SITE_URL = (
+  configuredSiteUrl ||
+  "https://www.indiabatteryshow.com"
+).replace(/\/+$/, "");
+
 export const siteConfig = {
   eventName: "2nd India Battery International Show",
 
   shortName: "2nd India Battery Show",
+
+  eventYear: 2027,
 
   tagline:
     "Battery Manufacturing, Technology, Energy Storage & Power Solutions",
@@ -36,13 +43,13 @@ export const siteConfig = {
     display: "10:00 AM – 6:00 PM",
     timeZone: "Asia/Kolkata",
     timeZoneLabel: "IST",
+    utcOffset: "+05:30",
   },
 
   venue: {
     name: "Auto Cluster Exhibition Centre",
 
     line1: "Auto Cluster Exhibition Centre",
-
     line2: "Chinchwad, Pimpri-Chinchwad",
 
     city: "Pune",
@@ -60,11 +67,18 @@ export const siteConfig = {
     name: "Futurex Trade Fair & Events Pvt. Ltd.",
   },
 
-  // Replace fallback with your verified production domain if different.
-  siteUrl: (
-    configuredSiteUrl ||
-    "https://www.indiabatteryshow.com"
-  ).replace(/\/+$/, ""),
+  siteUrl: SITE_URL,
+
+  // Stable canonical IDs for structured data.
+  seo: {
+    organizationId: `${SITE_URL}/#organization`,
+    websiteId: `${SITE_URL}/#website`,
+    eventId: `${SITE_URL}/#event-2027`,
+    venueId: `${SITE_URL}/#venue`,
+
+    // Verify that this file exists in public/images.
+    eventImage: "/images/batt.webp",
+  },
 
   coLocatedShows: [
     {
