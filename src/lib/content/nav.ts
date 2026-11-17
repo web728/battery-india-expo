@@ -88,10 +88,6 @@ export const mainNav: NavItem[] = [
         label: "Visitor Profile",
         href: "/visit/visitor-profile",
       },
-      {
-        label: "Visitor FAQs",
-        href: "/visit/faqs",
-      },
     ],
   },
   {
