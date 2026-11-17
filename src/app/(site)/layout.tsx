@@ -73,6 +73,10 @@ const defaultOgImage = "/logo/battery.png";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
+  verification: {
+    google: "8yJ4SGop6bGVPTCqTHPyjH6D4u__duHIEeLew9lNHBU",
+  },
+ 
   applicationName: siteConfig.eventName,
 
   title: {
