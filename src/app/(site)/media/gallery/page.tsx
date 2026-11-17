@@ -1,156 +1,208 @@
+
 import type { Metadata } from "next";
+import Link from "next/link";
+
+import { ArrowRight } from "lucide-react";
+
 import { PageHero } from "@/components/sections/page-hero";
 import { Container } from "@/components/ui/container";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { PhotoGallery, type Photo } from "@/components/sections/photo-gallery";
+import { PhotoGallery } from "@/components/sections/photo-gallery";
+
+import {
+  GALLERY_BATCH_SIZE,
+  getGalleryBatch,
+} from "@/lib/photo-catalog";
+
+import { siteConfig } from "@/lib/site-config";
+
+/*
+  INDIA BATTERY INTERNATIONAL SHOW
+  Media Photo Gallery
+
+  Images are discovered automatically
+  from public/images on the server.
+
+  Only the initial batch is sent with
+  the first page render.
+*/
+
+export const runtime = "nodejs";
+export const revalidate = 60;
+
+const PAGE_PATH = "/media/gallery";
+
+const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+
+const HERO_IMAGE =
+  "/images/DSC01808.JPG.webp";
+
+const PAGE_TITLE =
+  `Photo Gallery | ${siteConfig.eventName} 2027`;
+
+const PAGE_DESCRIPTION =
+  `Explore exhibition photography and previous-edition ` +
+  `highlights associated with ${siteConfig.eventName}. ` +
+  `Browse battery technologies, exhibition displays ` +
+  `and industry networking photographs.`;
 
 export const metadata: Metadata = {
-  description:
-    "Photo gallery for India International Battery Show 2026 and previous editions.",
-  alternates: { canonical: "/media/gallery" },
+  title: {
+    absolute: PAGE_TITLE,
+  },
+
+  description: PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical: PAGE_URL,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: PAGE_URL,
+    siteName: siteConfig.eventName,
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}${HERO_IMAGE}`,
+        alt: "Exhibition photo gallery",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [`${SITE_URL}${HERO_IMAGE}`],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
-const photos: Photo[] = [
-  {
-    src: "/images/expo-battery-products-display.jpg",
-    alt: "Battery products on display at an exhibitor booth at a previous edition",
-  },
-  {
-    src: "/images/expo-telematics-meeting.jpg",
-    alt: "Exhibitors and visitors in a business discussion at a previous edition",
-  },
+export default async function PhotoGalleryPage() {
+  const gallery = await getGalleryBatch(
+    0,
+    GALLERY_BATCH_SIZE
+  );
 
-  // TODO: replace these 7 filenames with the actual files in public/images/
-  {
-    src: "/images/2.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/3.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/4.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/5.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/6.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/7.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
-  {
-    src: "/images/Untitled-2.jpg.jpeg",
-    alt: "Photo from a previous edition of the show",
-  },
+  const pageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${PAGE_URL}#webpage`,
+    url: PAGE_URL,
+    name: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    inLanguage: "en-IN",
+    isPartOf: {
+      "@id": `${SITE_URL}/#website`,
+    },
+    about: {
+      "@id": `${SITE_URL}/#event`,
+    },
+  };
 
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277672849_1022808071946075_340558403948023620_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/80977122_477937706433117_8911482764633571328_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277756487_1022183295341886_6728238397737750234_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/81142496_477954383098116_3263101403136000000_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/1-scaled-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277756487_1022183295341886_6728238397737750234_n-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277672849_1022808071946075_340558403948023620_n-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277578914_1022808421946040_8419848406877055246_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277572120_1022808208612728_970823388728567591_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277563238_1022182605341955_631630248140110136_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277566730_1022808141946068_2536311605985154267_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277533584_1022807858612763_821064321156367470_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277558079_1022807441946138_1194801752750068336_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277527150_1022182995341916_4773007713539910118_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277513767_1022807351946147_3136467498949117086_n-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/277486484_1022182625341953_4309320621740266656_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/276316761_1022183005341915_8135599262387679972_n-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/81130928_477933963100158_2707887467498831872_n.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-  {
-    src: "https://info.batteryindiaexpo.com/wp-content/uploads/2022/09/82166943_477954493098105_1264107861324070912_n-1.jpg",
-    alt: "Gallery photo from a previous edition",
-  },
-];
-
-export default function PhotoGalleryPage() {
   return (
     <>
+      {/* STRUCTURED DATA */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pageJsonLd).replace(
+            /</g,
+            "\\u003c"
+          ),
+        }}
+      />
+
       <BreadcrumbJsonLd
         items={[
-          { label: "Media", href: "/media" },
-          { label: "Photo Gallery", href: "/media/gallery" },
+          {
+            label: "Media",
+            href: "/media",
+          },
+          {
+            label: "Photo Gallery",
+            href: PAGE_PATH,
+          },
         ]}
       />
+
+      {/* SHARED HERO */}
+
       <PageHero
         eyebrow="Media"
         title="Photo Gallery"
-        description="Photographs from previous editions. More will be added as the 2026 show approaches."
+        description={`Explore exhibition moments, technology showcases and industry interactions from previous exhibition activities associated with ${siteConfig.eventName}.`}
         breadcrumbs={[
-          { label: "Media", href: "/media" },
-          { label: "Photo Gallery" },
+          {
+            label: "Media",
+            href: "/media",
+          },
+          {
+            label: "Photo Gallery",
+          },
         ]}
+        backgroundImage={{
+          src: HERO_IMAGE,
+          alt: "Industry visitors exploring exhibition displays",
+        }}
       />
-      <section className="py-16 sm:py-20">
+
+      {/* GALLERY */}
+
+      <section
+        id="exhibition-photo-gallery"
+        aria-labelledby="gallery-heading"
+        className="bg-background py-16 text-foreground sm:py-20 lg:py-24 xl:py-28"
+      >
         <Container>
-          <PhotoGallery photos={photos} />
+          <div className="mb-10 grid gap-6 lg:mb-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-12">
+            <div>
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-0.5 w-7 bg-brand-red"
+                />
+
+                <p className="font-heading text-xs font-bold uppercase tracking-[0.15em] text-brand-red">
+                  Exhibition Photography
+                </p>
+              </div>
+
+              <h2
+                id="gallery-heading"
+                className="font-heading text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.15] tracking-[-0.04em]"
+              >
+                Moments from
+                <span className="block">
+                  the exhibition
+                  <span className="text-brand-red">.</span>
+                </span>
+              </h2>
+            </div>
+ 
+          </div>
+
+          <div className="border-t border-[#E4E2DE] pt-9">
+            <PhotoGallery
+              initialPhotos={gallery.photos}
+              initialHasMore={gallery.hasMore}
+              initialNextOffset={gallery.nextOffset}
+            />
+          </div>
+
+         
         </Container>
       </section>
+ 
     </>
   );
 }

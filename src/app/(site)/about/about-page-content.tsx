@@ -251,11 +251,7 @@ export function AboutPageContent() {
                 </figcaption>
               </div>
 
-              {/* Photo descriptor */}
-
-              <p className="mt-3 font-body text-xs leading-[1.6] text-muted">
-                Industry networking and exhibition experience
-              </p>
+            
             </figure>
           </div>
 

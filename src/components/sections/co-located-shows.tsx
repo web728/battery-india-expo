@@ -233,55 +233,7 @@ export function CoLocatedShows() {
             ))}
           </ul>
 
-          {/* EVENT INFORMATION STRIP */}
-
-          <div className="mt-10 grid gap-6 border-y border-[#E4E2DE] py-7 sm:mt-12 sm:grid-cols-2 sm:gap-0 lg:mt-14 lg:py-9">
-            {/* EVENT DATES */}
-
-            <div className="flex items-start gap-3 sm:pr-8">
-              <CalendarDays
-                aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
-                strokeWidth={1.8}
-              />
-
-              <div>
-                <p className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
-                  Exhibition Dates
-                </p>
-
-                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
-                  {siteConfig.dates.display}
-                </p>
-              </div>
-            </div>
-
-            {/* SHARED VENUE */}
-
-            <div className="flex items-start gap-3 sm:border-l sm:border-[#E4E2DE] sm:pl-8 lg:pl-10">
-              <MapPin
-                aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
-                strokeWidth={1.8}
-              />
-
-              <div>
-                <p className="font-body text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
-                  Exhibition Venue
-                </p>
-
-                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
-                  {siteConfig.venue.name}
-                </p>
-
-                <p className="mt-1 font-body text-xs leading-[1.7] text-muted">
-                  {siteConfig.venue.city},{" "}
-                  {siteConfig.venue.state},{" "}
-                  {siteConfig.venue.country}
-                </p>
-              </div>
-            </div>
-          </div>
+        
         </Container>
       </section>
 
@@ -316,7 +268,7 @@ export function CoLocatedShows() {
               >
                 Organized by{" "}
                 <span className="text-brand-red">
-                  Futurex.
+                  Futurex Trade Fair & Events Pvt. Ltd..
                 </span>
               </h2>
 

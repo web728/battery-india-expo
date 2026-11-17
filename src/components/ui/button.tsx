@@ -1,60 +1,223 @@
-import { cn } from "@/lib/utils";
+
 import Link from "next/link";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost" | "outline-white";
-type Size = "sm" | "md" | "lg";
+import type {
+  ButtonHTMLAttributes,
+  ReactNode,
+} from "react";
 
-const variantClasses: Record<Variant, string> = {
-  primary: "bg-red text-white hover:bg-red-dark",
-  secondary: "bg-navy text-white hover:bg-navy-dark",
-  outline: "border-2 border-navy text-navy hover:bg-navy hover:text-white bg-transparent",
-  "outline-white": "border-2 border-white text-white hover:bg-white hover:text-navy bg-transparent",
-  ghost: "text-navy hover:bg-grey-light",
-};
+import { cn } from "@/lib/utils";
 
-const sizeClasses: Record<Size, string> = {
-  sm: "px-4 py-2.5 text-sm min-h-[40px]",
-  md: "px-6 py-3 text-base min-h-[44px]",
-  lg: "px-8 py-4 text-base min-h-[52px]",
-};
+/* ==================================================
+   SHARED BUTTON
+   Hybrid Industrial Editorial
 
-const base =
-  "inline-flex items-center justify-center gap-2 font-semibold rounded-md transition-colors duration-150 focus-visible:outline focus-visible:outline-3 focus-visible:outline-red focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+   Supports:
+   - Native buttons
+   - Next.js internal links
+   - External links
+   - Five visual variants
+   - Three sizes
+   - Accessible focus states
+================================================== */
+
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "outline-white"
+  | "ghost";
+
+export type ButtonSize = "sm" | "md" | "lg";
 
 type CommonProps = {
-  variant?: Variant;
-  size?: Size;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   className?: string;
   children: ReactNode;
 };
 
 type ButtonAsButton = CommonProps &
-  ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined };
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    href?: never;
+  };
 
 type ButtonAsLink = CommonProps & {
   href: string;
   target?: string;
   rel?: string;
+  title?: string;
+  "aria-label"?: string;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-export function Button(props: ButtonAsButton | ButtonAsLink) {
-  const { variant = "primary", size = "md", className, children } = props;
-  const classes = cn(base, variantClasses[variant], sizeClasses[size], className);
+export type ButtonProps =
+  | ButtonAsButton
+  | ButtonAsLink;
 
-  if ("href" in props && props.href) {
-    const { href, target, rel } = props;
+/* --------------------------------------------------
+   BASE STYLES
+-------------------------------------------------- */
+
+const baseClasses = [
+  "inline-flex shrink-0",
+  "items-center justify-center gap-2.5",
+  "rounded-button",
+  "font-heading font-bold",
+  "leading-none",
+  "transition-[background-color,border-color,color]",
+  "duration-200",
+  "focus-visible:outline-2",
+  "focus-visible:outline-offset-2",
+  "focus-visible:outline-brand-red",
+  "disabled:pointer-events-none",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+].join(" ");
+
+/* --------------------------------------------------
+   VARIANTS
+-------------------------------------------------- */
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary: [
+    "border border-brand-red",
+    "bg-brand-red text-white",
+    "hover:border-brand-red-hover",
+    "hover:bg-brand-red-hover",
+  ].join(" "),
+
+  secondary: [
+    "border border-[#191C21]",
+    "bg-[#191C21] text-white",
+    "hover:border-[#343941]",
+    "hover:bg-[#343941]",
+  ].join(" "),
+
+  outline: [
+    "border border-[#D9D7D3]",
+    "bg-white text-foreground",
+    "hover:border-brand-red",
+    "hover:text-brand-red",
+  ].join(" "),
+
+  "outline-white": [
+    "border border-white/70",
+    "bg-transparent text-white",
+    "hover:border-white",
+    "hover:bg-white",
+    "hover:text-[#191C21]",
+    "focus-visible:outline-white",
+  ].join(" "),
+
+  ghost: [
+    "border border-transparent",
+    "bg-transparent text-foreground",
+    "hover:bg-[#EEECE8]",
+    "hover:text-brand-red",
+  ].join(" "),
+};
+
+/* --------------------------------------------------
+   SIZES
+-------------------------------------------------- */
+
+const sizeClasses: Record<ButtonSize, string> = {
+  sm: "min-h-10 px-4 py-2.5 text-xs",
+  md: "min-h-12 px-6 py-3 text-sm",
+  lg: "min-h-[52px] px-7 py-3.5 text-sm sm:px-8",
+};
+
+/* ==================================================
+   BUTTON COMPONENT
+================================================== */
+
+export function Button(props: ButtonProps) {
+  const {
+    variant = "primary",
+    size = "md",
+    className,
+    children,
+  } = props;
+
+  const classes = cn(
+    baseClasses,
+    variantClasses[variant],
+    sizeClasses[size],
+    className
+  );
+
+  if (typeof props.href === "string") {
+    const {
+      href,
+      target,
+      rel,
+      title,
+      onClick,
+    } = props;
+
+    const isExternal =
+      /^https?:\/\//i.test(href) ||
+      href.startsWith("//");
+
+    const safeRel =
+      target === "_blank"
+        ? [
+            rel,
+            "noopener",
+            "noreferrer",
+          ]
+            .filter(Boolean)
+            .join(" ")
+        : rel;
+
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          target={target}
+          rel={safeRel}
+          title={title}
+          aria-label={props["aria-label"]}
+          onClick={onClick}
+          className={classes}
+        >
+          {children}
+        </a>
+      );
+    }
+
     return (
-      <Link href={href} target={target} rel={rel} className={classes}>
+      <Link
+        href={href}
+        target={target}
+        rel={safeRel}
+        title={title}
+        aria-label={props["aria-label"]}
+        onClick={onClick}
+        className={classes}
+      >
         {children}
       </Link>
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { href: _href, ...buttonProps } = props as ButtonAsButton;
+  const {
+    variant: _variant,
+    size: _size,
+    className: _className,
+    href: _href,
+    children: _children,
+    type = "button",
+    ...buttonProps
+  } = props as ButtonAsButton;
+
   return (
-    <button className={classes} {...buttonProps}>
+    <button
+      {...buttonProps}
+      type={type}
+      className={classes}
+    >
       {children}
     </button>
   );

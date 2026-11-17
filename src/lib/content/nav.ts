@@ -69,10 +69,7 @@ export const mainNav: NavItem[] = [
         label: "Sponsorship Opportunities",
         href: "/exhibit/sponsorship",
       },
-      {
-        label: "Exhibitor FAQs",
-        href: "/exhibit/faqs",
-      },
+       
     ],
   },
   {
@@ -119,11 +116,7 @@ export const footerQuickLinks: NavLink[] = [
   {
     label: "Exhibitor Categories",
     href: "/exhibit/categories",
-  },
-  {
-    label: "Past Participants",
-    href: "/about/past-participants",
-  },
+  }, 
   {
     label: "Visitor Profile",
     href: "/visit/visitor-profile",
@@ -155,10 +148,7 @@ export const footerParticipationLinks: NavLink[] = [
     label: "Planning Your Visit",
     href: "/visit#plan-your-visit",
   },
-  {
-    label: "Visitor FAQs",
-    href: "/visit/faqs",
-  },
+  
   {
     label: "Conference",
     href: CONFERENCE_URL,

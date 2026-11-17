@@ -1,100 +1,282 @@
+
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
+import {
+  ArrowUpRight,
+  Check,
+  Cookie,
+  ShieldCheck,
+  X,
+} from "lucide-react";
+
+import { cn } from "@/lib/utils";
+
+/* ==================================================
+   INDIA BATTERY INTERNATIONAL SHOW
+
+   PREMIUM COOKIE CONSENT BANNER
+   Hybrid Industrial Editorial
+
+   Features:
+   - Premium floating white panel
+   - Clear consent choices
+   - Responsive mobile layout
+   - LocalStorage persistence
+   - Existing consent event preserved
+   - No automatic lead submission
+   - No third-party animation dependency
+
+   Consent values:
+   - accepted
+   - declined
+================================================== */
 
 const STORAGE_KEY = "bie-cookie-consent";
 
-// If any of your forms autosave a draft to localStorage as the visitor
-// types (e.g. localStorage.setItem("bie-registration-draft", JSON.stringify(values))),
-// list the keys here so accepting cookies can save that lead even if they
-// never hit submit. Safe to leave as-is if no form does this yet.
-const DRAFT_KEYS = ["bie-registration-draft", "bie-contact-draft", "bie-exhibitor-draft"];
+type ConsentValue = "accepted" | "declined";
 
-function extractContact(draft: Record<string, unknown>) {
-  const name =
-    (draft.name as string) ||
-    [draft.firstName, draft.lastName].filter(Boolean).join(" ") ||
-    (draft.contactPerson as string) ||
-    null;
-  const email = (draft.email as string) || (draft.businessEmail as string) || null;
-  const phone = (draft.phone as string) || (draft.mobileNumber as string) || null;
-  return { name, email, phone };
-}
+const buttonBaseClasses = [
+  "inline-flex min-h-11",
+  "items-center justify-center gap-2",
+  "rounded-button px-5 py-3",
+  "font-heading text-[13px] font-bold",
+  "transition-[background-color,border-color,color]",
+  "duration-200",
+  "focus-visible:outline-2",
+  "focus-visible:outline-offset-2",
+  "focus-visible:outline-brand-red",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-60",
+].join(" ");
+
+/* ==================================================
+   CONSENT BANNER
+================================================== */
 
 export function ConsentBanner() {
   const [visible, setVisible] = useState(false);
 
+  /* ------------------------------------------------
+     READ SAVED CONSENT
+  ------------------------------------------------ */
+
   useEffect(() => {
-    // One-time sync from localStorage (client-only) on mount to avoid SSR hydration mismatch.
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!stored) setVisible(true);
+    try {
+      const saved =
+        window.localStorage.getItem(STORAGE_KEY);
+
+      if (
+        saved !== "accepted" &&
+        saved !== "declined"
+      ) {
+        setVisible(true);
+      }
+    } catch {
+      // If storage is unavailable, allow
+      // the visitor to see the consent options.
+      setVisible(true);
+    }
   }, []);
 
-  const decide = (value: "accepted" | "declined") => {
-    window.localStorage.setItem(STORAGE_KEY, value);
-    window.dispatchEvent(new CustomEvent("bie-consent-change", { detail: value }));
-    setVisible(false);
+  /* ------------------------------------------------
+     SAVE CONSENT
 
-    if (value === "accepted") {
-      saveDraftContactIfAny();
-    }
-  };
+     Preserve event for analytics/cookie
+     integrations listening for changes.
+  ------------------------------------------------ */
 
-  if (!visible) return null;
+  const decide = useCallback(
+    (value: ConsentValue) => {
+      try {
+        window.localStorage.setItem(
+          STORAGE_KEY,
+          value
+        );
+      } catch {
+        // Browsers may block localStorage.
+        // The current decision still applies
+        // to listeners in this page session.
+      }
+
+      window.dispatchEvent(
+        new CustomEvent<ConsentValue>(
+          "bie-consent-change",
+          {
+            detail: value,
+          }
+        )
+      );
+
+      setVisible(false);
+    },
+    []
+  );
+
+  if (!visible) {
+    return null;
+  }
 
   return (
-    <div
-      role="dialog"
-      aria-label="Cookie consent"
-      className="fixed inset-x-0 bottom-0 z-[90] border-t border-grey-light bg-white px-4 py-4 shadow-[0_-4px_16px_rgba(0,0,0,0.1)] sm:px-6"
+    <aside
+      aria-labelledby="cookie-consent-heading"
+      aria-describedby="cookie-consent-description"
+      className={cn(
+        "fixed bottom-0 left-0 right-0 z-[90]",
+        "pointer-events-none",
+        "px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]",
+        "sm:px-5 sm:pb-5",
+        "lg:px-8 lg:pb-7"
+      )}
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-navy-dark">
-          We use cookies to improve your experience and analyze site traffic. Read our{" "}
-          <Link href="/cookies" className="font-semibold text-red underline">
-            Cookie Policy
-          </Link>
-          .
-        </p>
-        <div className="flex shrink-0 gap-3">
-          <Button size="sm" variant="ghost" onClick={() => decide("declined")}>
-            Decline Non-Essential
-          </Button>
-          <Button size="sm" variant="primary" onClick={() => decide("accepted")}>
-            Accept All
-          </Button>
+      <div
+        className={cn(
+          "pointer-events-auto",
+          "mx-auto w-full max-w-[1040px]",
+          "overflow-hidden rounded-[12px]",
+          "border border-[#E4E2DE]",
+          "bg-white text-[#191C21]",
+          "shadow-[0_16px_50px_rgba(25,28,33,0.16)]"
+        )}
+      >
+        {/* TOP ACCENT */}
+
+        <div
+          aria-hidden="true"
+          className="h-[3px] w-full bg-[#C62832]"
+        />
+
+        <div className="relative p-5 sm:p-6 lg:px-8 lg:py-7">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+            {/* ---------------------------------
+                LEFT: COOKIE INFORMATION
+            --------------------------------- */}
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start gap-4">
+                {/* ICON */}
+
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[#E4E2DE] bg-[#F7F6F3] text-[#C62832]">
+                  <Cookie
+                    aria-hidden="true"
+                    className="h-6 w-6"
+                    strokeWidth={1.7}
+                  />
+                </div>
+
+                {/* CONTENT */}
+
+                <div className="min-w-0">
+                  <p className="font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[#C62832] sm:text-[11px]">
+                    Your Privacy Matters
+                  </p>
+
+                  <h2
+                    id="cookie-consent-heading"
+                    className="mt-1.5 font-heading text-lg font-bold leading-[1.35] tracking-[-0.025em] text-[#191C21] sm:text-xl"
+                  >
+                    We Value Your Privacy
+                  </h2>
+
+                  <p
+                    id="cookie-consent-description"
+                    className="mt-2 max-w-[620px] font-body text-[13px] leading-[1.8] text-[#686B72] sm:text-sm"
+                  >
+                    We use essential storage to
+                    support the website. With your
+                    permission, we also use optional
+                    analytics cookies to understand
+                    site usage and improve the
+                    browsing experience.
+                  </p>
+
+                  <Link
+                    href="/cookies"
+                    className="group mt-3 inline-flex min-h-9 items-center gap-1.5 font-heading text-xs font-bold text-[#C62832] transition-colors hover:text-[#A82029] focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C62832]"
+                  >
+                    Read Cookie Policy
+
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                      strokeWidth={1.8}
+                    />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* ---------------------------------
+                RIGHT: CONSENT ACTIONS
+            --------------------------------- */}
+
+            <div className="w-full shrink-0 lg:w-auto">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:items-center">
+                <button
+                  type="button"
+                  onClick={() => decide("declined")}
+                  className={cn(
+                    buttonBaseClasses,
+                    "border border-[#D9D7D3]",
+                    "bg-white text-[#191C21]",
+                    "hover:border-[#C62832]",
+                    "hover:text-[#C62832]",
+                    "sm:min-w-[150px]"
+                  )}
+                >
+                  <X
+                    aria-hidden="true"
+                    className="h-4 w-4"
+                    strokeWidth={1.8}
+                  />
+
+                  Reject Optional
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => decide("accepted")}
+                  className={cn(
+                    buttonBaseClasses,
+                    "border border-[#C62832]",
+                    "bg-[#C62832] text-white",
+                    "hover:border-[#A82029]",
+                    "hover:bg-[#A82029]",
+                    "sm:min-w-[150px]"
+                  )}
+                >
+                  <Check
+                    aria-hidden="true"
+                    className="h-4 w-4"
+                    strokeWidth={2}
+                  />
+
+                  Accept All
+                </button>
+              </div>
+
+              <div className="mt-3 flex items-center justify-center gap-2 lg:justify-end">
+                <ShieldCheck
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5 text-[#777A80]"
+                  strokeWidth={1.7}
+                />
+
+                <p className="font-body text-[11px] leading-5 text-[#777A80]">
+                  Your choice is saved on this device.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
-}
-
-// Best-effort only — never blocks the UI. Only reads data the visitor
-// already typed into a form on THIS site and that form chose to autosave;
-// browsers do not expose autofill/other-site data to page JavaScript, so
-// nothing beyond that can be (or is) read here.
-function saveDraftContactIfAny() {
-  try {
-    for (const key of DRAFT_KEYS) {
-      const raw = window.localStorage.getItem(key);
-      if (!raw) continue;
-
-      const draft = JSON.parse(raw);
-      const { name, email, phone } = extractContact(draft);
-      if (!email && !phone) continue;
-
-      fetch("/api/consent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, consentType: "cookies" }),
-      }).catch(() => {
-        // ignore — non-critical
-      });
-    }
-  } catch {
-    // ignore — non-critical
-  }
 }

@@ -1,150 +1,442 @@
+
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Expand } from "lucide-react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-export type Photo = {
-  src: string;
-  alt: string;
+import Image from "next/image";
+
+import {
+  ChevronLeft,
+  ChevronRight,
+  Expand,
+  LoaderCircle,
+  X,
+} from "lucide-react";
+
+import type { GalleryPhoto } from "@/lib/photo-catalog";
+
+export type Photo = GalleryPhoto;
+
+type PhotoGalleryProps = {
+  initialPhotos: readonly GalleryPhoto[];
+  initialHasMore: boolean;
+  initialNextOffset: number;
 };
 
-const SHIMMER = `
-<svg xmlns="http://www.w3.org/2000/svg" width="700" height="475" viewBox="0 0 700 475">
-  <rect width="700" height="475" fill="#e5e7eb"/>
-</svg>`;
+type GalleryResponse = {
+  photos: GalleryPhoto[];
+  nextOffset: number;
+  hasMore: boolean;
+};
 
-const toBase64 = (str: string) =>
-  typeof window === "undefined" ? Buffer.from(str).toString("base64") : window.btoa(str);
-
-const BATCH_SIZE = 6;
-
-export function PhotoGallery({ photos }: { photos: Photo[] }) {
-  const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  const visiblePhotos = photos.slice(0, visibleCount);
-  const hasMore = visibleCount < photos.length;
-
-  const closeLightbox = useCallback(() => setActiveIndex(null), []);
-  const showPrev = useCallback(
-    () => setActiveIndex((i) => (i === null ? null : (i - 1 + photos.length) % photos.length)),
-    [photos.length]
+export function PhotoGallery({
+  initialPhotos,
+  initialHasMore,
+  initialNextOffset,
+}: PhotoGalleryProps) {
+  const [photos, setPhotos] = useState<GalleryPhoto[]>(
+    () => [...initialPhotos]
   );
-  const showNext = useCallback(
-    () => setActiveIndex((i) => (i === null ? null : (i + 1) % photos.length)),
-    [photos.length]
-  );
+
+  const [hasMore, setHasMore] =
+    useState(initialHasMore);
+
+  const [nextOffset, setNextOffset] =
+    useState(initialNextOffset);
+
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+
+  const [activeIndex, setActiveIndex] =
+    useState<number | null>(null);
+
+  const closeButtonRef =
+    useRef<HTMLButtonElement>(null);
+
+  const previousTriggerRef =
+    useRef<HTMLButtonElement | null>(null);
+
+  const loadingRef = useRef(false);
+
+  const activePhoto =
+    activeIndex === null
+      ? null
+      : photos[activeIndex] ?? null;
+
+  const closeLightbox = useCallback(() => {
+    setActiveIndex(null);
+
+    requestAnimationFrame(() => {
+      previousTriggerRef.current?.focus();
+    });
+  }, []);
+
+  const showPrevious = useCallback(() => {
+    setActiveIndex((current) => {
+      if (current === null || photos.length === 0) {
+        return current;
+      }
+
+      return (
+        current - 1 + photos.length
+      ) % photos.length;
+    });
+  }, [photos.length]);
+
+  const showNext = useCallback(() => {
+    setActiveIndex((current) => {
+      if (current === null || photos.length === 0) {
+        return current;
+      }
+
+      return (current + 1) % photos.length;
+    });
+  }, [photos.length]);
+
+  /* -----------------------------------------
+     LOAD MORE
+
+     Only the next small image batch is fetched.
+     Previously loaded photographs stay visible.
+  ----------------------------------------- */
+
+  async function loadMorePhotos() {
+    if (
+      loadingRef.current ||
+      loading ||
+      !hasMore
+    ) {
+      return;
+    }
+
+    loadingRef.current = true;
+    setLoading(true);
+    setLoadError(false);
+
+    try {
+      const response = await fetch(
+        `/api/gallery?offset=${nextOffset}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Gallery request failed");
+      }
+
+      const result =
+        (await response.json()) as GalleryResponse;
+
+      if (
+        !Array.isArray(result.photos) ||
+        typeof result.nextOffset !== "number" ||
+        typeof result.hasMore !== "boolean"
+      ) {
+        throw new Error("Invalid gallery response");
+      }
+
+      setPhotos((current) => [
+        ...current,
+        ...result.photos,
+      ]);
+
+      setNextOffset(result.nextOffset);
+      setHasMore(result.hasMore);
+    } catch {
+      setLoadError(true);
+    } finally {
+      loadingRef.current = false;
+      setLoading(false);
+    }
+  }
+
+  /* -----------------------------------------
+     LIGHTBOX KEYBOARD SUPPORT
+     - Escape closes
+     - Left/right arrows navigate
+     - Tab stays within the dialog
+     - Body scrolling is locked while open
+  ----------------------------------------- */
 
   useEffect(() => {
-    if (activeIndex === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowLeft") showPrev();
-      if (e.key === "ArrowRight") showNext();
-    };
-    window.addEventListener("keydown", onKey);
+    if (activeIndex === null) {
+      return;
+    }
+
+    const originalOverflow =
+      document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
+
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeLightbox();
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPrevious();
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showNext();
+      }
+
+      if (event.key === "Tab") {
+        const dialog = document.getElementById(
+          "photo-gallery-lightbox"
+        );
+
+        if (!dialog) {
+          return;
+        }
+
+        const buttons = Array.from(
+          dialog.querySelectorAll<HTMLButtonElement>(
+            "button:not([disabled])"
+          )
+        );
+
+        if (buttons.length === 0) {
+          return;
+        }
+
+        const first = buttons[0];
+        const last = buttons[buttons.length - 1];
+
+        if (
+          event.shiftKey &&
+          document.activeElement === first
+        ) {
+          event.preventDefault();
+          last.focus();
+        } else if (
+          !event.shiftKey &&
+          document.activeElement === last
+        ) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
     return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.body.style.overflow =
+        originalOverflow;
+
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
-  }, [activeIndex, closeLightbox, showPrev, showNext]);
+  }, [
+    activeIndex,
+    closeLightbox,
+    showNext,
+    showPrevious,
+  ]);
+
+  /* -----------------------------------------
+     EMPTY GALLERY
+  ----------------------------------------- */
+
+  if (photos.length === 0) {
+    return (
+      <p className="border-t border-[#E4E2DE] py-10 text-sm leading-7 text-muted">
+        Gallery photographs will appear here
+        once images are available.
+      </p>
+    );
+  }
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {visiblePhotos.map((photo, index) => (
+      {/* -------------------------------------
+          IMAGE GRID
+      ------------------------------------- */}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+        {photos.map((photo, index) => (
           <button
             key={photo.src}
             type="button"
-            onClick={() => setActiveIndex(index)}
-            className="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:shadow-xl hover:ring-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label={`Open ${photo.alt}`}
+            onClick={(event) => {
+              previousTriggerRef.current =
+                event.currentTarget;
+
+              setActiveIndex(index);
+            }}
+            className={[
+              "group relative block w-full",
+              "overflow-hidden rounded-[10px]",
+              "border border-[#E4E2DE]",
+              "bg-[#EAE8E4]",
+              "text-left",
+              "transition-colors duration-200",
+              "hover:border-brand-red/35",
+              "focus-visible:outline-2",
+              "focus-visible:outline-offset-2",
+              "focus-visible:outline-brand-red",
+            ].join(" ")}
           >
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
               <Image
                 src={photo.src}
                 alt={photo.alt}
                 fill
-                loading={index < 2 ? "eager" : "lazy"}
-                priority={index === 0}
+                loading="lazy"
                 quality={70}
-                placeholder={`data:image/svg+xml;base64,${toBase64(SHIMMER)}`}
-                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                sizes="(min-width: 1280px) 390px, (min-width: 1024px) 31vw, (min-width: 640px) 47vw, 100vw"
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.025] motion-reduce:transform-none"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 opacity-0 shadow-md transition-opacity duration-300 group-hover:opacity-100">
-                <Expand className="h-4 w-4 text-foreground" />
-              </div>
+
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-200 group-hover:bg-black/10"
+              />
+
+              <span
+                aria-hidden="true"
+                className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-md bg-white/95 text-[#191C21] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                <Expand
+                  className="h-4 w-4"
+                  strokeWidth={1.8}
+                />
+              </span>
             </div>
           </button>
         ))}
       </div>
 
+      {/* -------------------------------------
+          LOAD MORE BUTTON
+      ------------------------------------- */}
+
       {hasMore && (
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 flex flex-col items-center gap-4 sm:mt-12">
           <button
             type="button"
-            onClick={() => setVisibleCount((c) => c + BATCH_SIZE)}
-            className="rounded-full border border-input bg-background px-6 py-2.5 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            onClick={loadMorePhotos}
+            disabled={loading}
+            aria-busy={loading}
+            className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-button border border-[#D9D7D3] bg-white px-7 py-3 font-heading text-sm font-bold text-foreground transition-colors duration-200 hover:border-brand-red hover:text-brand-red focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red disabled:cursor-wait disabled:opacity-60"
           >
-            Load more photos
+            {loading ? (
+              <>
+                <LoaderCircle
+                  aria-hidden="true"
+                  className="h-4 w-4 animate-spin"
+                />
+                Loading Photos
+              </>
+            ) : (
+              "Load More Photos"
+            )}
           </button>
+
+          {loadError && (
+            <p role="alert" className="text-sm text-brand-red">
+              Photos could not be loaded.
+              Please try again.
+            </p>
+          )}
         </div>
       )}
 
-      {activeIndex !== null && (
+      {/* -------------------------------------
+          FULL SCREEN LIGHTBOX
+      ------------------------------------- */}
+
+      {activePhoto && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
-          onClick={closeLightbox}
+          id="photo-gallery-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo gallery viewer"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#101115]/95 px-4 py-16 sm:px-16"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeLightbox();
+            }
+          }}
         >
+          {/* CLOSE */}
+
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={closeLightbox}
-            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Close"
+            aria-label="Close photo viewer"
+            className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-md border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:right-6 sm:top-6"
           >
-            <X className="h-5 w-5" />
+            <X
+              className="h-5 w-5"
+              strokeWidth={1.8}
+            />
           </button>
 
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              showPrev();
-            }}
-            className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-6"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
+          {/* PREVIOUS */}
 
-          <div
-            className="relative h-[80vh] w-full max-w-4xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+          {photos.length > 1 && (
+            <button
+              type="button"
+              onClick={showPrevious}
+              aria-label="Previous photo"
+              className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-[#191C21]/75 text-white transition-colors hover:bg-[#30343B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:left-6"
+            >
+              <ChevronLeft
+                className="h-6 w-6"
+                strokeWidth={1.8}
+              />
+            </button>
+          )}
+
+          {/* ACTIVE IMAGE */}
+
+          <div className="relative h-full w-full max-w-[1200px]">
             <Image
-              src={photos[activeIndex].src}
-              alt={photos[activeIndex].alt}
+              key={activePhoto.src}
+              src={activePhoto.src}
+              alt={activePhoto.alt}
               fill
               quality={85}
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 1200px"
               className="object-contain"
             />
           </div>
 
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              showNext();
-            }}
-            className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-6"
-            aria-label="Next photo"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
+          {/* NEXT */}
+
+          {photos.length > 1 && (
+            <button
+              type="button"
+              onClick={showNext}
+              aria-label="Next photo"
+              className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-[#191C21]/75 text-white transition-colors hover:bg-[#30343B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:right-6"
+            >
+              <ChevronRight
+                className="h-6 w-6"
+                strokeWidth={1.8}
+              />
+            </button>
+          )}
         </div>
       )}
     </>

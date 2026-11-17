@@ -1,7 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight, CalendarDays, Download, MapPin } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  CalendarDays,
+  Download,
+  MapPin,
+} from "lucide-react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "framer-motion";
 
 import { TrackedLink } from "@/components/ui/tracked-link";
@@ -62,10 +68,16 @@ export function Hero() {
           <div className="max-w-[780px]">
             <div className="mb-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.15em] sm:text-xs">
               <span className="inline-flex items-center gap-2 text-white/75">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-                India International Battery Show
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-brand-green"
+                  aria-hidden="true"
+                />
+                2nd India International Battery Show
               </span>
-              <span className="hidden h-3 w-px bg-white/30 sm:block" aria-hidden="true" />
+              <span
+                className="hidden h-3 w-px bg-white/30 sm:block"
+                aria-hidden="true"
+              />
               <span className="text-white/60">2027 Edition</span>
             </div>
 
@@ -74,22 +86,29 @@ export function Hero() {
               id="home-hero-title"
               className="max-w-[760px] font-heading text-[clamp(2.5rem,5.15vw,4.75rem)] font-extrabold leading-[1.075] tracking-[-0.045em] text-white [text-wrap:balance]"
             >
-              Built for the <span className="text-[#f36a70]">Battery</span> Industry.
+              Built for the <span className="text-[#f36a70]">Battery</span>{" "}
+              Industry.
             </h1>
 
             <p className="mt-6 max-w-[585px] font-body text-[15px] leading-[1.75] text-white/75 sm:text-[17px]">
               Production. Processing. Products. Connect with battery
-              manufacturers, component suppliers and technology leaders
-              shaping the future of energy storage.
+              manufacturers, component suppliers and technology leaders shaping
+              the future of energy storage.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7 sm:gap-y-4">
               <span className="inline-flex items-center gap-2.5 font-semibold text-white">
-                <CalendarDays className="h-[18px] w-[18px] shrink-0 text-[#f36a70]" aria-hidden="true" />
+                <CalendarDays
+                  className="h-[18px] w-[18px] shrink-0 text-[#f36a70]"
+                  aria-hidden="true"
+                />
                 {siteConfig.dates.display}
               </span>
               <span className="inline-flex items-start gap-2.5 text-white/80">
-                <MapPin className="mt-0.5 h-[18px] w-[18px] shrink-0 text-[#f36a70]" aria-hidden="true" />
+                <MapPin
+                  className="mt-0.5 h-[18px] w-[18px] shrink-0 text-[#f36a70]"
+                  aria-hidden="true"
+                />
                 <span>{venue}</span>
               </span>
             </div>
@@ -102,7 +121,10 @@ export function Hero() {
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-button bg-brand-red px-6 py-3 font-heading text-sm font-bold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-brand-red-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transform-none"
               >
                 Book a Stand
-                <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none" />
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                />
               </TrackedLink>
 
               <TrackedLink
@@ -127,8 +149,6 @@ export function Hero() {
               </TrackedLink>
             </div>
           </div>
-
-        
         </div>
 
         {/* A single understated Motion accent — no animated background. */}

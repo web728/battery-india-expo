@@ -1,7 +1,17 @@
+
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  Clock3,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+} from "lucide-react";
 
 import { PageHero } from "@/components/sections/page-hero";
 import { Container } from "@/components/ui/container";
@@ -9,24 +19,52 @@ import { ExhibitorEnquiryForm } from "@/components/forms/exhibitor-enquiry-form"
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/lib/site-config";
 
-const bookingUrl = "/exhibit/book-a-stand";
+/* ==================================================
+   INDIA BATTERY INTERNATIONAL SHOW
+   Book a Stand — /exhibit/book-a-stand
+   Hybrid Industrial Editorial
+================================================== */
+
+const PAGE_PATH = "/exhibit/book-a-stand";
+const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+
+const HERO_IMAGE = "/images/expo-vip-lounge-branding.jpg";
+
+const PAGE_TITLE = `Book a Stand | ${siteConfig.eventName} 2027`;
+
+const PAGE_DESCRIPTION =
+  `Submit a stand enquiry for ${siteConfig.eventName}, ` +
+  `${siteConfig.dates.display} in Pune. Discuss exhibition ` +
+  `space, stand requirements and participation options with the organizer.`;
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Book a Stand | India International Battery Show 2027",
+    absolute: PAGE_TITLE,
   },
-  description:
-    "Enquire about exhibition stands at India International Battery Show 2027, taking place 14–16 October in Pune. Contact the team about stand requirements and availability.",
+  description: PAGE_DESCRIPTION,
   alternates: {
-    canonical: "/exhibit/book-a-stand",
+    canonical: PAGE_URL,
   },
   openGraph: {
     type: "website",
-    title: "Book a Stand | India International Battery Show 2027",
-    description:
-      "Send your stand enquiry for India International Battery Show 2027 in Pune.",
-    url: "/exhibit/book-a-stand",
-    images: ["/images/expo-vip-lounge-branding.jpg"],
+    locale: "en_IN",
+    url: PAGE_URL,
+    siteName: siteConfig.eventName,
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}${HERO_IMAGE}`,
+        alt: "Exhibition branding and professional networking",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [`${SITE_URL}${HERO_IMAGE}`],
   },
   robots: {
     index: true,
@@ -35,149 +73,317 @@ export const metadata: Metadata = {
 };
 
 export default function BookAStandPage() {
+  const pageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${PAGE_URL}#webpage`,
+    url: PAGE_URL,
+    name: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    inLanguage: "en-IN",
+    isPartOf: {
+      "@id": `${SITE_URL}/#website`,
+    },
+    about: {
+      "@id": `${SITE_URL}/#event`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pageJsonLd).replace(
+            /</g,
+            "\\u003c"
+          ),
+        }}
+      />
+
       <BreadcrumbJsonLd
         items={[
-          { label: "Exhibit", href: "/exhibit" },
+          {
+            label: "Exhibit",
+            href: "/exhibit",
+          },
           {
             label: "Book a Stand",
-            href: "/exhibit/book-a-stand",
+            href: PAGE_PATH,
           },
         ]}
       />
 
       <PageHero
-        eyebrow="Exhibit"
+        eyebrow="Exhibit at the Show"
         title="Book a Stand"
-        description="Send your exhibiting requirements to the India International Battery Show 2027 team."
+        description={`Discuss your exhibition space requirements for ${siteConfig.eventName}, ${siteConfig.dates.display} in Pune.`}
         breadcrumbs={[
-          { label: "Exhibit", href: "/exhibit" },
-          { label: "Book a Stand" },
+          {
+            label: "Exhibit",
+            href: "/exhibit",
+          },
+          {
+            label: "Book a Stand",
+          },
         ]}
         backgroundImage={{
-          src: "/images/expo-vip-lounge-branding.jpg",
+          src: HERO_IMAGE,
           alt: "Exhibition and industry networking at a previous edition",
         }}
       />
 
-      <section className="bg-[#faf9f7] py-14 text-[#19191c] sm:py-16 lg:py-20">
+      {/* MAIN ENQUIRY SECTION */}
+
+      <section
+        id="stand-enquiry"
+        aria-labelledby="stand-enquiry-heading"
+        className="bg-background py-16 text-foreground sm:py-20 lg:py-24 xl:py-28"
+      >
         <Container>
-          <div className="grid items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12 xl:gap-16">
-            {/* Introduction */}
-            <div className="lg:sticky lg:top-28">
-              <p className="text-[11px] font-bold uppercase tracking-[0.17em] text-[#d52d35]">
-                Exhibitor Enquiry
-              </p>
+          {/* EDITORIAL INTRO */}
 
-              <h2 className="mt-4 max-w-lg font-heading text-[clamp(1.9rem,3vw,2.75rem)] font-extrabold leading-[1.15] tracking-[-0.04em]">
-                Discuss your
-                <span className="text-[#ed3138]"> stand requirements.</span>
-              </h2>
+          <div className="mb-10 grid gap-6 lg:mb-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
+            <div>
+              <div className="mb-5 flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="h-0.5 w-7 bg-brand-red"
+                />
 
-              <p className="mt-5 max-w-lg text-[15px] leading-8 text-[#67676e]">
-                Share your company details and preferred stand requirements. The
-                exhibition team can provide information about available options,
-                pricing and the booking process.
-              </p>
-
-              <div className="mt-8 border-t border-[#e6e3df] pt-6">
-                <p className="font-heading text-sm font-bold text-[#252529]">
-                  Existing booking form
+                <p className="font-heading text-xs font-bold uppercase tracking-[0.15em] text-brand-red">
+                  Exhibitor Enquiry
                 </p>
-
-                <p className="mt-2 text-sm leading-7 text-[#696970]">
-                  You can also open the exhibition booking form directly.
-                </p>
-
-                <a
-                  href={bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-md border border-[#dcd9d5] bg-white px-5 text-sm font-bold text-[#29292e] transition-colors hover:border-[#ed3138] hover:text-[#d52d35]"
-                >
-                  Open Booking Form
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
               </div>
 
-              {siteConfig.contacts.length > 0 && (
-                <div className="mt-8 border-t border-[#e6e3df] pt-6">
-                  <h3 className="font-heading text-sm font-bold text-[#252529]">
-                    Exhibitor Enquiries
-                  </h3>
-
-                  <div className="mt-5 space-y-5">
-                    {siteConfig.contacts.map((contact) => (
-                      <div key={contact.email}>
-                        <p className="text-sm font-semibold text-[#333338]">
-                          {contact.name}
-                        </p>
-
-                        {contact.phone && (
-                          <a
-                            href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
-                            className="mt-2 flex w-fit items-center gap-2 text-sm text-[#696970] hover:text-[#d52d35]"
-                          >
-                            <Phone
-                              className="h-4 w-4 text-[#d52d35]"
-                              aria-hidden="true"
-                            />
-                            {contact.phone}
-                          </a>
-                        )}
-
-                        {contact.email && (
-                          <a
-                            href={`mailto:${contact.email}`}
-                            className="mt-2 flex w-fit items-center gap-2 break-all text-sm text-[#696970] hover:text-[#d52d35]"
-                          >
-                            <Mail
-                              className="h-4 w-4 shrink-0 text-[#d52d35]"
-                              aria-hidden="true"
-                            />
-                            {contact.email}
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <h2
+                id="stand-enquiry-heading"
+                className="max-w-[740px] font-heading text-[clamp(2rem,3.5vw,3rem)] font-bold leading-[1.15] tracking-[-0.04em]"
+              >
+                Discuss your stand
+                <span className="block">
+                  requirements
+                  <span className="text-brand-red">.</span>
+                </span>
+              </h2>
             </div>
 
-            {/* Enquiry form */}
-            <div className="min-w-0 overflow-hidden rounded-xl border border-[#e7e4e0] bg-white shadow-[0_16px_45px_rgba(0,0,0,0.04)]">
-              <div className="border-b border-[#eeece9] px-6 py-7 sm:px-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#d52d35]">
-                  India International Battery Show 2027
+         
+          </div>
+
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-10 xl:gap-14">
+            {/* LEFT: EXHIBITION DETAILS */}
+
+            <aside className="min-w-0 lg:sticky lg:top-28">
+              <div className="overflow-hidden rounded-card border border-[#E4E2DE] bg-surface">
+                <div className="border-b border-[#E4E2DE] px-6 py-7 sm:px-7">
+                  <p className="font-heading text-xs font-bold uppercase tracking-[0.13em] text-brand-red">
+                    Exhibition Information
+                  </p>
+
+                  <h3 className="mt-3 font-heading text-xl font-bold leading-[1.4] tracking-[-0.03em]">
+                    {siteConfig.eventName}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7 text-muted">
+                    Battery Manufacturing · Energy Storage ·
+                    Electric Mobility
+                  </p>
+                </div>
+
+                <div className="divide-y divide-[#E4E2DE] px-6 sm:px-7">
+                  <div className="flex items-start gap-4 py-6">
+                    <CalendarDays
+                      aria-hidden="true"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                      strokeWidth={1.8}
+                    />
+
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                        Exhibition Dates
+                      </p>
+
+                      <p className="mt-2 font-heading text-sm font-bold">
+                        {siteConfig.dates.display}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 py-6">
+                    <Clock3
+                      aria-hidden="true"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                      strokeWidth={1.8}
+                    />
+
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                        Visitor Hours
+                      </p>
+
+                      <p className="mt-2 font-heading text-sm font-bold">
+                        {siteConfig.visitorHours.display}{" "}
+                        {siteConfig.visitorHours.timeZoneLabel}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 py-6">
+                    <MapPin
+                      aria-hidden="true"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
+                      strokeWidth={1.8}
+                    />
+
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                        Exhibition Venue
+                      </p>
+
+                      <p className="mt-2 font-heading text-sm font-bold leading-6">
+                        {siteConfig.venue.name}
+                      </p>
+
+                      <p className="mt-2 text-sm leading-7 text-muted">
+                        {siteConfig.venue.line2},{" "}
+                        {siteConfig.venue.city},{" "}
+                        {siteConfig.venue.state}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          
+
+              {/* DIRECT CONTACTS */}
+
+              <div className="mt-9 border-t border-[#E4E2DE] pt-7">
+                <h3 className="font-heading text-lg font-bold tracking-[-0.025em]">
+                  Exhibitor Enquiries
+                </h3>
+
+                <p className="mt-2 text-sm leading-7 text-muted">
+                  Prefer to discuss your requirements
+                  directly? Contact our team.
                 </p>
 
-                <h2 className="mt-3 font-heading text-2xl font-bold tracking-[-0.035em] text-[#252529]">
-                  Exhibitor Enquiry Form
-                </h2>
+                <div className="mt-5 space-y-6">
+                  {siteConfig.contacts.map((contact) => (
+                    <div
+                      key={contact.email}
+                      className="border-b border-[#E4E2DE] pb-5 last:border-b-0"
+                    >
+                      <p className="font-heading text-sm font-bold">
+                        {contact.name}
+                      </p>
 
-                <p className="mt-2 text-sm leading-7 text-[#696970]">
-                  Complete the details below to submit your enquiry.
+                      <a
+                        href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+                        className="mt-3 flex w-fit items-center gap-3 text-sm text-muted transition-colors hover:text-brand-red"
+                      >
+                        <Phone
+                          aria-hidden="true"
+                          className="h-4 w-4 shrink-0 text-brand-red"
+                          strokeWidth={1.8}
+                        />
+                        {contact.phone}
+                      </a>
+
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="mt-3 flex w-fit items-center gap-3 break-all text-sm text-muted transition-colors hover:text-brand-red"
+                      >
+                        <Mail
+                          aria-hidden="true"
+                          className="h-4 w-4 shrink-0 text-brand-red"
+                          strokeWidth={1.8}
+                        />
+                        {contact.email}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </aside>
+
+            {/* RIGHT: STAND ENQUIRY FORM */}
+
+            <div
+              id="exhibitor-enquiry-form"
+              className="min-w-0 scroll-mt-28 overflow-hidden rounded-card border border-[#E4E2DE] bg-surface"
+            >
+              <div className="border-b border-[#E4E2DE] px-6 py-7 sm:px-8 sm:py-8 lg:px-9">
+                <div className="mb-4 flex items-center gap-3">
+                  <span
+                    aria-hidden="true"
+                    className="h-0.5 w-7 bg-brand-red"
+                  />
+
+                  <p className="font-heading text-xs font-bold uppercase tracking-[0.13em] text-brand-red">
+                    Stand Booking Request
+                  </p>
+                </div>
+
+                <h3 className="font-heading text-[clamp(1.5rem,2.5vw,2rem)] font-bold leading-[1.3] tracking-[-0.035em]">
+                  Exhibitor Enquiry Form
+                </h3>
+
+                <p className="mt-3 max-w-[500px] text-sm leading-[1.8] text-muted">
+                  Provide your company and stand
+                  requirements below. The organizing
+                  team will review your enquiry.
                 </p>
               </div>
 
-              <div className="px-5 py-7 sm:px-8 sm:py-8">
+              <div className="px-6 py-7 sm:px-8 sm:py-9 lg:px-9">
                 <ExhibitorEnquiryForm />
               </div>
             </div>
           </div>
+        </Container>
+      </section>
 
-          <p className="mt-7 text-center text-xs text-[#85858a]">
-            For general event enquiries, visit{" "}
+      {/* NEXT STEPS */}
+
+      <section
+        aria-labelledby="exhibitor-next-steps-heading"
+        className="border-t border-[#E4E2DE] bg-surface py-14 text-foreground sm:py-16"
+      >
+        <Container>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-[700px]">
+              <p className="font-heading text-xs font-bold uppercase tracking-[0.13em] text-brand-red">
+                Exhibitor Information
+              </p>
+
+              <h2
+                id="exhibitor-next-steps-heading"
+                className="mt-4 font-heading text-xl font-bold tracking-[-0.025em] sm:text-2xl"
+              >
+                Explore participation details
+              </h2>
+
+              <p className="mt-3 text-sm leading-7 text-muted">
+                Find answers about stand formats,
+                booking and exhibitor arrangements
+                on our Exhibit page.
+              </p>
+            </div>
+
             <Link
-              href="/contact"
-              className="font-semibold text-[#d52d35] hover:underline"
+              href="/exhibit#exhibitor-faqs"
+              className="group inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-button border border-[#D9D7D3] bg-white px-6 font-heading text-sm font-bold text-foreground transition-colors hover:border-brand-red hover:text-brand-red"
             >
-              Contact Us
+              Exhibitor FAQs
+
+              <ArrowRight
+                aria-hidden="true"
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transform-none"
+              />
             </Link>
-            .
-          </p>
+          </div>
         </Container>
       </section>
     </>
