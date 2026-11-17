@@ -1,7 +1,14 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Bypass Next.js image optimization.
+    // Fixes image loading failures caused by
+    // hosting image optimization quota limits.
+    unoptimized: true,
+
+    // Preserve existing allowed remote image hosts.
     remotePatterns: [
       {
         protocol: "https",
