@@ -73,7 +73,7 @@ const TRAVEL_URL = "/venue/travel";
 const CONTACT_URL = "/contact";
 
 const HERO_IMAGE =
-  "/images/expo-floor-components-booth.jpg";
+  "/images/DSC01444.JPG.webp";
 
 const CONTENT_IMAGE =
   "/images/expo-ev-battery-showcase.jpg";

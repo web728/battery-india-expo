@@ -51,10 +51,10 @@ const CATEGORIES_URL = "/exhibit/categories";
 const SPONSORSHIP_URL = "/exhibit/sponsorship";
 
 const HERO_IMAGE =
-  "/images/expo-motor-technology-booth.jpg";
+  "/images/DSC01328.JPG.webp";
 
 const CONTENT_IMAGE =
-  "/images/expo-ev-powertrain-demo.jpg";
+  "/images/DSC01808.JPG.webp";
 
 const PAGE_TITLE =
   `Why Exhibit | ${siteConfig.eventName} 2027`;

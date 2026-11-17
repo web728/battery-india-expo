@@ -33,7 +33,7 @@ const REGISTRATION_PATH = "/visit/register";
 const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const HERO_IMAGE = "/images/expo-floor-components-booth.jpg";
+const HERO_IMAGE = "/images/DSC01524.JPG.webp";
 const SOCIAL_IMAGE = `${SITE_URL}${HERO_IMAGE}`;
 
 const PAGE_TITLE = `Visitor Profile | ${siteConfig.eventName} 2027`;

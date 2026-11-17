@@ -146,79 +146,7 @@ export function OrganizerPageContent() {
             </div>
           </div>
 
-          {/* ====================================
-              EVENT INFORMATION STRIP
-          ==================================== */}
-
-          <div className="mt-14 grid gap-6 border-y border-[#E4E2DE] py-7 sm:mt-16 sm:grid-cols-3 sm:gap-0 lg:mt-20 lg:py-9">
-
-            {/* EVENT DATES */}
-
-            <div className="flex items-start gap-3 sm:pr-6">
-              <CalendarDays
-                aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
-                strokeWidth={1.8}
-              />
-
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
-                  Exhibition Dates
-                </p>
-
-                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
-                  {siteConfig.dates.display}
-                </p>
-              </div>
-            </div>
-
-            {/* VISITOR HOURS */}
-
-            <div className="flex items-start gap-3 sm:border-l sm:border-[#E4E2DE] sm:px-6 lg:px-10">
-              <Clock3
-                aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
-                strokeWidth={1.8}
-              />
-
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
-                  Visitor Hours
-                </p>
-
-                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
-                  {siteConfig.visitorHours.display}{" "}
-                  {siteConfig.visitorHours.timeZoneLabel}
-                </p>
-              </div>
-            </div>
-
-            {/* VENUE */}
-
-            <div className="flex items-start gap-3 sm:border-l sm:border-[#E4E2DE] sm:pl-6 lg:pl-10">
-              <MapPin
-                aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-brand-red"
-                strokeWidth={1.8}
-              />
-
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
-                  Exhibition Venue
-                </p>
-
-                <p className="mt-2 font-heading text-sm font-bold leading-[1.5] text-foreground sm:text-base">
-                  {siteConfig.venue.name}
-                </p>
-
-                <p className="mt-1 text-xs leading-relaxed text-muted">
-                  {siteConfig.venue.city},{" "}
-                  {siteConfig.venue.state},{" "}
-                  {siteConfig.venue.country}
-                </p>
-              </div>
-            </div>
-          </div>
+         
         </Container>
       </section>
 
@@ -284,12 +212,7 @@ export function OrganizerPageContent() {
                         {contact.name}
                       </h3>
 
-                      <span
-                        aria-hidden="true"
-                        className="shrink-0 text-xs font-medium tabular-nums text-muted"
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                    
                     </div>
 
                     {/* CONTACT DETAILS */}

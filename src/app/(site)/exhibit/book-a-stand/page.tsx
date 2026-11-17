@@ -29,7 +29,7 @@ const PAGE_PATH = "/exhibit/book-a-stand";
 const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const HERO_IMAGE = "/images/expo-vip-lounge-branding.jpg";
+const HERO_IMAGE = "/images/DSC00727.JPG.webp";
 
 const PAGE_TITLE = `Book a Stand | ${siteConfig.eventName} 2027`;
 

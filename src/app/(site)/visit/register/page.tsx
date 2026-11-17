@@ -21,7 +21,7 @@ const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 const PAGE_PATH = "/visit/register";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const HERO_IMAGE = "/images/expo-floor-components-booth.jpg";
+const HERO_IMAGE = "/images/DSC00808.webp.webp";
 
 const PAGE_TITLE = `Visitor Registration | ${siteConfig.eventName} 2027`;
 

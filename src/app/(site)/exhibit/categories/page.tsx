@@ -69,7 +69,7 @@ const BOOKING_URL = "/exhibit/book-a-stand";
 const EXHIBIT_URL = "/exhibit";
 
 const HERO_IMAGE =
-  "/images/expo-motor-technology-booth.jpg";
+  "/images/DSC01837.JPG.webp";
 
 const SOCIAL_IMAGE =
   `${SITE_URL}${HERO_IMAGE}`;

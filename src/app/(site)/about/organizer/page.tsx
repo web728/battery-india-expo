@@ -28,7 +28,7 @@ const pageUrl =
   `${siteConfig.siteUrl}${pagePath}`;
 
 const heroImage =
-  "/images/expo-vip-lounge-branding.jpg";
+  "/images/DSC00901.JPG.webp";
 
 const socialImage =
   `${siteConfig.siteUrl}${heroImage}`;

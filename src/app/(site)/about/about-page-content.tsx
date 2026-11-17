@@ -47,7 +47,7 @@ import { Container } from "@/components/ui/container";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const ABOUT_IMAGE =
-  "/images/expo-vip-lounge-branding.jpg";
+  "/images/DSC01761.JPG.webp";
 
 const focusAreas = [
   "Battery cells, modules and packs",

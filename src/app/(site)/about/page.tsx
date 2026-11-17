@@ -41,7 +41,7 @@ const PAGE_DESCRIPTION =
   "testing, components and recycling technologies.";
 
 const HERO_IMAGE =
-  "/images/expo-vip-lounge-branding.jpg";
+  "/images/DSC01297.JPG.webp";
 
 const OG_IMAGE = `${SITE_URL}${HERO_IMAGE}`;
 

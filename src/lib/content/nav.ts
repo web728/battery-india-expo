@@ -92,7 +92,22 @@ export const mainNav: NavItem[] = [
   },
   {
     label: "Media",
-    href: "/media/gallery",
+    href: "/media",
+    children: [
+      {
+        label: "Gallery",
+        href: "/media/gallery",
+      },
+      {
+        label: "Brochures",
+        href: "/media/downloads",
+      }, 
+      {
+        label: "Post Show Report",
+        href: "/downloads/India_Internation_Battery_Expo_2026_Post_Show_Report.pdf",
+      },
+    
+    ],
   },
   {
     label: "Conference",

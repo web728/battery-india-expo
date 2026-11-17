@@ -34,7 +34,7 @@ const PAGE_PATH = "/exhibit/sponsorship";
 const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const HERO_IMAGE = "/images/expo-vip-lounge-branding.jpg";
+const HERO_IMAGE = "/images/DSC00716.JPG.webp";
 
 const PAGE_TITLE =
   `Sponsorship Opportunities | ${siteConfig.eventName} 2027`;

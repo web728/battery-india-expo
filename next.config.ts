@@ -3,12 +3,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Bypass Next.js image optimization.
-    // Fixes image loading failures caused by
-    // hosting image optimization quota limits.
+    // Preserve the production image 402 workaround.
     unoptimized: true,
 
-    // Preserve existing allowed remote image hosts.
     remotePatterns: [
       {
         protocol: "https",
@@ -22,6 +19,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.batteryindiaexpo.com",
       },
+    ],
+  },
+
+  // Ensure the private brochure PDF is included
+  // with the brochure download API deployment.
+  outputFileTracingIncludes: {
+    "/api/brochure-download": [
+      "./private/brochure.pdf",
     ],
   },
 };

@@ -42,7 +42,7 @@ import { whyPunePoints } from "@/lib/content/home-content";
 -------------------------------------------------- */
 
 const INDUSTRY_IMAGE =
-  "/images/expo-ev-powertrain-demo.jpg";
+  "/images/DSC01960.JPG.webp";
 
 const icons = [
   Factory,
