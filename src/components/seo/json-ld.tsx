@@ -4,8 +4,7 @@ import { siteConfig } from "@/lib/site-config";
 /* ==================================================
    STRUCTURED DATA — INDIA BATTERY SHOW 2027
 
-   Server Component compatible
-   No client-side JavaScript required
+   Next.js Server Component compatible
 
    Exports:
    - OrganizationJsonLd
@@ -13,7 +12,20 @@ import { siteConfig } from "@/lib/site-config";
    - EventJsonLd
    - BreadcrumbJsonLd
    - FaqJsonLd
+
+   STRUCTURED DATA STRATEGY:
+   - One Organization entity
+   - One WebSite entity
+   - One Event entity
+   - Stable entity IDs
+   - No duplicate Event objects
+   - Canonical absolute URLs
+   - Safe JSON-LD serialization
 ================================================== */
+
+/* --------------------------------------------------
+   TYPES
+-------------------------------------------------- */
 
 type BreadcrumbItem = {
   label: string;
@@ -41,10 +53,7 @@ type JsonLdProps = {
    CANONICAL URLS
 -------------------------------------------------- */
 
-const SITE_URL = siteConfig.siteUrl.replace(
-  /\/+$/,
-  ""
-);
+const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 
 const HOME_URL = `${SITE_URL}/`;
 
@@ -59,8 +68,16 @@ const {
    HELPERS
 -------------------------------------------------- */
 
+/**
+ * Converts relative URLs into absolute URLs
+ * using the canonical production domain.
+ */
 function toAbsoluteUrl(href: string): string {
   const value = href.trim();
+
+  if (!value) {
+    return HOME_URL;
+  }
 
   if (/^https?:\/\//i.test(value)) {
     return value;
@@ -73,13 +90,24 @@ function toAbsoluteUrl(href: string): string {
   return new URL(path, HOME_URL).toString();
 }
 
+/**
+ * Safely serializes JSON-LD.
+ *
+ * Escapes characters that could interfere
+ * with HTML script parsing.
+ */
 function serializeJsonLd(data: unknown): string {
-  return JSON.stringify(data)
+  const json = JSON.stringify(data) ?? "{}";
+
+  return json
     .replace(/</g, "\\u003c")
     .replace(/\u2028/g, "\\u2028")
     .replace(/\u2029/g, "\\u2029");
 }
 
+/**
+ * Reusable JSON-LD script component.
+ */
 function JsonLd({ data }: JsonLdProps) {
   return (
     <script
@@ -93,18 +121,19 @@ function JsonLd({ data }: JsonLdProps) {
 
 /* --------------------------------------------------
    ORGANIZATION JSON-LD
+
+   Render globally in app/layout.tsx.
 -------------------------------------------------- */
 
 export function OrganizationJsonLd() {
   const data = {
     "@context": "https://schema.org",
+
     "@type": "Organization",
 
     "@id": ORGANIZATION_ID,
 
     name: siteConfig.organizer.name,
-
-    url: HOME_URL,
 
     description:
       `Organizer of ${siteConfig.eventName} ` +
@@ -116,11 +145,14 @@ export function OrganizationJsonLd() {
 
 /* --------------------------------------------------
    WEBSITE JSON-LD
+
+   Render globally in app/layout.tsx.
 -------------------------------------------------- */
 
 export function WebsiteJsonLd() {
   const data = {
     "@context": "https://schema.org",
+
     "@type": "WebSite",
 
     "@id": WEBSITE_ID,
@@ -131,7 +163,7 @@ export function WebsiteJsonLd() {
 
     url: HOME_URL,
 
-    inLanguage: "en-IN",
+    inLanguage: siteConfig.seo.language,
 
     publisher: {
       "@id": ORGANIZATION_ID,
@@ -148,16 +180,17 @@ export function WebsiteJsonLd() {
 /* --------------------------------------------------
    EVENT JSON-LD
 
-   Render once on the main event landing page.
+   Google-supported Event type.
 
-   Do not insert another partial Event schema
-   elsewhere on the same page.
+   IMPORTANT:
+   Render ONLY ONCE on the homepage.
+
+   Do not render this in the root layout.
 -------------------------------------------------- */
 
 export function EventJsonLd() {
   const eventName =
-    `${siteConfig.eventName} ` +
-    `${siteConfig.eventYear}`;
+    `${siteConfig.eventName} ${siteConfig.eventYear}`;
 
   const startDate =
     `${siteConfig.dates.start}T` +
@@ -169,9 +202,14 @@ export function EventJsonLd() {
     `${siteConfig.visitorHours.closes}:00` +
     siteConfig.visitorHours.utcOffset;
 
+  const eventImage = toAbsoluteUrl(
+    siteConfig.seo.eventImage
+  );
+
   const data = {
     "@context": "https://schema.org",
-    "@type": "ExhibitionEvent",
+
+    "@type": "Event",
 
     "@id": EVENT_ID,
 
@@ -185,9 +223,10 @@ export function EventJsonLd() {
 
     url: HOME_URL,
 
-    inLanguage: "en-IN",
+    inLanguage: siteConfig.seo.language,
 
     startDate,
+
     endDate,
 
     eventAttendanceMode:
@@ -196,9 +235,7 @@ export function EventJsonLd() {
     eventStatus:
       "https://schema.org/EventScheduled",
 
-    image: [
-      toAbsoluteUrl(siteConfig.seo.eventImage),
-    ],
+    image: [eventImage],
 
     location: {
       "@type": "Place",
@@ -228,12 +265,11 @@ export function EventJsonLd() {
       "@id": ORGANIZATION_ID,
 
       name: siteConfig.organizer.name,
-
-      url: HOME_URL,
     },
 
     mainEntityOfPage: {
       "@type": "WebPage",
+
       "@id": HOME_URL,
     },
   };
@@ -243,32 +279,49 @@ export function EventJsonLd() {
 
 /* --------------------------------------------------
    BREADCRUMB JSON-LD
+
+   Generates canonical breadcrumb URLs.
+
+   Example:
+   Home > About > Why Pune
 -------------------------------------------------- */
 
 export function BreadcrumbJsonLd({
   items,
 }: BreadcrumbJsonLdProps) {
-  const breadcrumbs: BreadcrumbItem[] = [
+  const allItems: BreadcrumbItem[] = [
     {
       label: "Home",
       href: "/",
     },
 
     ...items.filter(
-      (item) => item.href !== "/"
+      (item) => item.href.trim() !== "/"
     ),
   ];
 
-  const uniqueItems = breadcrumbs.filter(
-    (item, index, array) =>
-      array.findIndex(
-        (candidate) =>
-          candidate.href === item.href
-      ) === index
-  );
+  const seen = new Set<string>();
+
+  const uniqueItems = allItems.filter((item) => {
+    const label = item.label.trim();
+    const url = toAbsoluteUrl(item.href);
+
+    if (!label || seen.has(url)) {
+      return false;
+    }
+
+    seen.add(url);
+
+    return true;
+  });
+
+  if (uniqueItems.length === 0) {
+    return null;
+  }
 
   const data = {
     "@context": "https://schema.org",
+
     "@type": "BreadcrumbList",
 
     itemListElement: uniqueItems.map(
@@ -277,7 +330,7 @@ export function BreadcrumbJsonLd({
 
         position: index + 1,
 
-        name: item.label,
+        name: item.label.trim(),
 
         item: toAbsoluteUrl(item.href),
       })
@@ -290,8 +343,11 @@ export function BreadcrumbJsonLd({
 /* --------------------------------------------------
    FAQ JSON-LD
 
+   IMPORTANT:
    Questions and answers must match
-   visible content on the same page.
+   the visible content on the same page.
+
+   Do not add hidden or invented FAQs.
 -------------------------------------------------- */
 
 export function FaqJsonLd({
@@ -299,6 +355,8 @@ export function FaqJsonLd({
 }: FaqJsonLdProps) {
   const validItems = items.filter(
     (item) =>
+      typeof item.question === "string" &&
+      typeof item.answer === "string" &&
       item.question.trim().length > 0 &&
       item.answer.trim().length > 0
   );
@@ -309,6 +367,7 @@ export function FaqJsonLd({
 
   const data = {
     "@context": "https://schema.org",
+
     "@type": "FAQPage",
 
     mainEntity: validItems.map((item) => ({

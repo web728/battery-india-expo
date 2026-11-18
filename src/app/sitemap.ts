@@ -10,56 +10,64 @@ import { exhibitors } from "@/lib/content/exhibitors";
    ADVANCED XML SITEMAP
    Route: /sitemap.xml
 
-   Features:
+   FEATURES:
    - Canonical absolute URLs
    - Static page discovery
    - Dynamic exhibitor profiles
+   - URL normalization
    - Duplicate URL protection
-   - Invalid slug filtering
-   - Optional real modification dates
-   - Typed Next.js sitemap metadata
+   - Strict slug validation
+   - Verified lastModified support
+   - Next.js typed sitemap metadata
 
-   IMPORTANT:
-   Do not generate fake lastModified dates.
+   SEO RULES:
+   - Only public indexable pages
+   - No query parameters
+   - No hash fragments
+   - No fake modification dates
+   - No duplicate canonical URLs
 ================================================== */
 
 /* --------------------------------------------------
    TYPES
 -------------------------------------------------- */
 
-type ChangeFrequency =
-  NonNullable<
-    MetadataRoute.Sitemap[number]["changeFrequency"]
-  >;
+type ChangeFrequency = NonNullable<
+  MetadataRoute.Sitemap[number]["changeFrequency"]
+>;
 
 type SitemapRoute = {
   path: string;
   priority: number;
   changeFrequency: ChangeFrequency;
-
-  /**
-   * Set only when the page's significant
-   * content was actually updated.
-   *
-   * Example:
-   * lastModified: "2027-02-15"
-   */
   lastModified?: string;
 };
 
 /* --------------------------------------------------
-   SITE URL
-
-   Must match the canonical production domain
-   configured in siteConfig.siteUrl.
+   SITE CONFIGURATION
 -------------------------------------------------- */
 
-const SITE_URL = siteConfig.siteUrl
-  .trim()
-  .replace(/\/+$/, "");
+const configuredUrl = siteConfig.siteUrl.trim();
+
+const parsedSiteUrl = new URL(configuredUrl);
+
+if (
+  !["http:", "https:"].includes(parsedSiteUrl.protocol)
+) {
+  throw new Error("Invalid sitemap site URL.");
+}
+
+const SITE_URL = parsedSiteUrl.origin;
 
 /* --------------------------------------------------
    STATIC PAGE ROUTES
+
+   Include only pages that:
+   - Actually exist
+   - Return HTTP 200
+   - Are publicly accessible
+   - Are intended for indexing
+   - Have self-referencing canonical URLs
 -------------------------------------------------- */
 
 const STATIC_ROUTES: readonly SitemapRoute[] = [
@@ -67,7 +75,7 @@ const STATIC_ROUTES: readonly SitemapRoute[] = [
 
   {
     path: "/",
-    priority: 1,
+    priority: 1.0,
     changeFrequency: "weekly",
   },
 
@@ -234,10 +242,11 @@ const STATIC_ROUTES: readonly SitemapRoute[] = [
 /* --------------------------------------------------
    CANONICAL URL BUILDER
 
-   - Ensures leading slash
-   - Removes unnecessary trailing slash
-   - Avoids duplicate separators
-   - Removes query and hash fragments
+   - Absolute HTTPS production URLs
+   - Normalized paths
+   - No duplicate slashes
+   - No query parameters
+   - No hash fragments
 -------------------------------------------------- */
 
 function createCanonicalUrl(path: string): string {
@@ -254,7 +263,7 @@ function createCanonicalUrl(path: string): string {
           .replace(/\/{2,}/g, "/")
           .replace(/\/+$/, "");
 
-  const url = new URL(normalizedPath, SITE_URL);
+  const url = new URL(normalizedPath, `${SITE_URL}/`);
 
   url.search = "";
   url.hash = "";
@@ -263,31 +272,60 @@ function createCanonicalUrl(path: string): string {
 }
 
 /* --------------------------------------------------
-   OPTIONAL LAST-MODIFIED DATE
+   LAST MODIFIED VALIDATION
 
-   Only include a date if it is valid and known.
+   Accept:
+   - YYYY-MM-DD
+   - Valid ISO 8601 datetime
+
+   Reject:
+   - Invalid dates
+   - Future dates
+   - Arbitrary date strings
 -------------------------------------------------- */
 
 function getValidLastModified(
   value?: string | null
 ): string | undefined {
-  if (!value) return undefined;
+  if (!value || typeof value !== "string") {
+    return undefined;
+  }
 
   const trimmed = value.trim();
 
+  const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
+
+  const dateTimePattern =
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/;
+
   if (
-    !/^\d{4}-\d{2}-\d{2}(?:T.*)?$/.test(trimmed)
+    !dateOnlyPattern.test(trimmed) &&
+    !dateTimePattern.test(trimmed)
   ) {
     return undefined;
   }
 
-  const date = new Date(trimmed);
+  const timestamp = Date.parse(
+    dateOnlyPattern.test(trimmed)
+      ? `${trimmed}T00:00:00.000Z`
+      : trimmed
+  );
 
-  if (Number.isNaN(date.getTime())) {
+  if (Number.isNaN(timestamp)) {
     return undefined;
   }
 
-  if (date.getTime() > Date.now()) {
+  const date = new Date(timestamp);
+
+  // Prevent invalid calendar dates such as February 31.
+  if (dateOnlyPattern.test(trimmed)) {
+    if (date.toISOString().slice(0, 10) !== trimmed) {
+      return undefined;
+    }
+  }
+
+  // Do not publish future modification dates.
+  if (timestamp > Date.now()) {
     return undefined;
   }
 
@@ -295,14 +333,16 @@ function getValidLastModified(
 }
 
 /* --------------------------------------------------
-   STATIC ENTRIES
+   STATIC SITEMAP ENTRIES
 -------------------------------------------------- */
 
 function getStaticEntries(): MetadataRoute.Sitemap {
   return STATIC_ROUTES.map((route) => {
     const entry: MetadataRoute.Sitemap[number] = {
       url: createCanonicalUrl(route.path),
+
       changeFrequency: route.changeFrequency,
+
       priority: route.priority,
     };
 
@@ -320,6 +360,18 @@ function getStaticEntries(): MetadataRoute.Sitemap {
 
 /* --------------------------------------------------
    EXHIBITOR SLUG VALIDATION
+
+   Valid:
+   - company-name
+   - abc-company
+   - company-123
+
+   Invalid:
+   - -company
+   - company-
+   - company name
+   - company/name
+   - company--name
 -------------------------------------------------- */
 
 function isValidExhibitorSlug(
@@ -331,7 +383,7 @@ function isValidExhibitorSlug(
 
   const normalized = slug.trim();
 
-  return /^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/.test(
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(
     normalized
   );
 }
@@ -339,8 +391,9 @@ function isValidExhibitorSlug(
 /* --------------------------------------------------
    DYNAMIC EXHIBITOR ENTRIES
 
-   Existing exhibitors data is the source.
-   No fictional company URLs are created.
+   Source: exhibitors content data
+
+   Only valid slugs are included.
 -------------------------------------------------- */
 
 function getExhibitorEntries(): MetadataRoute.Sitemap {
@@ -355,16 +408,17 @@ function getExhibitorEntries(): MetadataRoute.Sitemap {
         url: createCanonicalUrl(
           `/exhibitors/${slug}`
         ),
+
         changeFrequency: "monthly",
+
         priority: 0.6,
       };
 
       /*
-       * If your exhibitor data later contains
-       * a verified updatedAt / lastModified field,
-       * add it here after validating its date.
+       * Add lastModified only when your exhibitor
+       * content has a verified updatedAt field.
        *
-       * Do not automatically use the current date.
+       * Never use the current date as a substitute.
        */
 
       return entry;
@@ -372,9 +426,9 @@ function getExhibitorEntries(): MetadataRoute.Sitemap {
 }
 
 /* --------------------------------------------------
-   URL DEDUPLICATION
+   DUPLICATE URL PROTECTION
 
-   Prevents repeated <loc> entries.
+   Deduplicate after canonical URL normalization.
 -------------------------------------------------- */
 
 function removeDuplicateUrls(
@@ -383,17 +437,23 @@ function removeDuplicateUrls(
   const seen = new Set<string>();
 
   return entries.filter((entry) => {
-    if (seen.has(entry.url)) {
+    const normalizedUrl = entry.url;
+
+    if (seen.has(normalizedUrl)) {
       return false;
     }
 
-    seen.add(entry.url);
+    seen.add(normalizedUrl);
+
     return true;
   });
 }
 
 /* ==================================================
    NEXT.JS SITEMAP EXPORT
+
+   Route:
+   /sitemap.xml
 ================================================== */
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -401,8 +461,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const exhibitorEntries = getExhibitorEntries();
 
-  return removeDuplicateUrls([
+  const allEntries: MetadataRoute.Sitemap = [
     ...staticEntries,
     ...exhibitorEntries,
-  ]);
+  ];
+
+  return removeDuplicateUrls(allEntries);
 }

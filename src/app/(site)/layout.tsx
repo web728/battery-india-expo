@@ -15,17 +15,16 @@ import { ToastProvider } from "@/components/ui/toast";
 
 import {
   OrganizationJsonLd,
-  EventJsonLd,
+  WebsiteJsonLd,
 } from "@/components/seo/json-ld";
 
 import { AnalyticsScripts } from "@/components/seo/analytics-scripts";
 
 import { siteConfig } from "@/lib/site-config";
 
-/* ---------------------------------------------
+/* ==================================================
    FONTS
-   Self-hosted through Next.js font optimization.
---------------------------------------------- */
+================================================== */
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -45,46 +44,60 @@ const inter = Inter({
   fallback: ["Arial", "sans-serif"],
 });
 
-/* ---------------------------------------------
+/* ==================================================
    SEO CONSTANTS
---------------------------------------------- */
+================================================== */
 
-const siteUrl = siteConfig.siteUrl.replace(/\/+$/, "");
+const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 
-const seoTitle =
-  `${siteConfig.eventName} 2027 | Battery & Energy Storage Expo`;
+const HOME_URL = `${SITE_URL}/`;
 
-const seoDescription =
-  `Explore ${siteConfig.eventName}, 14–16 October 2027 ` +
-  `in Pune, India. Connect with battery manufacturers, ` +
-  `energy storage companies, component suppliers, ` +
-  `technology innovators and industry professionals.`;
+const SEO_TITLE =
+  `${siteConfig.eventName} ${siteConfig.eventYear} | ` +
+  "Battery & Energy Storage Exhibition India";
 
-const defaultOgImage = "/logo/battery.png";
+const SEO_DESCRIPTION =
+  `Explore ${siteConfig.eventName} ${siteConfig.eventYear}, ` +
+  `taking place ${siteConfig.dates.display} at ` +
+  `${siteConfig.venue.name}, ${siteConfig.venue.city}, India. ` +
+  "Discover battery manufacturing, lithium-ion technology, " +
+  "energy storage systems, EV batteries, battery management " +
+  "systems and recycling innovations. Connect with leading " +
+  "manufacturers, suppliers and industry professionals.";
 
-/* ---------------------------------------------
-   ROOT SEO METADATA
+const DEFAULT_OG_IMAGE = new URL(
+  siteConfig.seo.socialImage,
+  HOME_URL
+).toString();
 
-   Page-specific titles, descriptions,
-   canonical URLs and OG metadata should
-   be defined in individual page files.
---------------------------------------------- */
+/* ==================================================
+   ROOT METADATA
+
+   Global default metadata.
+   Individual pages should define their own:
+   - Title
+   - Description
+   - Canonical URL
+   - Open Graph URL
+   - Page-specific social metadata
+================================================== */
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(HOME_URL),
 
   verification: {
-    google: "8yJ4SGop6bGVPTCqTHPyjH6D4u__duHIEeLew9lNHBU",
+    google:
+      "8yJ4SGop6bGVPTCqTHPyjH6D4u__duHIEeLew9lNHBU",
   },
- 
+
   applicationName: siteConfig.eventName,
 
   title: {
-    default: seoTitle,
+    default: SEO_TITLE,
     template: `%s | ${siteConfig.shortName}`,
   },
 
-  description: seoDescription,
+  description: SEO_DESCRIPTION,
 
   keywords: [
     "India Battery Show 2027",
@@ -96,7 +109,7 @@ export const metadata: Metadata = {
     "lithium ion battery exhibition",
     "battery recycling expo",
     "battery management systems",
-    "battery industry conference",
+    "battery industry exhibition",
   ],
 
   authors: [
@@ -106,6 +119,7 @@ export const metadata: Metadata = {
   ],
 
   creator: siteConfig.organizer.name,
+
   publisher: siteConfig.organizer.name,
 
   category: "Business and Industrial Exhibition",
@@ -113,6 +127,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -124,22 +139,19 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    locale: "en_IN",
 
-    url: siteUrl,
+    locale: "en_IN",
 
     siteName: siteConfig.eventName,
 
-    title: seoTitle,
+    title: SEO_TITLE,
 
-    description: seoDescription,
+    description: SEO_DESCRIPTION,
 
     images: [
       {
-        url: defaultOgImage,
-        width: 2048,
-        height: 830,
-        alt: `${siteConfig.eventName} official logo`,
+        url: DEFAULT_OG_IMAGE,
+        alt: `${siteConfig.eventName} official event preview`,
       },
     ],
   },
@@ -147,11 +159,16 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
 
-    title: seoTitle,
+    title: SEO_TITLE,
 
-    description: seoDescription,
+    description: SEO_DESCRIPTION,
 
-    images: [defaultOgImage],
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        alt: `${siteConfig.eventName} official event preview`,
+      },
+    ],
   },
 
   formatDetection: {
@@ -161,13 +178,15 @@ export const metadata: Metadata = {
   },
 };
 
-/* ---------------------------------------------
+/* ==================================================
    VIEWPORT
---------------------------------------------- */
+================================================== */
 
 export const viewport: Viewport = {
   width: "device-width",
+
   initialScale: 1,
+
   viewportFit: "cover",
 
   themeColor: "#191c21",
@@ -175,15 +194,9 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-/* ---------------------------------------------
+/* ==================================================
    ROOT LAYOUT
-
-   Keep as a Server Component.
-   Do not add "use client".
-
-   Motion animations belong to individual
-   client components, not the root layout.
---------------------------------------------- */
+================================================== */
 
 type RootLayoutProps = Readonly<{
   children: ReactNode;
@@ -194,7 +207,7 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     <html
-      lang="en"
+      lang="en-IN"
       className={`${manrope.variable} ${inter.variable}`}
     >
       <body
@@ -208,15 +221,17 @@ export default function RootLayout({
           "antialiased",
         ].join(" ")}
       >
-        {/* Global structured data */}
-        <OrganizationJsonLd />
-        <EventJsonLd />
+        {/* GLOBAL STRUCTURED DATA */}
 
-        {/* Analytics implementation must
-            respect consent preferences */}
+        <OrganizationJsonLd />
+        <WebsiteJsonLd />
+
+        {/* ANALYTICS */}
+
         <AnalyticsScripts />
 
-        {/* Keyboard accessibility */}
+        {/* ACCESSIBILITY */}
+
         <a
           href="#main-content"
           className={[
@@ -239,7 +254,11 @@ export default function RootLayout({
 
         <ToastProvider>
           <div className="flex min-h-screen min-w-0 flex-col">
+            {/* HEADER */}
+
             <Header />
+
+            {/* PAGE CONTENT */}
 
             <main
               id="main-content"
@@ -256,13 +275,17 @@ export default function RootLayout({
               {children}
             </main>
 
+            {/* FOOTER */}
+
             <Footer />
           </div>
 
-          {/* Mobile conversion action bar */}
+          {/* MOBILE CONVERSION BAR */}
+
           <StickyMobileBar />
 
-          {/* Privacy / cookie consent */}
+          {/* COOKIE CONSENT */}
+
           <ConsentBanner />
         </ToastProvider>
       </body>

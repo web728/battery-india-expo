@@ -7,46 +7,86 @@ import { AboutPageContent } from "./about-page-content";
 
 import { siteConfig } from "@/lib/site-config";
 
-/* --------------------------------------------------
+/* ==================================================
    INDIA BATTERY INTERNATIONAL SHOW
-   Route: /about
+   ROUTE: /about
 
    SEO:
-   - Unique title and description
+   - Unique page title
+   - Unique meta description
    - Self-referencing canonical
-   - Open Graph / Twitter metadata
-   - AboutPage structured data
-   - Breadcrumb structured data
+   - Open Graph metadata
+   - Twitter metadata
+   - AboutPage JSON-LD
+   - Breadcrumb JSON-LD
 
-   DESIGN:
-   - Premium charcoal inner-page hero
-   - Editorial light content
-   - Existing PageHero component
+   ENTITY RELATIONSHIPS:
+   - References global Website entity
+   - References global Organization entity
+   - References homepage Event entity
+
+   IMPORTANT:
+   - Do not create another Event object here.
+   - Reuse the canonical Event @id.
+================================================== */
+
+/* --------------------------------------------------
+   CANONICAL URLS
 -------------------------------------------------- */
 
 const SITE_URL = siteConfig.siteUrl.replace(/\/+$/, "");
 
 const PAGE_PATH = "/about";
+
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const EVENT_NAME = "2nd India Battery International Show";
+const HOME_URL = `${SITE_URL}/`;
+
+/* --------------------------------------------------
+   SEO CONTENT
+-------------------------------------------------- */
+
+const EVENT_NAME =
+  `${siteConfig.eventName} ${siteConfig.eventYear}`;
 
 const PAGE_TITLE =
-  "About 2nd India Battery International Show 2027 | Pune";
+  `About ${EVENT_NAME} | Battery Exhibition Pune`;
 
 const PAGE_DESCRIPTION =
-  "Discover 2nd India Battery International Show, 14–16 October " +
-  "2027 at Auto Cluster Exhibition Centre, Pune. " +
-  "Explore battery manufacturing, energy storage, " +
-  "testing, components and recycling technologies.";
+  `Learn about ${EVENT_NAME}, taking place ` +
+  `${siteConfig.dates.display} at ` +
+  `${siteConfig.venue.name}, ${siteConfig.venue.city}, India. ` +
+  "Discover the exhibition's focus on battery manufacturing, " +
+  "energy storage, battery technology, testing, components " +
+  "and recycling innovations.";
 
-const HERO_IMAGE =
-  "/images/DSC01297.JPG.webp";
+const HERO_IMAGE = "/images/DSC01297.JPG.webp";
 
 const OG_IMAGE = `${SITE_URL}${HERO_IMAGE}`;
 
 /* --------------------------------------------------
-   PAGE-SPECIFIC METADATA
+   STABLE STRUCTURED DATA IDS
+-------------------------------------------------- */
+
+const {
+  organizationId: ORGANIZATION_ID,
+  websiteId: WEBSITE_ID,
+  eventId: EVENT_ID,
+} = siteConfig.seo;
+
+/* --------------------------------------------------
+   SAFE JSON-LD SERIALIZER
+-------------------------------------------------- */
+
+function serializeJsonLd(data: unknown): string {
+  return (JSON.stringify(data) ?? "{}")
+    .replace(/</g, "\\u003c")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
+/* --------------------------------------------------
+   PAGE METADATA
 -------------------------------------------------- */
 
 export const metadata: Metadata = {
@@ -62,29 +102,45 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
+
     locale: "en_IN",
+
     url: PAGE_URL,
-    siteName: EVENT_NAME,
+
+    siteName: siteConfig.eventName,
+
     title: PAGE_TITLE,
+
     description: PAGE_DESCRIPTION,
+
     images: [
       {
         url: OG_IMAGE,
-        alt: "2nd India Battery International Show exhibition",
+
+        alt: `${EVENT_NAME} exhibition in Pune, India`,
+
+        width: 1200,
+
+        height: 630,
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
+
     title: PAGE_TITLE,
+
     description: PAGE_DESCRIPTION,
+
     images: [OG_IMAGE],
   },
 
   robots: {
     index: true,
+
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -96,19 +152,19 @@ export const metadata: Metadata = {
 };
 
 /* --------------------------------------------------
-   STRUCTURED DATA
+   ABOUT PAGE JSON-LD
 
-   AboutPage schema references the event entity.
+   AboutPage references existing entities.
 
-   The detailed Event JSON-LD already exists
-   in the site's root layout.
+   Do not redefine the complete Event object.
 
-   Avoid creating another competing, detailed
-   Event object on every page.
+   Event details are managed by the homepage
+   EventJsonLd component.
 -------------------------------------------------- */
 
 const aboutPageJsonLd = {
   "@context": "https://schema.org",
+
   "@type": "AboutPage",
 
   "@id": `${PAGE_URL}#webpage`,
@@ -116,56 +172,52 @@ const aboutPageJsonLd = {
   url: PAGE_URL,
 
   name: PAGE_TITLE,
+
   description: PAGE_DESCRIPTION,
 
   inLanguage: "en-IN",
 
   isPartOf: {
-    "@type": "WebSite",
-    "@id": `${SITE_URL}/#website`,
-    url: `${SITE_URL}/`,
-    name: EVENT_NAME,
+    "@id": WEBSITE_ID,
+  },
+
+  publisher: {
+    "@id": ORGANIZATION_ID,
   },
 
   about: {
-    "@type": "Event",
-    name: EVENT_NAME,
+    "@id": EVENT_ID,
+  },
 
-    startDate: "2027-10-14T10:00:00+05:30",
-    endDate: "2027-10-16T18:00:00+05:30",
+  mainEntity: {
+    "@id": EVENT_ID,
+  },
 
-    location: {
-      "@type": "Place",
-      name: "Auto Cluster Exhibition Centre",
+  primaryImageOfPage: {
+    "@type": "ImageObject",
 
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Pune",
-        addressRegion: "Maharashtra",
-        addressCountry: "IN",
-      },
-    },
+    url: OG_IMAGE,
   },
 };
 
-/* --------------------------------------------------
-   PAGE COMPONENT
--------------------------------------------------- */
+/* ==================================================
+   ABOUT PAGE COMPONENT
+================================================== */
 
 export default function AboutPage() {
   return (
     <>
-      {/* AboutPage JSON-LD */}
+      {/* ABOUT PAGE STRUCTURED DATA */}
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            aboutPageJsonLd
-          ).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(aboutPageJsonLd),
         }}
       />
 
-      {/* Breadcrumb structured data */}
+      {/* BREADCRUMB STRUCTURED DATA */}
+
       <BreadcrumbJsonLd
         items={[
           {
@@ -175,11 +227,16 @@ export default function AboutPage() {
         ]}
       />
 
-      {/* Inner-page hero */}
+      {/* INNER PAGE HERO */}
+
       <PageHero
         eyebrow="About the Show"
-        title="About 2nd India Battery International Show 2027"
-        description="A dedicated exhibition bringing together battery manufacturers, technology providers, energy storage companies and industry professionals in Pune, India."
+        title={`About ${EVENT_NAME}`}
+        description={
+          "A dedicated exhibition bringing together battery " +
+          "manufacturers, technology providers, energy storage " +
+          "companies and industry professionals in Pune, India."
+        }
         breadcrumbs={[
           {
             label: "About the Show",
@@ -191,7 +248,8 @@ export default function AboutPage() {
         }}
       />
 
-      {/* Main editorial content */}
+      {/* MAIN EDITORIAL CONTENT */}
+
       <AboutPageContent />
     </>
   );
